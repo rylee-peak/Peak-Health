@@ -32,7 +32,6 @@
 
     <!-- Datasets for Autocomplete -->
     <datalist id="icd-10-codes">
-        <!-- Common ICD-10 & Specific Requests -->
         <option value="I10 - Essential (primary) hypertension">
         <option value="E11.9 - Type 2 diabetes mellitus without complications">
         <option value="E78.5 - Hyperlipidemia, unspecified">
@@ -53,20 +52,10 @@
         <option value="M54.5 - Low back pain">
         <option value="F41.1 - Generalized anxiety disorder">
         <option value="F32.9 - Major depressive disorder, single episode">
-        <option value="E03.9 - Hypothyroidism, unspecified">
-        <option value="I48.91 - Unspecified atrial fibrillation">
-        <option value="M19.90 - Unspecified osteoarthritis, unspecified site">
-        <option value="N39.0 - Urinary tract infection, site not specified">
-        <option value="R07.9 - Chest pain, unspecified">
-        <option value="R51 - Headache">
-        <option value="G43.909 - Migraine, unspecified, not intractable">
-        <option value="L20.9 - Atopic dermatitis, unspecified">
-        <option value="R53.83 - Other fatigue">
         <option value="Z00.00 - Encounter for general adult medical examination">
     </datalist>
 
     <datalist id="rx-treatments">
-        <!-- Brand / Generic Meds -->
         <option value="Amphetamine/Dextroamphetamine (Adderall)">
         <option value="Amphetamine/Dextroamphetamine ER (Adderall XR)">
         <option value="Lisdexamfetamine (Vyvanse)">
@@ -82,27 +71,10 @@
         <option value="Ibuprofen (Advil, Motrin)">
         <option value="Sertraline (Zoloft)">
         <option value="Escitalopram (Lexapro)">
-        <option value="Amlodipine (Norvasc)">
-        <option value="Levothyroxine (Synthroid)">
-        <option value="Losartan (Cozaar)">
-        <option value="Gabapentin (Neurontin)">
-        <option value="Hydrochlorothiazide (Microzide)">
-        <option value="Pantoprazole (Protonix)">
-        <option value="Fluoxetine (Prozac)">
-        <option value="Trazodone (Desyrel)">
-        <option value="Fluticasone (Flonase)">
-        <option value="Acetaminophen (Tylenol)">
-        <!-- Durable Medical Equipment (DME) -->
         <option value="DME: Standard Manual Wheelchair">
         <option value="DME: Power Wheelchair">
         <option value="DME: CPAP Machine">
-        <option value="DME: BiPAP Machine">
         <option value="DME: Blood Glucose Monitor">
-        <option value="DME: Aluminum Crutches (Pair)">
-        <option value="DME: Four-Wheel Rollator Walker">
-        <option value="DME: Standard Walker">
-        <option value="DME: Oxygen Concentrator">
-        <option value="DME: Nebulizer Compressor">
     </datalist>
 
     <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
@@ -254,7 +226,7 @@
         </div>
     </div>
 
-    <!-- Add Patient (Provider/Admin) -->
+    <!-- Add Patient -->
     <div id="modal-add-patient" class="fixed inset-0 bg-slate-900/60 hidden items-center justify-center z-50 backdrop-blur-sm">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
             <div class="px-6 py-4 border-b border-slate-200 flex justify-between items-center bg-slate-50">
@@ -264,7 +236,7 @@
             <div class="p-6 space-y-4">
                 <div><label class="block text-sm font-bold text-slate-700 mb-1">Full Name</label>
                 <input type="text" id="new-pat-name" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none"></div>
-                <div><label class="block text-sm font-bold text-slate-700 mb-1">Email Address (Used for Portal Login)</label>
+                <div><label class="block text-sm font-bold text-slate-700 mb-1">Email Address</label>
                 <input type="email" id="new-pat-email" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none"></div>
                 <div><label class="block text-sm font-bold text-slate-700 mb-1">Date of Birth</label>
                 <input type="date" id="new-pat-dob" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none"></div>
@@ -304,21 +276,6 @@
         </div>
     </div>
 
-    <!-- Delete Confirmation Modal -->
-    <div id="modal-confirm-delete" class="fixed inset-0 bg-slate-900/60 hidden items-center justify-center z-50 backdrop-blur-sm">
-        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
-            <div class="p-6 text-center">
-                <div class="w-16 h-16 rounded-full bg-red-100 text-red-600 flex items-center justify-center text-2xl mx-auto mb-4"><i class="fas fa-exclamation-triangle"></i></div>
-                <h3 class="text-xl font-bold text-slate-800 mb-2">Delete Encounter?</h3>
-                <p class="text-slate-500 text-sm">This action cannot be undone. Are you sure you want to permanently remove this clinical note?</p>
-            </div>
-            <div class="px-6 py-4 border-t border-slate-100 bg-slate-50 flex justify-center gap-3">
-                <button onclick="closeModal('modal-confirm-delete')" class="px-4 py-2 text-slate-600 font-bold hover:bg-slate-200 rounded-lg w-1/2">Cancel</button>
-                <button onclick="executeDeleteEncounter()" class="px-4 py-2 bg-red-600 text-white font-bold hover:bg-red-700 rounded-lg shadow-sm w-1/2">Delete</button>
-            </div>
-        </div>
-    </div>
-
     <!-- Appointment Scheduling Modal -->
     <div id="modal-appointment" class="fixed inset-0 bg-slate-900/60 hidden items-center justify-center z-50 backdrop-blur-sm">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
@@ -347,6 +304,43 @@
         </div>
     </div>
 
+    <!-- Provider Refill Approval Modal -->
+    <div id="modal-approve-refill" class="fixed inset-0 bg-slate-900/60 hidden items-center justify-center z-50 backdrop-blur-sm">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
+            <div class="px-6 py-4 border-b border-slate-200 flex justify-between items-center bg-slate-50">
+                <h3 class="text-lg font-bold text-slate-800">Approve Renewal Request</h3>
+                <button onclick="closeModal('modal-approve-refill')" class="text-slate-400 hover:text-slate-600"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-6 space-y-4">
+                <p class="text-sm text-slate-600 font-medium">How many new refills would you like to authorize for this prescription?</p>
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-1">Number of Refills</label>
+                    <input type="number" id="renewal-refill-count" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none" min="0" value="0">
+                    <p id="renewal-controlled-warning" class="text-xs font-bold text-amber-600 mt-2 hidden"><i class="fas fa-exclamation-triangle mr-1"></i>Controlled substances cannot have active refills. Set to 0.</p>
+                </div>
+            </div>
+            <div class="px-6 py-4 border-t border-slate-200 bg-slate-50 flex justify-end gap-3">
+                <button onclick="closeModal('modal-approve-refill')" class="px-4 py-2 text-slate-600 font-bold hover:bg-slate-200 rounded-lg">Cancel</button>
+                <button onclick="executeRenewalApproval()" class="px-4 py-2 bg-emerald-600 text-white font-bold hover:bg-emerald-700 rounded-lg shadow-sm">Approve to Pharmacy</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="modal-confirm-delete" class="fixed inset-0 bg-slate-900/60 hidden items-center justify-center z-50 backdrop-blur-sm">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
+            <div class="p-6 text-center">
+                <div class="w-16 h-16 rounded-full bg-red-100 text-red-600 flex items-center justify-center text-2xl mx-auto mb-4"><i class="fas fa-exclamation-triangle"></i></div>
+                <h3 class="text-xl font-bold text-slate-800 mb-2">Delete Record?</h3>
+                <p class="text-slate-500 text-sm font-medium">This action cannot be undone. Are you sure?</p>
+            </div>
+            <div class="px-6 py-4 border-t border-slate-100 bg-slate-50 flex justify-center gap-3">
+                <button onclick="closeModal('modal-confirm-delete')" class="px-4 py-2 text-slate-600 font-bold hover:bg-slate-200 rounded-lg w-1/2">Cancel</button>
+                <button onclick="executeDeletion()" class="px-4 py-2 bg-red-600 text-white font-bold hover:bg-red-700 rounded-lg shadow-sm w-1/2">Delete</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Firebase Logic -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
@@ -359,8 +353,7 @@
             projectId: "peak-health-410e5",
             storageBucket: "peak-health-410e5.firebasestorage.app",
             messagingSenderId: "548701963948",
-            appId: "1:548701963948:web:a10d6e000c28d22d50c109",
-            measurementId: "G-5G5X8ZZ3Z9"
+            appId: "1:548701963948:web:a10d6e000c28d22d50c109"
         };
 
         const app = initializeApp(firebaseConfig);
@@ -373,7 +366,11 @@
         let isSignUpMode = false;
         let allUsersCache = [];
         let unsubscribeMessages = null;
-        window.encounterToDelete = null;
+        
+        window.recordToDelete = null; 
+        window.deleteType = null;
+        window.pendingRenewalId = null;
+        window.pendingRenewalControlled = false;
 
         // --- UTILS ---
         window.showToast = (msg, type = 'info') => {
@@ -388,6 +385,21 @@
         };
         window.closeModal = id => { document.getElementById(id).classList.add('hidden'); document.getElementById(id).classList.remove('flex'); };
         window.openModal = id => { document.getElementById(id).classList.remove('hidden'); document.getElementById(id).classList.add('flex'); };
+
+        window.confirmDeletion = (id, type) => {
+            window.recordToDelete = id;
+            window.deleteType = type;
+            openModal('modal-confirm-delete');
+        };
+        window.executeDeletion = async () => {
+            if(!window.recordToDelete || !window.deleteType) return;
+            try {
+                await deleteDoc(doc(db, window.deleteType, window.recordToDelete));
+                showToast("Record permanently deleted.", "success");
+                closeModal('modal-confirm-delete');
+                if(window.currentPatientId) renderChartContent(); // refresh patient chart
+            } catch(e) { showToast("Failed to delete.", "error"); }
+        };
 
         // --- AUTH ---
         document.getElementById('toggle-signup').addEventListener('click', (e) => {
@@ -406,13 +418,11 @@
             try {
                 btn.disabled = true; btn.innerText = "Processing...";
                 if (isSignUpMode) {
-                    let baseData = { email: email, role: 'patient', name: email.split('@')[0], createdAt: serverTimestamp() };
+                    let baseData = { email: email, role: 'patient', name: email.split('@')[0], createdAt: serverTimestamp(), labels: [] };
                     try {
-                        const q = query(collection(db, "users"), where("email", "==", email));
-                        const snap = await getDocs(q);
+                        const snap = await getDocs(query(collection(db, "users"), where("email", "==", email)));
                         if(!snap.empty) { baseData = { ...baseData, ...snap.docs[0].data(), stub: false }; }
-                    } catch(e) { console.warn("Could not check stub user due to rules"); }
-                    
+                    } catch(e) {}
                     const cred = await createUserWithEmailAndPassword(auth, email, pass);
                     await setDoc(doc(db, "users", cred.user.uid), baseData);
                     showToast("Account registered", "success");
@@ -451,19 +461,18 @@
             try {
                 const userRef = doc(db, "users", user.uid);
                 const userSnap = await getDoc(userRef);
-                
                 if (!userSnap.exists()) {
                     if (user.email === 'rylee.peak@rpeak.org') role = 'admin';
                     else if (user.email?.includes('@rpeak.org')) role = 'physician';
-                    window.currentUserData = { email: user.email, role, name, createdAt: serverTimestamp() };
+                    window.currentUserData = { email: user.email, role, name, createdAt: serverTimestamp(), labels: [] };
                     await setDoc(userRef, window.currentUserData);
                 } else { window.currentUserData = userSnap.data(); }
-            } catch(e) { console.error(e); showToast("Error loading user profile", "error"); }
+            } catch(e) { console.error(e); }
 
             try {
                 const allUsersSnap = await getDocs(collection(db, "users"));
                 allUsersCache = allUsersSnap.docs.map(d => ({id: d.id, ...d.data()}));
-            } catch(e) { console.error("Could not cache users. Check rules."); allUsersCache = [window.currentUserData]; allUsersCache[0].id = currentUser.uid; }
+            } catch(e) { allUsersCache = [{...window.currentUserData, id: currentUser.uid}]; }
 
             updateProfileUI();
             buildNav();
@@ -476,14 +485,12 @@
             const rb = document.getElementById('sidebar-user-role');
             rb.innerText = currentUserData.role;
             rb.className = `text-xs uppercase tracking-wider mt-1 font-bold px-2 py-1 rounded ${currentUserData.role==='admin'?'bg-purple-500/20 text-purple-400':currentUserData.role==='physician'?'bg-emerald-500/20 text-emerald-400':'bg-blue-500/20 text-blue-400'}`;
-            
             if(currentUserData.photoUrl) {
                 document.getElementById('sidebar-user-photo').src = currentUserData.photoUrl;
                 document.getElementById('setting-photo').value = currentUserData.photoUrl;
             } else {
                 document.getElementById('sidebar-user-photo').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUserData.name)}&background=0D8ABC&color=fff`;
             }
-
             if(currentUserData.role !== 'patient') document.getElementById('setting-photo-container').classList.remove('hidden');
         }
 
@@ -493,9 +500,7 @@
             try {
                 await updateDoc(doc(db, "users", currentUser.uid), { name, photoUrl: photo });
                 currentUserData.name = name; currentUserData.photoUrl = photo;
-                updateProfileUI();
-                closeModal('modal-settings');
-                showToast("Profile updated", "success");
+                updateProfileUI(); closeModal('modal-settings'); showToast("Profile updated", "success");
             } catch(e) { showToast("Failed to update profile", "error"); }
         };
 
@@ -503,7 +508,6 @@
         function buildNav() {
             const nav = document.getElementById('nav-menu');
             const items = [{id:'dashboard', icon:'fa-chart-pie', text:'Dashboard', roles:['patient','physician','admin']}];
-            
             if(currentUserData.role === 'patient') {
                 items.push({id:'appointments', icon:'fa-calendar-alt', text:'Appointments', roles:['patient']});
                 items.push({id:'records', icon:'fa-notes-medical', text:'My Records', roles:['patient']});
@@ -522,9 +526,7 @@
             }
 
             nav.innerHTML = items.filter(i => i.roles.includes(currentUserData.role)).map(i => 
-                `<button data-view="${i.id}" onclick="switchView('${i.id}')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg font-bold transition-colors text-slate-400 hover:bg-slate-800 hover:text-white mb-1">
-                    <i class="fas ${i.icon} w-5 text-center"></i> ${i.text}
-                </button>`
+                `<button data-view="${i.id}" onclick="switchView('${i.id}')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg font-bold transition-colors text-slate-400 hover:bg-slate-800 hover:text-white mb-1"><i class="fas ${i.icon} w-5 text-center"></i> ${i.text}</button>`
             ).join('');
         }
 
@@ -548,7 +550,7 @@
                     else if(viewId === 'coverage') await renderCoverage(container);
                     else if(viewId === 'billing') renderBillingAdmin(container);
                     else if(viewId === 'admin') renderAdmin(container);
-                } catch(e) { console.error(e); container.innerHTML = `<div class="p-6 bg-red-100 text-red-700 rounded-lg border border-red-200"><i class="fas fa-exclamation-triangle mr-2"></i>Error rendering view. Please ensure Firestore Rules are applied globally for this prototype.</div>`; }
+                } catch(e) { console.error(e); container.innerHTML = `<div class="p-6 bg-red-100 text-red-700 rounded-lg">Error rendering view.</div>`; }
                 document.getElementById('loading-state').classList.add('hidden');
             }, 50);
         };
@@ -561,92 +563,34 @@
                     const badge = document.getElementById('notification-badge');
                     if(snapshot.empty) badge.classList.add('hidden');
                     else { badge.classList.remove('hidden'); badge.innerText = snapshot.size; }
-                }, (error) => { console.warn("Messages rules not set yet:", error); });
+                });
             } catch(e) {}
         }
-
         window.openMessageModal = (toUserId = '', prefillSubject = '') => {
             openModal('modal-message');
             document.getElementById('msg-modal-title').innerText = toUserId ? 'Reply to Message' : 'New Secure Message';
-            document.getElementById('msg-subject').value = prefillSubject;
-            document.getElementById('msg-body').value = '';
-            
-            const select = document.getElementById('msg-to');
-            select.innerHTML = '<option value="">Select recipient...</option>';
-            
-            const contacts = currentUserData.role === 'patient' 
-                ? allUsersCache.filter(u => u.role !== 'patient') 
-                : allUsersCache.filter(u => u.id !== currentUser.uid);
-                
-            contacts.forEach(c => {
-                select.innerHTML += `<option value="${c.id}" ${c.id === toUserId ? 'selected':''}>${c.name} (${c.role.toUpperCase()})</option>`;
-            });
+            document.getElementById('msg-subject').value = prefillSubject; document.getElementById('msg-body').value = '';
+            const select = document.getElementById('msg-to'); select.innerHTML = '<option value="">Select recipient...</option>';
+            const contacts = currentUserData.role === 'patient' ? allUsersCache.filter(u => u.role !== 'patient') : allUsersCache.filter(u => u.id !== currentUser.uid);
+            contacts.forEach(c => select.innerHTML += `<option value="${c.id}" ${c.id === toUserId ? 'selected':''}>${c.name} (${c.role.toUpperCase()})</option>`);
         };
-
         window.sendMessage = async () => {
-            const to = document.getElementById('msg-to').value;
-            const sub = document.getElementById('msg-subject').value;
-            const body = document.getElementById('msg-body').value;
+            const to = document.getElementById('msg-to').value; const sub = document.getElementById('msg-subject').value; const body = document.getElementById('msg-body').value;
             if(!to || !body) return showToast("Recipient and message required", "error");
-            
             try {
-                await addDoc(collection(db, "messages"), {
-                    senderId: currentUser.uid, senderName: currentUserData.name,
-                    receiverId: to, subject: sub || 'No Subject', body: body,
-                    timestamp: serverTimestamp(), read: false
-                });
-                closeModal('modal-message'); showToast("Message sent", "success");
-                if(document.getElementById('header-title').innerText.includes('Inbox') || document.getElementById('header-title').innerText.includes('Messages')) switchView('messages');
-            } catch(e) { showToast("Failed to send message. Check rules.", "error"); }
+                await addDoc(collection(db, "messages"), { senderId: currentUser.uid, senderName: currentUserData.name, receiverId: to, subject: sub || 'No Subject', body: body, timestamp: serverTimestamp(), read: false });
+                closeModal('modal-message'); showToast("Message sent", "success"); switchView('messages');
+            } catch(e) { showToast("Failed to send message.", "error"); }
         };
-
         async function renderMessages(container) {
-            let msgs = [];
-            try {
-                const q = query(collection(db, "messages"));
-                const snap = await getDocs(q);
-                msgs = snap.docs.map(d=>({id:d.id, ...d.data()}))
-                                .filter(m => m.receiverId === currentUser.uid || m.senderId === currentUser.uid)
-                                .sort((a,b)=>(b.timestamp?.toMillis()||0)-(a.timestamp?.toMillis()||0));
-            } catch(e) { console.warn("Messages rule issue:", e); return container.innerHTML = `<div class="p-6 bg-amber-50 text-amber-700 rounded-lg">Update Firestore Rules to view Messages.</div>`; }
-
-            let html = `
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-xl font-bold text-slate-800">Secure Messages</h3>
-                    <button onclick="openMessageModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors shadow-sm font-bold"><i class="fas fa-pen mr-2"></i>Compose</button>
-                </div>
-                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 divide-y divide-slate-100">
-            `;
+            const q = query(collection(db, "messages"));
+            const snap = await getDocs(q);
+            const msgs = snap.docs.map(d=>({id:d.id, ...d.data()})).filter(m => m.receiverId === currentUser.uid || m.senderId === currentUser.uid).sort((a,b)=>(b.timestamp?.toMillis()||0)-(a.timestamp?.toMillis()||0));
+            let html = `<div class="flex justify-between items-center mb-6"><h3 class="text-xl font-bold text-slate-800">Secure Messages</h3><button onclick="openMessageModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-bold"><i class="fas fa-pen mr-2"></i>Compose</button></div><div class="bg-white rounded-2xl shadow-sm border border-slate-200 divide-y divide-slate-100">`;
             if(msgs.length === 0) html += `<div class="p-8 text-center text-slate-500">No messages found.</div>`;
-            
             msgs.forEach(m => {
-                const isReceived = m.receiverId === currentUser.uid;
-                const isUnread = isReceived && !m.read;
-                const date = m.timestamp ? new Date(m.timestamp.toDate()).toLocaleString() : '';
-                const displayUser = isReceived ? m.senderName : `To: ${allUsersCache.find(u=>u.id===m.receiverId)?.name || 'Unknown'}`;
-                
-                html += `
-                    <div class="p-5 hover:bg-slate-50 transition-colors ${isUnread ? 'bg-blue-50/50 border-l-4 border-blue-500':''}">
-                        <div class="flex items-start gap-4">
-                            <div class="w-10 h-10 rounded-full ${isReceived ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-200 text-slate-500'} flex items-center justify-center shrink-0">
-                                <i class="fas ${isReceived ? 'fa-inbox' : 'fa-paper-plane'}"></i>
-                            </div>
-                            <div class="flex-1">
-                                <div class="flex justify-between items-start mb-1">
-                                    <h4 class="font-bold text-lg ${isUnread?'text-blue-900':'text-slate-800'}">${m.subject}</h4>
-                                    <span class="text-xs text-slate-400 whitespace-nowrap ml-4 font-bold">${date}</span>
-                                </div>
-                                <p class="text-sm font-bold text-slate-600 mb-2">${displayUser}</p>
-                                <p class="text-sm text-slate-700 bg-slate-50 p-3 rounded-lg border border-slate-100 whitespace-pre-wrap">${m.body}</p>
-                                
-                                <div class="mt-3 flex gap-3">
-                                    ${isReceived && isUnread ? `<button onclick="markRead('${m.id}')" class="text-xs font-bold text-blue-600 hover:underline">Mark as Read</button>` : ''}
-                                    ${isReceived ? `<button onclick="openMessageModal('${m.senderId}', 'Re: ${m.subject}')" class="text-xs font-bold text-emerald-600 hover:underline"><i class="fas fa-reply mr-1"></i>Reply</button>` : ''}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
+                const isReceived = m.receiverId === currentUser.uid; const isUnread = isReceived && !m.read; const date = m.timestamp ? new Date(m.timestamp.toDate()).toLocaleString() : ''; const displayUser = isReceived ? m.senderName : `To: ${allUsersCache.find(u=>u.id===m.receiverId)?.name || 'Unknown'}`;
+                html += `<div class="p-5 hover:bg-slate-50 ${isUnread ? 'bg-blue-50/50 border-l-4 border-blue-500':''}"><div class="flex items-start gap-4"><div class="w-10 h-10 rounded-full ${isReceived ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-200 text-slate-500'} flex items-center justify-center shrink-0"><i class="fas ${isReceived ? 'fa-inbox' : 'fa-paper-plane'}"></i></div><div class="flex-1"><div class="flex justify-between items-start mb-1"><h4 class="font-bold text-lg ${isUnread?'text-blue-900':'text-slate-800'}">${m.subject}</h4><span class="text-xs text-slate-400 font-bold">${date}</span></div><p class="text-sm font-bold text-slate-600 mb-2">${displayUser}</p><p class="text-sm text-slate-700 bg-slate-50 p-3 rounded-lg border border-slate-100 whitespace-pre-wrap">${m.body}</p><div class="mt-3 flex gap-3">${isReceived && isUnread ? `<button onclick="markRead('${m.id}')" class="text-xs font-bold text-blue-600 hover:underline">Mark as Read</button>` : ''}${isReceived ? `<button onclick="openMessageModal('${m.senderId}', 'Re: ${m.subject}')" class="text-xs font-bold text-emerald-600 hover:underline"><i class="fas fa-reply mr-1"></i>Reply</button>` : ''}</div></div></div></div>`;
             });
             container.innerHTML = html + `</div>`;
         }
@@ -655,79 +599,17 @@
         // --- DASHBOARD ---
         async function renderDashboard(container) {
             if(currentUserData.role === 'patient') {
-                
-                // Fetch dynamic care team
                 let careTeamHtml = '';
                 try {
                     const snap = await getDocs(query(collection(db, "encounters"), where("patientId", "==", currentUser.uid)));
                     const providerIds = [...new Set(snap.docs.map(d=>d.data().providerId))];
-                    if(providerIds.length === 0) careTeamHtml = '<p class="text-sm font-medium text-slate-500">No care team assigned yet. A provider will be assigned when you have your first visit.</p>';
-                    else {
-                        providerIds.forEach(pid => {
-                            const prov = allUsersCache.find(u=>u.id===pid);
-                            if(prov) {
-                                careTeamHtml += `
-                                    <div class="flex items-center gap-3 mb-3">
-                                        <div class="w-10 h-10 rounded-full bg-slate-200 overflow-hidden border border-slate-300"><img src="${prov.photoUrl || `https://ui-avatars.com/api/?name=${prov.name}`}"></div>
-                                        <div><p class="font-bold text-sm text-slate-800">${prov.name}</p><p class="text-xs font-bold text-blue-600 uppercase tracking-wide">${prov.role}</p></div>
-                                    </div>
-                                `;
-                            }
-                        });
-                    }
-                } catch(e) { careTeamHtml = '<p class="text-xs font-bold text-amber-600">Update Rules to view Care Team.</p>'; }
-
-                container.innerHTML = `
-                    <div class="bg-gradient-to-r from-blue-700 to-blue-900 rounded-3xl p-10 text-white shadow-xl shadow-blue-900/20 mb-8 relative overflow-hidden">
-                        <div class="absolute -right-20 -top-20 opacity-10 text-9xl"><i class="fas fa-heartbeat"></i></div>
-                        <div class="relative z-10">
-                            <h2 class="text-4xl font-extrabold mb-3 tracking-tight">Hello, ${currentUserData.name}</h2>
-                            <p class="text-blue-200 font-medium text-lg">Welcome to Peak Health. Your Care Team is here for you.</p>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                            <div class="flex items-center gap-3 mb-4"><div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center text-xl shadow-sm"><i class="fas fa-shield-virus"></i></div><h4 class="font-bold text-lg text-slate-800">Preventive Care</h4></div>
-                            <ul class="space-y-3 text-sm mb-6">
-                                <li class="flex justify-between items-center"><span class="text-slate-600 font-medium">Annual Flu Vaccine</span><span class="bg-red-100 text-red-600 px-2 py-0.5 rounded text-xs font-bold uppercase tracking-wide">Due</span></li>
-                                <li class="flex justify-between items-center"><span class="text-slate-600 font-medium">Wellness Visit</span><span class="bg-emerald-100 text-emerald-600 px-2 py-0.5 rounded text-xs font-bold uppercase tracking-wide">Up to date</span></li>
-                            </ul>
-                            <button onclick="switchView('appointments')" class="w-full py-2.5 text-blue-600 border-2 border-blue-100 rounded-xl hover:bg-blue-50 text-sm font-bold transition-colors">Schedule Now</button>
-                        </div>
-                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                            <div class="flex items-center gap-3 mb-4"><div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl shadow-sm"><i class="fas fa-user-md"></i></div><h4 class="font-bold text-lg text-slate-800">My Care Team</h4></div>
-                            <div class="mb-6">${careTeamHtml}</div>
-                            <button onclick="openMessageModal()" class="w-full py-2.5 text-slate-600 border-2 border-slate-100 rounded-xl hover:bg-slate-50 text-sm font-bold transition-colors"><i class="fas fa-envelope mr-2"></i> Send a Message</button>
-                        </div>
-                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                            <div class="flex items-center gap-3 mb-4"><div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center text-xl shadow-sm"><i class="fas fa-hospital"></i></div><h4 class="font-bold text-lg text-slate-800">Favorite Facilities</h4></div>
-                            <div class="space-y-4">
-                                <div class="border-l-4 border-blue-500 pl-4 py-1">
-                                    <p class="font-bold text-slate-800">Peak Health Main Campus</p>
-                                    <p class="text-xs font-medium text-slate-500 mt-0.5">123 Wellness Way, City</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
+                    if(providerIds.length === 0) careTeamHtml = '<p class="text-sm font-medium text-slate-500">No care team assigned yet.</p>';
+                    else { providerIds.forEach(pid => { const prov = allUsersCache.find(u=>u.id===pid); if(prov) careTeamHtml += `<div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 rounded-full bg-slate-200 overflow-hidden"><img src="${prov.photoUrl || `https://ui-avatars.com/api/?name=${prov.name}`}"></div><div><p class="font-bold text-sm text-slate-800">${prov.name}</p><p class="text-xs font-bold text-blue-600 uppercase tracking-wide">${prov.role}</p></div></div>`; }); }
+                } catch(e) {}
+                container.innerHTML = `<div class="bg-gradient-to-r from-blue-700 to-blue-900 rounded-3xl p-10 text-white shadow-xl mb-8 relative overflow-hidden"><div class="absolute -right-20 -top-20 opacity-10 text-9xl"><i class="fas fa-heartbeat"></i></div><div class="relative z-10"><h2 class="text-4xl font-extrabold mb-3 tracking-tight">Hello, ${currentUserData.name}</h2><p class="text-blue-200 font-medium text-lg">Welcome to Peak Health. Your Care Team is here for you.</p></div></div><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"><div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200"><div class="flex items-center gap-3 mb-4"><div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center text-xl"><i class="fas fa-shield-virus"></i></div><h4 class="font-bold text-lg">Preventive Care</h4></div><ul class="space-y-3 text-sm mb-6"><li class="flex justify-between items-center"><span class="text-slate-600 font-medium">Annual Flu Vaccine</span><span class="bg-red-100 text-red-600 px-2 py-0.5 rounded text-xs font-bold uppercase">Due</span></li><li class="flex justify-between items-center"><span class="text-slate-600 font-medium">Wellness Visit</span><span class="bg-emerald-100 text-emerald-600 px-2 py-0.5 rounded text-xs font-bold uppercase">Up to date</span></li></ul><button onclick="switchView('appointments')" class="w-full py-2.5 text-blue-600 border-2 border-blue-100 rounded-xl font-bold">Schedule Now</button></div><div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200"><div class="flex items-center gap-3 mb-4"><div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl"><i class="fas fa-user-md"></i></div><h4 class="font-bold text-lg">My Care Team</h4></div><div class="mb-6">${careTeamHtml}</div><button onclick="openMessageModal()" class="w-full py-2.5 text-slate-600 border-2 border-slate-100 rounded-xl font-bold"><i class="fas fa-envelope mr-2"></i> Send a Message</button></div><div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200"><div class="flex items-center gap-3 mb-4"><div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center text-xl"><i class="fas fa-hospital"></i></div><h4 class="font-bold text-lg">Favorite Facilities</h4></div><div class="border-l-4 border-blue-500 pl-4 py-1"><p class="font-bold text-slate-800">Peak Health Main Campus</p><p class="text-xs font-medium text-slate-500 mt-0.5">123 Wellness Way, City</p></div></div></div>`;
             } else {
                 const ptCount = allUsersCache.filter(u=>u.role==='patient').length;
-                container.innerHTML = `
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                        <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200 flex items-center justify-between border-l-8 border-l-blue-500">
-                            <div><p class="text-sm font-bold uppercase tracking-wider text-slate-500 mb-1">Total Patients</p><h3 class="text-4xl font-extrabold text-slate-800">${ptCount}</h3></div>
-                            <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center"><i class="fas fa-users text-2xl text-blue-500"></i></div>
-                        </div>
-                    </div>
-                    <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-8">
-                        <h3 class="font-extrabold text-xl mb-6">Quick Actions</h3>
-                        <div class="flex flex-wrap gap-4">
-                            <button onclick="switchView('directory')" class="px-6 py-3.5 bg-blue-50 text-blue-700 rounded-xl font-bold hover:bg-blue-100 shadow-sm transition-colors"><i class="fas fa-search mr-2"></i>Find Patient</button>
-                            <button onclick="openModal('modal-add-patient')" class="px-6 py-3.5 bg-emerald-50 text-emerald-700 rounded-xl font-bold hover:bg-emerald-100 shadow-sm transition-colors"><i class="fas fa-user-plus mr-2"></i>Register Patient</button>
-                            <button onclick="openAppointmentModal()" class="px-6 py-3.5 bg-purple-50 text-purple-700 rounded-xl font-bold hover:bg-purple-100 shadow-sm transition-colors"><i class="fas fa-calendar-plus mr-2"></i>Schedule Appt</button>
-                        </div>
-                    </div>
-                `;
+                container.innerHTML = `<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8"><div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200 flex items-center justify-between border-l-8 border-l-blue-500"><div><p class="text-sm font-bold uppercase tracking-wider text-slate-500 mb-1">Total Patients</p><h3 class="text-4xl font-extrabold text-slate-800">${ptCount}</h3></div><div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center"><i class="fas fa-users text-2xl text-blue-500"></i></div></div></div><div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-8"><h3 class="font-extrabold text-xl mb-6">Quick Actions</h3><div class="flex flex-wrap gap-4"><button onclick="switchView('directory')" class="px-6 py-3.5 bg-blue-50 text-blue-700 rounded-xl font-bold shadow-sm"><i class="fas fa-search mr-2"></i>Find Patient</button><button onclick="openModal('modal-add-patient')" class="px-6 py-3.5 bg-emerald-50 text-emerald-700 rounded-xl font-bold shadow-sm"><i class="fas fa-user-plus mr-2"></i>Register Patient</button><button onclick="openAppointmentModal()" class="px-6 py-3.5 bg-purple-50 text-purple-700 rounded-xl font-bold shadow-sm"><i class="fas fa-calendar-plus mr-2"></i>Schedule Appt</button></div></div>`;
             }
         }
 
@@ -735,58 +617,87 @@
         async function renderPharmacy(container) {
             let meds = [];
             try {
-                let q = currentUserData.role === 'patient' 
-                    ? query(collection(db, "medications"), where("patientId", "==", currentUser.uid))
-                    : query(collection(db, "medications"));
-                const snap = await getDocs(q);
-                meds = snap.docs.map(d=>({id:d.id,...d.data()}));
-            } catch(e) { return container.innerHTML = `<div class="p-6 bg-amber-50 text-amber-700 rounded-lg">Update Rules to view Pharmacy.</div>`; }
+                let q = currentUserData.role === 'patient' ? query(collection(db, "medications"), where("patientId", "==", currentUser.uid)) : query(collection(db, "medications"));
+                const snap = await getDocs(q); meds = snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(b.timestamp?.toMillis()||0)-(a.timestamp?.toMillis()||0));
+            } catch(e) { return container.innerHTML = `<div class="p-6 bg-amber-50 text-amber-700 rounded-lg">Error loading Pharmacy.</div>`; }
 
-            let html = `
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-2xl font-bold text-slate-800">${currentUserData.role === 'patient' ? 'My Pharmacy' : 'Clinic Pharmacy Queue'}</h3>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            `;
-            
+            let html = `<div class="flex justify-between items-center mb-6"><h3 class="text-2xl font-bold text-slate-800">${currentUserData.role === 'patient' ? 'My Pharmacy' : 'Clinic Pharmacy Queue'}</h3></div><div class="grid grid-cols-1 md:grid-cols-2 gap-6">`;
             if(meds.length === 0) html = `<div class="w-full p-8 text-center text-slate-500 font-medium">No active medications or orders found.</div>`;
             
             meds.forEach(m => {
                 const ptName = currentUserData.role !== 'patient' ? allUsersCache.find(u=>u.id===m.patientId)?.name || 'Unknown' : '';
-                const isRequested = m.status === 'Refill Requested';
+                const isPending = m.status === 'Pending Pharmacy';
+                const isRequested = m.status === 'Refill Requested (Pharmacy)';
+                const isRenewal = m.status === 'Renewal Requested (Provider)';
+                const isControlled = m.isControlled;
+                const refillsStr = isControlled ? 'Controlled (No Refills)' : `${m.refills} Remaining`;
                 
-                html += `
-                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col ${isRequested && currentUserData.role !== 'patient' ? 'border-l-4 border-l-amber-500' : ''}">
-                        <div class="flex justify-between items-start mb-4">
-                            <div class="flex items-center gap-4">
-                                <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-xl"><i class="fas fa-pills"></i></div>
-                                <div>
-                                    <h4 class="font-bold text-slate-800 text-lg">${m.name}</h4>
-                                    ${m.instructions ? `<p class="text-sm font-bold text-slate-600 mt-1">Sig: ${m.instructions}</p>` : ''}
-                                    ${currentUserData.role !== 'patient' ? `<p class="text-xs font-bold text-slate-500 mb-1 mt-1 uppercase tracking-wide">Patient: ${ptName}</p>` : ''}
-                                    <span class="text-[10px] mt-2 inline-block ${isRequested ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700'} px-2 py-1 rounded font-extrabold uppercase tracking-wider">${m.status}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mt-auto pt-4 border-t border-slate-100 flex justify-between items-center">
-                            <span class="text-xs font-bold text-slate-400 uppercase tracking-wide">Ordered by: ${allUsersCache.find(u=>u.id===m.providerId)?.name || 'Provider'}</span>
-                            ${currentUserData.role === 'patient' && m.status !== 'Refill Requested' ? `<button onclick="requestRefill('${m.id}')" class="text-xs font-bold text-blue-600 hover:bg-blue-50 border-2 border-blue-100 px-3 py-1.5 rounded-lg transition-colors">Request Refill</button>` : ''}
-                            ${currentUserData.role !== 'patient' && isRequested ? `<button onclick="fillPrescription('${m.id}')" class="text-xs font-bold text-emerald-600 hover:bg-emerald-100 bg-emerald-50 border-2 border-emerald-200 px-3 py-1.5 rounded-lg transition-colors">Mark Filled</button>` : ''}
-                        </div>
-                    </div>
-                `;
+                let highlightClass = '';
+                if(isPending) highlightClass = 'border-l-4 border-l-blue-500';
+                else if(isRequested) highlightClass = 'border-l-4 border-l-amber-500';
+                else if(isRenewal) highlightClass = 'border-l-4 border-l-purple-500';
+
+                html += `<div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col ${highlightClass}">
+                    <div class="flex justify-between items-start mb-4"><div class="flex items-center gap-4"><div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-xl"><i class="fas fa-pills"></i></div><div><h4 class="font-bold text-slate-800 text-lg">${m.name} ${m.strength ? `<span class="text-sm text-slate-500 ml-1 font-mono">${m.strength}</span>`:''}</h4>${m.instructions ? `<p class="text-sm font-bold text-slate-600 mt-1">Sig: ${m.instructions}</p>` : ''}${currentUserData.role !== 'patient' ? `<p class="text-xs font-bold text-slate-500 mb-1 mt-1 uppercase">Patient: ${ptName}</p>` : ''}<span class="text-[10px] mt-2 inline-block bg-slate-100 text-slate-700 px-2 py-1 rounded font-extrabold uppercase tracking-wider">${m.status}</span></div></div></div>
+                    <div class="mt-auto pt-4 border-t border-slate-100 flex flex-col sm:flex-row justify-between items-center gap-3">
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wide">Refills: ${refillsStr}</span>
+                        <div class="flex gap-2">`;
+
+                // Patient Buttons
+                if(currentUserData.role === 'patient' && m.status === 'Active') {
+                    html += `<button onclick="requestRefill('${m.id}', ${m.refills}, ${m.isControlled})" class="text-xs font-bold text-blue-600 hover:bg-blue-50 border-2 border-blue-100 px-3 py-1.5 rounded-lg transition-colors">Request Refill</button>`;
+                }
+                
+                // Staff Buttons
+                if(currentUserData.role !== 'patient') {
+                    if(isPending) html += `<button onclick="fillInitialPrescription('${m.id}')" class="text-xs font-bold text-blue-600 hover:bg-blue-100 bg-blue-50 border-2 border-blue-200 px-3 py-1.5 rounded-lg transition-colors"><i class="fas fa-check-circle mr-1"></i>Fill Initial Rx</button>`;
+                    if(isRequested) html += `<button onclick="fillRefillPrescription('${m.id}', ${m.refills})" class="text-xs font-bold text-emerald-600 hover:bg-emerald-100 bg-emerald-50 border-2 border-emerald-200 px-3 py-1.5 rounded-lg transition-colors"><i class="fas fa-check-double mr-1"></i>Fill Refill</button>`;
+                    if(isRenewal) html += `<button onclick="openProviderRenewal('${m.id}', ${m.isControlled})" class="text-xs font-bold text-purple-600 hover:bg-purple-100 bg-purple-50 border-2 border-purple-200 px-3 py-1.5 rounded-lg transition-colors"><i class="fas fa-user-md mr-1"></i>Provider Auth Needed</button>`;
+                }
+                html += `</div></div></div>`;
             });
             container.innerHTML = html + `</div>`;
         }
         
-        window.requestRefill = async (id) => {
-            try { await updateDoc(doc(db, "medications", id), { status: 'Refill Requested' }); showToast("Refill requested.", "success"); switchView('pharmacy'); }
-            catch(e){ showToast("Failed to request. Check rules.", "error"); }
+        window.requestRefill = async (id, currentRefills, isControlled) => {
+            const status = (isControlled || currentRefills <= 0) ? 'Renewal Requested (Provider)' : 'Refill Requested (Pharmacy)';
+            try { await updateDoc(doc(db, "medications", id), { status }); showToast(`Request routed to ${status.includes('Provider') ? 'Provider' : 'Pharmacy'}.`, "success"); switchView('pharmacy'); }
+            catch(e){ showToast("Failed to request.", "error"); }
         };
         
-        window.fillPrescription = async (id) => {
-            try { await updateDoc(doc(db, "medications", id), { status: 'Active' }); showToast("Marked as filled.", "success"); switchView('pharmacy'); }
-            catch(e){ showToast("Failed. Check rules.", "error"); }
+        window.fillInitialPrescription = async (id) => {
+            try { await updateDoc(doc(db, "medications", id), { status: 'Active' }); showToast("Initial prescription filled.", "success"); switchView('pharmacy'); }
+            catch(e){ showToast("Failed to fill.", "error"); }
+        };
+
+        window.fillRefillPrescription = async (id, currentRefills) => {
+            try { await updateDoc(doc(db, "medications", id), { status: 'Active', refills: Math.max(0, currentRefills - 1) }); showToast("Refill dispensed.", "success"); switchView('pharmacy'); }
+            catch(e){ showToast("Failed to dispense.", "error"); }
+        };
+
+        window.openProviderRenewal = (id, isControlled) => {
+            window.pendingRenewalId = id;
+            window.pendingRenewalControlled = isControlled;
+            document.getElementById('renewal-refill-count').value = '0';
+            if(isControlled) {
+                document.getElementById('renewal-refill-count').disabled = true;
+                document.getElementById('renewal-controlled-warning').classList.remove('hidden');
+            } else {
+                document.getElementById('renewal-refill-count').disabled = false;
+                document.getElementById('renewal-controlled-warning').classList.add('hidden');
+            }
+            openModal('modal-approve-refill');
+        };
+
+        window.executeRenewalApproval = async () => {
+            if(!window.pendingRenewalId) return;
+            const newRefills = window.pendingRenewalControlled ? 0 : parseInt(document.getElementById('renewal-refill-count').value) || 0;
+            try {
+                await updateDoc(doc(db, "medications", window.pendingRenewalId), { status: 'Pending Pharmacy', refills: newRefills });
+                showToast("Renewal approved to Pharmacy.", "success");
+                closeModal('modal-approve-refill');
+                switchView('pharmacy');
+            } catch(e) { showToast("Error approving.", "error"); }
         };
 
         // --- PATIENT: MY RECORDS ---
@@ -794,62 +705,34 @@
         window.setRecordTab = (tab) => { window.activeRecordTab = tab; switchView('records'); };
         
         async function renderPatientRecords(container) {
-            const tabs = [
-                {id: 'visits', label: 'Past Visits', icon: 'fa-stethoscope'},
-                {id: 'conditions', label: 'Conditions', icon: 'fa-heartbeat'},
-                {id: 'vitals', label: 'Vitals Log', icon: 'fa-file-medical-alt'}
-            ];
-
-            let html = `
-                <h3 class="text-2xl font-bold text-slate-800 mb-6">My Medical Records</h3>
-                <div class="flex overflow-x-auto border-b border-slate-200 mb-6 space-x-8 hide-scrollbar">
-                    ${tabs.map(t => `<button onclick="setRecordTab('${t.id}')" class="pb-3 whitespace-nowrap ${activeRecordTab===t.id?'tab-active':'tab-inactive'}"><i class="fas ${t.icon} mr-2"></i>${t.label}</button>`).join('')}
-                </div>
-                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 min-h-[400px]">
-            `;
+            const tabs = [{id: 'visits', label: 'Past Visits', icon: 'fa-stethoscope'},{id: 'conditions', label: 'Conditions', icon: 'fa-heartbeat'},{id: 'allergies', label: 'Allergies', icon: 'fa-exclamation-triangle'},{id: 'vitals', label: 'Vitals Log', icon: 'fa-file-medical-alt'}];
+            let html = `<h3 class="text-2xl font-bold text-slate-800 mb-6">My Medical Records</h3><div class="flex overflow-x-auto border-b border-slate-200 mb-6 space-x-8 hide-scrollbar">${tabs.map(t => `<button onclick="setRecordTab('${t.id}')" class="pb-3 whitespace-nowrap ${activeRecordTab===t.id?'tab-active':'tab-inactive'}"><i class="fas ${t.icon} mr-2"></i>${t.label}</button>`).join('')}</div><div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 min-h-[400px]">`;
 
             try {
                 if(activeRecordTab === 'visits') {
                     const snap = await getDocs(query(collection(db, "encounters"), where("patientId", "==", currentUser.uid)));
                     const visits = snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(b.timestamp?.toMillis()||0)-(a.timestamp?.toMillis()||0));
-                    
                     if(visits.length === 0) html += `<p class="text-slate-500 text-center py-10 font-medium">No past visits recorded.</p>`;
-                    visits.forEach(v => {
-                        const d = v.timestamp ? new Date(v.timestamp.toDate()).toLocaleDateString() : '';
-                        html += `
-                            <div class="border-b border-slate-100 py-6 last:border-0">
-                                <div class="flex justify-between items-start mb-3">
-                                    <div><h4 class="font-extrabold text-xl text-slate-800">${v.complaint}</h4><p class="text-sm font-bold text-slate-500 mt-1">Provider: ${allUsersCache.find(u=>u.id===v.providerId)?.name||'Unknown'}</p></div>
-                                    <span class="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider">${d}</span>
-                                </div>
-                                <div class="bg-slate-50 p-5 rounded-xl text-sm text-slate-700 font-mono mt-4 leading-relaxed">${v.notes}</div>
-                            </div>
-                        `;
-                    });
+                    visits.forEach(v => { html += `<div class="border-b border-slate-100 py-6 last:border-0"><div class="flex justify-between items-start mb-3"><div><h4 class="font-extrabold text-xl text-slate-800">${v.complaint}</h4><p class="text-sm font-bold text-slate-500 mt-1">Provider: ${allUsersCache.find(u=>u.id===v.providerId)?.name||'Unknown'}</p></div><span class="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider">${v.timestamp ? new Date(v.timestamp.toDate()).toLocaleDateString() : ''}</span></div><div class="bg-slate-50 p-5 rounded-xl text-sm text-slate-700 font-mono mt-4 leading-relaxed">${v.notes}</div></div>`; });
                 } else if(activeRecordTab === 'conditions') {
                     const snap = await getDocs(query(collection(db, "conditions"), where("patientId", "==", currentUser.uid)));
                     if(snap.empty) html += `<p class="text-slate-500 text-center py-10 font-medium">No active conditions recorded.</p>`;
-                    else {
-                        html += `<ul class="space-y-4">`;
-                        snap.forEach(doc => {
-                            const d = doc.data();
-                            html += `<li class="flex items-center gap-4 p-4 bg-slate-50 rounded-xl border border-slate-100"><div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center"><i class="fas fa-stethoscope"></i></div> <span class="font-bold text-slate-800 text-lg">${d.diagnosis}</span> <span class="text-xs font-bold text-slate-400 ml-auto uppercase tracking-wide">Added: ${d.timestamp?new Date(d.timestamp.toDate()).toLocaleDateString():''}</span></li>`;
-                        });
-                        html += `</ul>`;
-                    }
+                    else { html += `<ul class="space-y-4">`; snap.forEach(doc => { const d = doc.data(); html += `<li class="flex items-center gap-4 p-4 bg-slate-50 rounded-xl border border-slate-100"><div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center"><i class="fas fa-stethoscope"></i></div> <span class="font-bold text-slate-800 text-lg">${d.diagnosis}</span> <span class="text-xs font-bold text-slate-400 ml-auto uppercase tracking-wide">Added: ${d.timestamp?new Date(d.timestamp.toDate()).toLocaleDateString():''}</span></li>`; }); html += `</ul>`; }
+                } else if(activeRecordTab === 'allergies') {
+                    const snap = await getDocs(query(collection(db, "allergies"), where("patientId", "==", currentUser.uid)));
+                    if(snap.empty) html += `<p class="text-slate-500 text-center py-10 font-medium">No known allergies (NKDA) recorded.</p>`;
+                    else { html += `<ul class="space-y-4">`; snap.forEach(doc => { const d = doc.data(); html += `<li class="flex items-center gap-4 p-4 bg-red-50 rounded-xl border border-red-100"><div class="w-10 h-10 bg-red-100 text-red-600 rounded-lg flex items-center justify-center"><i class="fas fa-exclamation-triangle"></i></div> <div><span class="font-bold text-slate-800 text-lg">${d.allergen}</span><p class="text-xs text-slate-500 font-medium">Reaction: ${d.reaction || 'Unknown'}</p></div></li>`; }); html += `</ul>`; }
                 } else if(activeRecordTab === 'vitals') {
                     const snap = await getDocs(query(collection(db, "vitals"), where("patientId", "==", currentUser.uid)));
                     const vitals = snap.docs.map(d=>d.data()).sort((a,b)=>(b.timestamp?.toMillis()||0)-(a.timestamp?.toMillis()||0));
                     if(vitals.length === 0) html += `<p class="text-slate-500 text-center py-10 font-medium">No vitals recorded.</p>`;
                     else {
                         html += `<table class="w-full text-left text-sm"><thead class="bg-slate-50 text-slate-500 uppercase tracking-wider text-xs font-extrabold"><tr><th class="p-4 rounded-tl-lg">Date</th><th class="p-4">BP</th><th class="p-4">HR</th><th class="p-4">Temp</th><th class="p-4 rounded-tr-lg">Weight</th></tr></thead><tbody class="divide-y divide-slate-100">`;
-                        vitals.forEach(v => {
-                            html += `<tr><td class="p-4 font-bold text-slate-700">${v.timestamp?new Date(v.timestamp.toDate()).toLocaleDateString():''}</td><td class="p-4 font-mono font-medium">${v.bp||'--'}</td><td class="p-4 font-mono font-medium">${v.hr||'--'}</td><td class="p-4 font-mono font-medium">${v.temp||'--'}</td><td class="p-4 font-mono font-medium">${v.weight||'--'}</td></tr>`;
-                        });
+                        vitals.forEach(v => { html += `<tr><td class="p-4 font-bold text-slate-700">${v.timestamp?new Date(v.timestamp.toDate()).toLocaleDateString():''}</td><td class="p-4 font-mono font-medium">${v.bp||'--'}</td><td class="p-4 font-mono font-medium">${v.hr||'--'}</td><td class="p-4 font-mono font-medium">${v.temp||'--'}</td><td class="p-4 font-mono font-medium">${v.weight||'--'}</td></tr>`; });
                         html += `</tbody></table>`;
                     }
                 }
-            } catch(e) { html += `<p class="text-amber-600 p-4 bg-amber-50 rounded font-bold">Failed to load data. Update Firestore rules to allow read.</p>`; }
+            } catch(e) { html += `<p class="text-amber-600 font-bold">Failed to load data.</p>`; }
             container.innerHTML = html + `</div>`;
         }
 
@@ -862,7 +745,7 @@
                 else {
                     snap.forEach(doc => {
                         const b = doc.data();
-                        billsHtml += `<div class="flex items-center justify-between p-5 bg-red-50 rounded-xl border border-red-100 mb-3"><div class="flex items-center gap-4"><i class="fas fa-file-invoice text-red-500 text-2xl"></i><div><p class="font-extrabold text-red-900">${b.reason}</p><p class="text-sm font-bold text-red-700 uppercase tracking-wide">Due immediately</p></div></div><span class="text-2xl font-black text-red-700">$${parseFloat(b.amount).toFixed(2)}</span></div>`;
+                        billsHtml += `<div class="flex items-center justify-between p-5 bg-white rounded-xl border-2 border-red-100 shadow-sm mb-3"><div class="flex items-center gap-4"><i class="fas fa-file-invoice text-red-500 text-2xl"></i><div><p class="font-extrabold text-red-900">${b.reason}</p><p class="text-xs font-bold text-red-500 uppercase tracking-wide">Due immediately</p></div></div><div class="flex items-center gap-4"><span class="text-2xl font-black text-red-700">$${parseFloat(b.amount).toFixed(2)}</span><button onclick="payBill('${doc.id}')" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-bold transition-colors">Pay Now</button></div></div>`;
                     });
                 }
             } catch(e) { billsHtml = `<p class="text-amber-600 font-bold text-sm">Update rules to view bills.</p>`; }
@@ -870,143 +753,67 @@
             container.innerHTML = `<h3 class="text-2xl font-bold text-slate-800 mb-6">Benefits & Billing</h3><div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl p-10 text-white shadow-xl shadow-slate-900/20 relative overflow-hidden"><div class="absolute -top-10 -right-10 p-6 opacity-10 text-9xl"><i class="fas fa-shield-alt"></i></div><h4 class="text-slate-400 text-xs font-bold tracking-widest uppercase mb-2">Health Insurance</h4><h2 class="text-3xl font-extrabold mb-8 tracking-tight">Peak Health Premium Plan</h2><div class="space-y-5"><div class="flex justify-between border-b border-slate-700 pb-3"><span class="text-slate-400 font-bold text-sm uppercase tracking-wide">Member ID</span><span class="font-mono font-bold">${currentUser.uid.substring(0,10).toUpperCase()}</span></div><div class="flex justify-between border-b border-slate-700 pb-3"><span class="text-slate-400 font-bold text-sm uppercase tracking-wide">Group</span><span class="font-mono font-bold">PH-2026</span></div><div class="flex justify-between"><span class="text-slate-400 font-bold text-sm uppercase tracking-wide">Primary Care Copay</span><span class="font-black text-lg text-emerald-400">$20.00</span></div></div></div><div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-8"><h4 class="font-extrabold text-slate-800 mb-6 flex items-center"><i class="fas fa-file-invoice-dollar text-slate-400 mr-3 text-xl"></i>Recent Claims & Balances</h4>${billsHtml}</div></div>`;
         }
 
+        window.payBill = async (id) => {
+            try { await deleteDoc(doc(db, "bills", id)); showToast("Payment processed successfully! Balance is $0.00.", "success"); switchView('coverage'); }
+            catch(e) { showToast("Payment failed.", "error"); }
+        }
+
         // --- ADMIN: BILLING PORTAL ---
         window.renderBillingAdmin = async (container) => {
             const pts = allUsersCache.filter(u=>u.role==='patient');
             let ptOptions = pts.map(p => `<option value="${p.id}">${p.name} (${p.email})</option>`).join('');
-            
-            container.innerHTML = `
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-2xl font-bold text-slate-800">Billing Administration</h3>
-                </div>
-                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200 mb-6">
-                    <h4 class="font-extrabold text-slate-800 mb-6 border-b pb-3">Generate New Patient Bill</h4>
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
-                        <div class="md:col-span-2">
-                            <label class="block text-sm font-bold text-slate-700 mb-2">Select Patient</label>
-                            <select id="bill-patient" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 outline-none"><option value="">Select...</option>${ptOptions}</select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-bold text-slate-700 mb-2">Amount ($)</label>
-                            <input type="number" id="bill-amount" placeholder="0.00" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-bold text-slate-700 mb-2">Reason/Service</label>
-                            <input type="text" id="bill-reason" placeholder="e.g., Copay, Lab Fee" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 outline-none">
-                        </div>
-                    </div>
-                    <button onclick="createBill()" class="mt-6 bg-purple-600 text-white px-8 py-3 rounded-xl font-bold shadow-md hover:bg-purple-700 transition-colors">Issue Bill</button>
-                </div>
-            `;
+            container.innerHTML = `<div class="flex justify-between items-center mb-6"><h3 class="text-2xl font-bold text-slate-800">Billing Administration</h3></div><div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200 mb-6"><h4 class="font-extrabold text-slate-800 mb-6 border-b pb-3">Generate New Patient Bill</h4><div class="grid grid-cols-1 md:grid-cols-4 gap-6 items-end"><div class="md:col-span-2"><label class="block text-sm font-bold text-slate-700 mb-2">Select Patient</label><select id="bill-patient" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 outline-none"><option value="">Select...</option>${ptOptions}</select></div><div><label class="block text-sm font-bold text-slate-700 mb-2">Amount ($)</label><input type="number" id="bill-amount" placeholder="0.00" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 outline-none"></div><div><label class="block text-sm font-bold text-slate-700 mb-2">Reason/Service</label><input type="text" id="bill-reason" placeholder="e.g., Copay, Lab Fee" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 outline-none"></div></div><button onclick="createBill()" class="mt-6 bg-purple-600 text-white px-8 py-3 rounded-xl font-bold shadow-md hover:bg-purple-700 transition-colors">Issue Bill</button></div>`;
         };
 
         window.createBill = async () => {
-            const patientId = document.getElementById('bill-patient').value;
-            const amount = document.getElementById('bill-amount').value;
-            const reason = document.getElementById('bill-reason').value;
+            const patientId = document.getElementById('bill-patient').value; const amount = document.getElementById('bill-amount').value; const reason = document.getElementById('bill-reason').value;
             if(!patientId || !amount || !reason) return showToast("All fields required", "error");
-            try {
-                await addDoc(collection(db, "bills"), { patientId, amount, reason, timestamp: serverTimestamp() });
-                showToast("Bill issued to patient.", "success");
-                document.getElementById('bill-amount').value = ''; document.getElementById('bill-reason').value = '';
-            } catch(e) { showToast("Failed to create bill. Check rules.", "error"); }
+            try { await addDoc(collection(db, "bills"), { patientId, amount, reason, timestamp: serverTimestamp() }); showToast("Bill issued to patient.", "success"); document.getElementById('bill-amount').value = ''; document.getElementById('bill-reason').value = ''; } 
+            catch(e) { showToast("Failed to create bill.", "error"); }
         };
 
         // --- APPOINTMENTS ---
         window.openAppointmentModal = () => {
             openModal('modal-appointment');
-            const select = document.getElementById('appt-user');
-            const lbl = document.getElementById('appt-user-label');
-            select.innerHTML = '<option value="">Select...</option>';
-            
-            if(currentUserData.role === 'patient') {
-                lbl.innerText = "Select Provider";
-                allUsersCache.filter(u=>u.role!=='patient').forEach(u => select.innerHTML += `<option value="${u.id}">${u.name} (${u.role})</option>`);
-            } else {
-                lbl.innerText = "Select Patient";
-                allUsersCache.filter(u=>u.role==='patient').forEach(u => select.innerHTML += `<option value="${u.id}">${u.name}</option>`);
-            }
+            const select = document.getElementById('appt-user'); const lbl = document.getElementById('appt-user-label'); select.innerHTML = '<option value="">Select...</option>';
+            if(currentUserData.role === 'patient') { lbl.innerText = "Select Provider"; allUsersCache.filter(u=>u.role!=='patient').forEach(u => select.innerHTML += `<option value="${u.id}">${u.name} (${u.role})</option>`); } 
+            else { lbl.innerText = "Select Patient"; allUsersCache.filter(u=>u.role==='patient').forEach(u => select.innerHTML += `<option value="${u.id}">${u.name}</option>`); }
         };
 
         window.saveAppointment = async () => {
-            const userId = document.getElementById('appt-user').value;
-            const date = document.getElementById('appt-datetime').value;
-            const type = document.getElementById('appt-reason').value;
-            
+            const userId = document.getElementById('appt-user').value; const date = document.getElementById('appt-datetime').value; const type = document.getElementById('appt-reason').value;
             if(!userId || !date || !type) return showToast("All fields required", "error");
-            
-            const ptId = currentUserData.role === 'patient' ? currentUser.uid : userId;
-            const provId = currentUserData.role === 'patient' ? userId : currentUser.uid;
+            const ptId = currentUserData.role === 'patient' ? currentUser.uid : userId; const provId = currentUserData.role === 'patient' ? userId : currentUser.uid;
             const withName = currentUserData.role === 'patient' ? allUsersCache.find(u=>u.id===provId)?.name : allUsersCache.find(u=>u.id===ptId)?.name;
-
-            try {
-                await addDoc(collection(db, "appointments"), { patientId: ptId, providerId: provId, withName, date, type, timestamp: serverTimestamp() });
-                showToast("Appointment Scheduled", "success");
-                closeModal('modal-appointment');
-                if(document.getElementById('header-title').innerText.includes('Schedule') || document.getElementById('header-title').innerText.includes('Appointments')) switchView('appointments');
-            } catch(e) { showToast("Failed to schedule. Check rules.", "error"); }
+            try { await addDoc(collection(db, "appointments"), { patientId: ptId, providerId: provId, withName, date, type, timestamp: serverTimestamp() }); showToast("Appointment Scheduled", "success"); closeModal('modal-appointment'); switchView('appointments'); } 
+            catch(e) { showToast("Failed to schedule.", "error"); }
         };
 
         async function renderAppointments(container) {
             let appts = [];
-            try {
-                const q = query(collection(db, "appointments"), where(currentUserData.role==='patient'?"patientId":"providerId", "==", currentUser.uid));
-                const snap = await getDocs(q);
-                appts = snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b) => new Date(a.date) - new Date(b.date));
-            } catch(e) { return container.innerHTML = `<div class="p-6 bg-amber-50 text-amber-700 rounded-lg font-bold">Update Rules to view Appointments.</div>`; }
+            try { const q = query(collection(db, "appointments"), where(currentUserData.role==='patient'?"patientId":"providerId", "==", currentUser.uid)); const snap = await getDocs(q); appts = snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b) => new Date(a.date) - new Date(b.date)); } 
+            catch(e) { return container.innerHTML = `<div class="p-6 bg-amber-50 text-amber-700 rounded-lg font-bold">Update Rules to view Appointments.</div>`; }
 
             let html = `<div class="flex justify-between items-center mb-6"><h3 class="text-2xl font-bold text-slate-800">${currentUserData.role === 'patient' ? 'My Appointments' : 'My Schedule'}</h3><button onclick="openAppointmentModal()" class="bg-blue-600 text-white px-5 py-2.5 rounded-xl font-bold shadow-sm hover:bg-blue-700 transition-colors"><i class="fas fa-calendar-plus mr-2"></i>Schedule New</button></div><div class="bg-white rounded-3xl shadow-sm border border-slate-200 divide-y divide-slate-100">`;
             if(appts.length === 0) html += `<div class="p-10 text-center text-slate-500"><i class="fas fa-calendar-times text-5xl mb-4 text-slate-300"></i><p class="font-medium text-lg">No upcoming appointments.</p></div>`;
-            
-            appts.forEach(a => { 
-                const d = new Date(a.date);
-                html += `<div class="p-6 flex justify-between items-center"><div class="flex items-start gap-5"><div class="bg-blue-50 text-blue-700 w-16 h-16 rounded-2xl flex flex-col items-center justify-center border border-blue-100 shadow-sm"><span class="text-xs font-black uppercase tracking-widest">${d.toLocaleString('default',{month:'short'})}</span><span class="text-2xl font-black leading-none">${d.getDate()}</span></div><div><h4 class="font-bold text-xl text-slate-800 mb-1">${a.type}</h4><p class="text-sm font-bold text-slate-500 uppercase tracking-wide">${currentUserData.role==='patient'?'Provider':'Patient'}: <span class="text-slate-700">${a.withName}</span></p><p class="text-xs font-bold text-slate-400 mt-2 bg-slate-100 inline-block px-2 py-1 rounded"><i class="fas fa-clock mr-1.5"></i>${d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</p></div></div><span class="px-3 py-1 bg-amber-100 text-amber-800 text-xs font-extrabold rounded-md uppercase tracking-wider">Scheduled</span></div>`; 
-            });
+            appts.forEach(a => { const d = new Date(a.date); html += `<div class="p-6 flex justify-between items-center"><div class="flex items-start gap-5"><div class="bg-blue-50 text-blue-700 w-16 h-16 rounded-2xl flex flex-col items-center justify-center border border-blue-100 shadow-sm"><span class="text-xs font-black uppercase tracking-widest">${d.toLocaleString('default',{month:'short'})}</span><span class="text-2xl font-black leading-none">${d.getDate()}</span></div><div><h4 class="font-bold text-xl text-slate-800 mb-1">${a.type}</h4><p class="text-sm font-bold text-slate-500 uppercase tracking-wide">${currentUserData.role==='patient'?'Provider':'Patient'}: <span class="text-slate-700">${a.withName}</span></p><p class="text-xs font-bold text-slate-400 mt-2 bg-slate-100 inline-block px-2 py-1 rounded"><i class="fas fa-clock mr-1.5"></i>${d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</p></div></div><div class="flex gap-2"><span class="px-3 py-1 bg-amber-100 text-amber-800 text-xs font-extrabold rounded-md uppercase tracking-wider">Scheduled</span><button onclick="confirmDeletion('${a.id}', 'appointments')" class="px-3 py-1 bg-red-50 hover:bg-red-100 text-red-600 text-xs font-extrabold rounded-md uppercase tracking-wider transition-colors"><i class="fas fa-times"></i></button></div></div>`; });
             container.innerHTML = html + `</div>`;
         }
 
         // --- ADMIN CONTROLS ---
         function renderAdmin(container) {
-            container.innerHTML = `<div class="bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-sm"><div class="bg-slate-50 px-8 py-5 border-b border-slate-200 flex justify-between items-center"><h3 class="font-extrabold text-slate-800 text-xl"><i class="fas fa-shield-halved text-purple-600 mr-3"></i> System Administration</h3></div><div class="p-8"><div class="bg-amber-50 border-l-4 border-amber-500 p-5 text-amber-900 text-sm font-bold mb-8 rounded-r-xl shadow-sm"><strong>Admin Access Confirmed:</strong> You have full system rights. Ensure rules are configured securely in production.</div><h4 class="font-extrabold text-lg mb-4 border-b pb-2 text-slate-800">All System Users</h4><table class="w-full text-left text-sm"><thead><tr class="text-slate-500 font-extrabold uppercase tracking-wider text-xs"><th class="pb-3">Name</th><th class="pb-3">Email</th><th class="pb-3">Role</th><th class="pb-3">UID</th></tr></thead><tbody class="divide-y divide-slate-100">${allUsersCache.map(u => `<tr><td class="py-3 font-bold text-slate-800">${u.name}</td><td class="py-3 font-medium text-slate-600">${u.email}</td><td class="py-3 font-mono font-bold text-xs uppercase ${u.role==='admin'?'text-purple-600 bg-purple-50 inline-block px-2 rounded':u.role==='physician'?'text-emerald-600 bg-emerald-50 inline-block px-2 rounded':'text-blue-600'}">${u.role}</td><td class="py-3 text-xs font-mono text-slate-400">${u.id}</td></tr>`).join('')}</tbody></table></div></div>`;
+            container.innerHTML = `<div class="bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-sm"><div class="bg-slate-50 px-8 py-5 border-b border-slate-200 flex justify-between items-center"><h3 class="font-extrabold text-slate-800 text-xl"><i class="fas fa-shield-halved text-purple-600 mr-3"></i> System Administration</h3></div><div class="p-8"><div class="bg-amber-50 border-l-4 border-amber-500 p-5 text-amber-900 text-sm font-bold mb-8 rounded-r-xl shadow-sm"><strong>Admin Access Confirmed:</strong> You have full system rights.</div><h4 class="font-extrabold text-lg mb-4 border-b pb-2 text-slate-800">All System Users</h4><table class="w-full text-left text-sm"><thead><tr class="text-slate-500 font-extrabold uppercase tracking-wider text-xs"><th class="pb-3">Name</th><th class="pb-3">Email</th><th class="pb-3">Role</th><th class="pb-3">UID</th></tr></thead><tbody class="divide-y divide-slate-100">${allUsersCache.map(u => `<tr><td class="py-3 font-bold text-slate-800">${u.name}</td><td class="py-3 font-medium text-slate-600">${u.email}</td><td class="py-3 font-mono font-bold text-xs uppercase ${u.role==='admin'?'text-purple-600 bg-purple-50 inline-block px-2 rounded':u.role==='physician'?'text-emerald-600 bg-emerald-50 inline-block px-2 rounded':'text-blue-600'}">${u.role}</td><td class="py-3 text-xs font-mono text-slate-400">${u.id}</td></tr>`).join('')}</tbody></table></div></div>`;
         }
 
         // --- PROVIDER: DIRECTORY & PATIENT CHART ---
         async function renderDirectory(container) {
             const pts = allUsersCache.filter(u=>u.role==='patient');
-            let html = `
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-2xl font-bold text-slate-800">Patient Directory</h3>
-                    <button onclick="openModal('modal-add-patient')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-xl font-bold shadow-sm transition-colors"><i class="fas fa-plus mr-2"></i>Register Patient</button>
-                </div>
-                <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
-                    <table class="w-full text-left">
-                        <thead class="bg-slate-50 border-b border-slate-200 text-xs uppercase text-slate-500 font-extrabold tracking-wider"><tr><th class="px-6 py-5">Patient</th><th class="px-6 py-5">Contact</th><th class="px-6 py-5 text-right">Action</th></tr></thead>
-                        <tbody class="divide-y divide-slate-100">
-            `;
+            let html = `<div class="flex justify-between items-center mb-6"><h3 class="text-2xl font-bold text-slate-800">Patient Directory</h3><button onclick="openModal('modal-add-patient')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-xl font-bold shadow-sm transition-colors"><i class="fas fa-plus mr-2"></i>Register Patient</button></div><div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden"><table class="w-full text-left"><thead class="bg-slate-50 border-b border-slate-200 text-xs uppercase text-slate-500 font-extrabold tracking-wider"><tr><th class="px-6 py-5">Patient</th><th class="px-6 py-5">Contact</th><th class="px-6 py-5 text-right">Action</th></tr></thead><tbody class="divide-y divide-slate-100">`;
             pts.forEach(p => {
-                html += `<tr class="hover:bg-slate-50 transition-colors">
-                    <td class="px-6 py-4"><div class="font-extrabold text-slate-900 text-lg">${p.name}</div><div class="text-[10px] text-slate-400 font-mono font-bold mt-1 uppercase tracking-widest">ID: ${p.id.substring(0,8)}</div></td>
-                    <td class="px-6 py-4 text-sm font-medium text-slate-600">${p.email}</td>
-                    <td class="px-6 py-4 text-right"><button onclick="loadPatientChart('${p.id}')" class="text-blue-600 hover:bg-blue-50 text-sm font-bold border-2 border-blue-100 px-4 py-2 rounded-lg transition-colors shadow-sm">Open Chart</button></td>
-                </tr>`;
+                html += `<tr class="hover:bg-slate-50 transition-colors"><td class="px-6 py-4"><div class="font-extrabold text-slate-900 text-lg">${p.name}</div><div class="text-[10px] text-slate-400 font-mono font-bold mt-1 uppercase tracking-widest">ID: ${p.id.substring(0,8)}</div></td><td class="px-6 py-4 text-sm font-medium text-slate-600">${p.email}</td><td class="px-6 py-4 text-right"><button onclick="loadPatientChart('${p.id}')" class="text-blue-600 hover:bg-blue-50 text-sm font-bold border-2 border-blue-100 px-4 py-2 rounded-lg transition-colors shadow-sm">Open Chart</button></td></tr>`;
             });
             container.innerHTML = html + `</tbody></table></div>`;
         }
-
-        window.registerPatient = async () => {
-            const name = document.getElementById('new-pat-name').value;
-            const email = document.getElementById('new-pat-email').value;
-            const dob = document.getElementById('new-pat-dob').value;
-            if(!name || !email) return showToast("Name and email required", "error");
-            try {
-                await addDoc(collection(db, "users"), { name, email, dob, role: 'patient', stub: true, createdAt: serverTimestamp() });
-                showToast("Patient registered successfully", "success");
-                closeModal('modal-add-patient');
-                const allUsersSnap = await getDocs(collection(db, "users"));
-                allUsersCache = allUsersSnap.docs.map(d => ({id: d.id, ...d.data()}));
-                if(document.getElementById('header-title').innerText === 'Patient Directory') switchView('directory');
-            } catch(e) { showToast("Error registering patient. Check Rules.", "error"); }
-        };
 
         window.chartTab = 'overview';
         window.currentPatientId = null;
@@ -1014,20 +821,31 @@
             window.currentPatientId = ptId;
             const pt = allUsersCache.find(u=>u.id===ptId);
             document.getElementById('header-title').innerHTML = `<button onclick="switchView('directory')" class="text-slate-400 hover:text-slate-600 mr-3"><i class="fas fa-arrow-left"></i></button> Chart: <span class="text-slate-600 font-medium ml-1">${pt.name}</span>`;
-            
             const container = document.getElementById('dynamic-view-container');
-            const tabs = [{id: 'overview', label: 'Overview'},{id: 'encounters', label: 'Encounters'},{id: 'vitals', label: 'Flowsheets'},{id: 'orders', label: 'Orders & Rx'}];
+            const tabs = [{id: 'overview', label: 'Overview & Profile'},{id: 'encounters', label: 'Encounters'},{id: 'vitals', label: 'Flowsheets'},{id: 'orders', label: 'Orders & Rx'}];
+
+            // Render Labels Display (Dynamic)
+            let labelsHtml = pt.labels ? pt.labels.map(l => `<span class="bg-amber-100 text-amber-800 text-[10px] font-black uppercase tracking-wider px-2 py-1 rounded-md border border-amber-200 mr-1 flex items-center gap-1 inline-flex">${l} <button onclick="removeLabel('${pt.id}', '${l}')" class="hover:text-amber-900 ml-1"><i class="fas fa-times"></i></button></span>`).join('') : '';
 
             let html = `
-                <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm mb-6 flex items-center justify-between border-l-8 border-l-blue-600">
-                    <div class="flex items-center gap-5">
-                        <div class="w-20 h-20 rounded-2xl bg-slate-100 flex items-center justify-center text-3xl text-slate-400 overflow-hidden shadow-inner border border-slate-200"><img src="${pt.photoUrl || `https://ui-avatars.com/api/?name=${pt.name}&background=f8fafc&color=334155`}"></div>
-                        <div><h2 class="text-3xl font-extrabold text-slate-900 mb-1 tracking-tight">${pt.name}</h2><p class="text-sm font-bold text-slate-500 uppercase tracking-wider">${pt.dob ? `DOB: ${pt.dob}` : 'DOB: Unknown'} <span class="mx-2 opacity-50">|</span> <span class="text-slate-400 lowercase tracking-normal font-medium">${pt.email}</span></p></div>
+                <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm mb-6 flex flex-col md:flex-row items-center justify-between border-l-8 border-l-blue-600 gap-4">
+                    <div class="flex items-center gap-5 w-full md:w-auto">
+                        <div class="w-20 h-20 rounded-2xl bg-slate-100 flex items-center justify-center text-3xl text-slate-400 overflow-hidden shadow-inner border border-slate-200 shrink-0"><img src="${pt.photoUrl || `https://ui-avatars.com/api/?name=${pt.name}&background=f8fafc&color=334155`}"></div>
+                        <div>
+                            <h2 class="text-3xl font-extrabold text-slate-900 mb-1 tracking-tight">${pt.name}</h2>
+                            <p class="text-sm font-bold text-slate-500 uppercase tracking-wider">${pt.dob ? `DOB: ${pt.dob}` : 'DOB: Unknown'} <span class="mx-2 opacity-50">|</span> <span class="text-slate-400 lowercase tracking-normal font-medium">${pt.email}</span></p>
+                            <div class="mt-2 flex flex-wrap gap-1 items-center">
+                                ${labelsHtml}
+                                <div class="relative inline-block ml-1">
+                                    <input type="text" id="new-label-input" placeholder="Add Label..." class="text-xs bg-slate-50 border border-slate-200 rounded px-2 py-1 w-24 outline-none focus:ring-1 focus:ring-blue-500" onkeypress="if(event.key==='Enter') addLabel('${pt.id}')">
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div><button onclick="openEncounterForm('${pt.id}')" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-bold shadow-md transition-all active:scale-95"><i class="fas fa-notes-medical mr-2"></i>New Clinical Note</button></div>
+                    <div><button onclick="openEncounterForm('${pt.id}')" class="w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-bold shadow-md transition-all active:scale-95"><i class="fas fa-notes-medical mr-2"></i>New Clinical Note</button></div>
                 </div>
-                <div class="flex border-b border-slate-200 mb-6 space-x-8 px-2">
-                    ${tabs.map(t => `<button onclick="switchChartTab('${t.id}')" class="pb-3 text-sm tracking-wide ${chartTab===t.id?'tab-active':'tab-inactive'}">${t.label}</button>`).join('')}
+                <div class="flex border-b border-slate-200 mb-6 space-x-8 px-2 overflow-x-auto hide-scrollbar">
+                    ${tabs.map(t => `<button onclick="switchChartTab('${t.id}')" class="pb-3 text-sm tracking-wide whitespace-nowrap ${chartTab===t.id?'tab-active':'tab-inactive'}">${t.label}</button>`).join('')}
                 </div>
                 <div id="chart-content" class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm min-h-[400px]"></div>
             `;
@@ -1037,18 +855,68 @@
 
         window.switchChartTab = (tab) => { window.chartTab = tab; loadPatientChart(window.currentPatientId); };
 
+        window.addLabel = async (ptId) => {
+            const input = document.getElementById('new-label-input'); const val = input.value.trim();
+            if(!val) return;
+            try {
+                const pt = allUsersCache.find(u=>u.id===ptId);
+                const labels = pt.labels || []; if(labels.includes(val)) return;
+                labels.push(val);
+                await updateDoc(doc(db, "users", ptId), { labels });
+                pt.labels = labels; // Update cache
+                input.value = ''; loadPatientChart(ptId); // Refresh top header
+            } catch(e) { showToast("Failed to add label", "error"); }
+        }
+        window.removeLabel = async (ptId, val) => {
+            try {
+                const pt = allUsersCache.find(u=>u.id===ptId);
+                const labels = pt.labels.filter(l => l !== val);
+                await updateDoc(doc(db, "users", ptId), { labels });
+                pt.labels = labels; loadPatientChart(ptId); 
+            } catch(e) { showToast("Failed to remove label", "error"); }
+        }
+
+        window.addAllergy = async () => {
+            const allergen = document.getElementById('new-allergen-input').value.trim();
+            const reaction = document.getElementById('new-reaction-input').value.trim();
+            if(!allergen) return showToast("Allergen required", "error");
+            try {
+                await addDoc(collection(db, "allergies"), { patientId: window.currentPatientId, providerId: currentUser.uid, allergen, reaction, timestamp: serverTimestamp() });
+                renderChartContent();
+            } catch(e) { showToast("Failed to add allergy", "error"); }
+        }
+
         async function renderChartContent() {
             const cc = document.getElementById('chart-content');
             
             if(chartTab === 'overview') {
                 try {
                     const snapC = await getDocs(query(collection(db, "conditions"), where("patientId", "==", window.currentPatientId)));
-                    let html = `<div class="grid grid-cols-2 gap-8"><div><h4 class="font-extrabold text-slate-800 text-lg mb-4 border-b border-slate-100 pb-2">Active Problems</h4><ul class="space-y-3">`;
+                    const snapA = await getDocs(query(collection(db, "allergies"), where("patientId", "==", window.currentPatientId)));
+                    
+                    let html = `<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <h4 class="font-extrabold text-slate-800 text-lg mb-4 border-b border-slate-100 pb-2">Active Problems</h4>
+                            <ul class="space-y-3 mb-4">`;
                     if(snapC.empty) html += `<li class="text-slate-500 font-medium">No active conditions</li>`;
-                    snapC.forEach(d => html += `<li class="flex items-start gap-3"><i class="fas fa-check-circle text-blue-500 mt-1"></i><span class="font-bold text-slate-700">${d.data().diagnosis}</span></li>`);
-                    html += `</ul></div><div><h4 class="font-extrabold text-slate-800 text-lg mb-4 border-b border-slate-100 pb-2">Allergies</h4><p class="text-sm font-bold text-slate-500 bg-slate-50 inline-block px-3 py-1.5 rounded-lg border border-slate-100">NKDA (No known drug allergies)</p></div></div>`;
+                    snapC.forEach(d => html += `<li class="flex items-start justify-between gap-3"><div class="flex items-start gap-3"><i class="fas fa-check-circle text-blue-500 mt-1"></i><span class="font-bold text-slate-700">${d.data().diagnosis}</span></div> <button onclick="confirmDeletion('${d.id}', 'conditions')" class="text-red-400 hover:text-red-600"><i class="fas fa-times"></i></button></li>`);
+                    html += `</ul></div>
+                        <div>
+                            <h4 class="font-extrabold text-slate-800 text-lg mb-4 border-b border-slate-100 pb-2">Allergies</h4>
+                            <ul class="space-y-3 mb-4">`;
+                    if(snapA.empty) html += `<li class="text-slate-500 font-bold bg-slate-50 inline-block px-3 py-1.5 rounded-lg border border-slate-100">NKDA (No known drug allergies)</li>`;
+                    snapA.forEach(d => { const a = d.data(); html += `<li class="flex items-start justify-between gap-3 bg-red-50 p-3 rounded-xl border border-red-100"><div class="flex gap-3"><i class="fas fa-exclamation-triangle text-red-500 mt-1"></i><div><span class="font-bold text-slate-800">${a.allergen}</span><p class="text-xs text-slate-500">Reaction: ${a.reaction||'Unknown'}</p></div></div><button onclick="confirmDeletion('${d.id}', 'allergies')" class="text-red-400 hover:text-red-600"><i class="fas fa-times"></i></button></li>`; });
+                    
+                    html += `</ul>
+                            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col gap-2">
+                                <h5 class="text-xs font-bold uppercase text-slate-500 mb-1">Add New Allergy</h5>
+                                <input type="text" id="new-allergen-input" placeholder="Allergen (e.g., Penicillin)" class="w-full px-3 py-2 rounded border border-slate-300 text-sm outline-none focus:border-blue-500">
+                                <input type="text" id="new-reaction-input" placeholder="Reaction (e.g., Hives)" class="w-full px-3 py-2 rounded border border-slate-300 text-sm outline-none focus:border-blue-500">
+                                <button onclick="addAllergy()" class="bg-blue-600 text-white text-sm font-bold py-2 rounded hover:bg-blue-700">Add to Chart</button>
+                            </div>
+                        </div></div>`;
                     cc.innerHTML = html;
-                } catch(e) { cc.innerHTML = `<p class="text-amber-600 font-bold">Failed to load overview. Check rules.</p>`; }
+                } catch(e) { cc.innerHTML = `<p class="text-amber-600 font-bold">Failed to load overview.</p>`; }
                 
             } else if (chartTab === 'encounters') {
                 try {
@@ -1058,21 +926,21 @@
                     let eh = `<div class="space-y-5">`;
                     if(encounters.length === 0) eh += `<p class="text-slate-500 font-medium">No encounters found.</p>`;
                     encounters.forEach(v => {
-                        eh += `<div class="border border-slate-200 rounded-2xl p-6 bg-slate-50 shadow-sm"><div class="flex justify-between items-center mb-4"><div class="flex items-center gap-4"><b class="text-slate-900 text-xl font-extrabold">${v.complaint}</b><span class="text-[11px] font-black tracking-widest text-slate-500 bg-white px-3 py-1 rounded-md border border-slate-200 shadow-sm uppercase">${v.timestamp?new Date(v.timestamp.toDate()).toLocaleDateString():''}</span></div><button onclick="confirmDeleteEncounter('${v.id}')" class="text-red-400 hover:text-red-600 bg-white border border-red-100 hover:bg-red-50 rounded-lg transition-colors p-2 shadow-sm" title="Delete Note"><i class="fas fa-trash"></i></button></div><pre class="text-sm font-mono font-medium text-slate-700 whitespace-pre-wrap leading-relaxed bg-white p-4 rounded-xl border border-slate-100">${v.notes}</pre></div>`;
+                        eh += `<div class="border border-slate-200 rounded-2xl p-6 bg-slate-50 shadow-sm"><div class="flex justify-between items-center mb-4"><div class="flex items-center gap-4"><b class="text-slate-900 text-xl font-extrabold">${v.complaint}</b><span class="text-[11px] font-black tracking-widest text-slate-500 bg-white px-3 py-1 rounded-md border border-slate-200 shadow-sm uppercase">${v.timestamp?new Date(v.timestamp.toDate()).toLocaleDateString():''}</span></div><button onclick="confirmDeletion('${v.id}', 'encounters')" class="text-red-400 hover:text-red-600 bg-white border border-red-100 hover:bg-red-50 rounded-lg transition-colors p-2 shadow-sm" title="Delete Note"><i class="fas fa-trash"></i></button></div><pre class="text-sm font-mono font-medium text-slate-700 whitespace-pre-wrap leading-relaxed bg-white p-4 rounded-xl border border-slate-100">${v.notes}</pre></div>`;
                     });
                     cc.innerHTML = eh + `</div>`;
-                } catch(e) { cc.innerHTML = `<p class="text-amber-600 font-bold">Failed to load encounters. Check rules.</p>`; }
+                } catch(e) { cc.innerHTML = `<p class="text-amber-600 font-bold">Failed to load encounters.</p>`; }
                 
             } else if (chartTab === 'vitals') {
                 try {
                     const snap = await getDocs(query(collection(db, "vitals"), where("patientId", "==", window.currentPatientId)));
-                    const vitals = snap.docs.map(d=>d.data()).sort((a,b)=>(b.timestamp?.toMillis()||0)-(a.timestamp?.toMillis()||0));
+                    const vitals = snap.docs.map(d=>({id: d.id, ...d.data()})).sort((a,b)=>(b.timestamp?.toMillis()||0)-(a.timestamp?.toMillis()||0));
                     
-                    let vh = `<table class="w-full text-left text-sm"><thead class="bg-slate-50 text-slate-500 uppercase font-extrabold tracking-wider text-xs"><tr><th class="p-4 rounded-tl-lg">Date</th><th class="p-4">BP</th><th class="p-4">HR</th><th class="p-4">Temp</th><th class="p-4 rounded-tr-lg">Weight</th></tr></thead><tbody>`;
-                    if(vitals.length === 0) vh += `<tr><td colspan="5" class="p-6 text-center text-slate-500 font-medium">No flowsheets available.</td></tr>`;
-                    vitals.forEach(v => { vh += `<tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors"><td class="p-4 font-bold text-slate-700">${v.timestamp?new Date(v.timestamp.toDate()).toLocaleDateString():''}</td><td class="p-4 font-mono font-bold">${v.bp||'--'}</td><td class="p-4 font-mono font-bold">${v.hr||'--'}</td><td class="p-4 font-mono font-bold">${v.temp||'--'}</td><td class="p-4 font-mono font-bold">${v.weight||'--'}</td></tr>`; });
+                    let vh = `<table class="w-full text-left text-sm"><thead class="bg-slate-50 text-slate-500 uppercase font-extrabold tracking-wider text-xs"><tr><th class="p-4 rounded-tl-lg">Date</th><th class="p-4">BP</th><th class="p-4">HR</th><th class="p-4">Temp</th><th class="p-4">Weight</th><th class="p-4 rounded-tr-lg"></th></tr></thead><tbody>`;
+                    if(vitals.length === 0) vh += `<tr><td colspan="6" class="p-6 text-center text-slate-500 font-medium">No flowsheets available.</td></tr>`;
+                    vitals.forEach(v => { vh += `<tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors"><td class="p-4 font-bold text-slate-700">${v.timestamp?new Date(v.timestamp.toDate()).toLocaleDateString():''}</td><td class="p-4 font-mono font-bold">${v.bp||'--'}</td><td class="p-4 font-mono font-bold">${v.hr||'--'}</td><td class="p-4 font-mono font-bold">${v.temp||'--'}</td><td class="p-4 font-mono font-bold">${v.weight||'--'}</td><td class="p-4 text-right"><button onclick="confirmDeletion('${v.id}', 'vitals')" class="text-red-400 hover:text-red-600"><i class="fas fa-times"></i></button></td></tr>`; });
                     cc.innerHTML = vh + `</tbody></table>`;
-                } catch(e) { cc.innerHTML = `<p class="text-amber-600 font-bold">Failed to load vitals. Check rules.</p>`; }
+                } catch(e) { cc.innerHTML = `<p class="text-amber-600 font-bold">Failed to load vitals.</p>`; }
                 
             } else {
                 try {
@@ -1081,27 +949,12 @@
                     if(snap.empty) rxHtml += `<p class="text-slate-500 font-medium">No active orders or prescriptions.</p>`;
                     snap.forEach(d => {
                         const rx = d.data();
-                        rxHtml += `<li class="flex justify-between items-center p-5 bg-white border border-slate-200 rounded-2xl shadow-sm"><div class="flex items-center gap-4"><div class="w-10 h-10 bg-blue-50 text-blue-500 rounded-lg flex items-center justify-center"><i class="fas fa-prescription"></i></div><div><b class="text-slate-900 text-lg font-extrabold tracking-tight">${rx.name}</b><p class="text-xs font-bold text-slate-500 mt-1 uppercase tracking-wide">Status: <span class="${rx.status==='Active'?'text-emerald-500':'text-amber-500'}">${rx.status}</span> <span class="mx-2 opacity-30">|</span> Sig: ${rx.instructions || 'N/A'}</p></div></div><span class="text-xs bg-slate-100 text-slate-600 border border-slate-200 px-3 py-1.5 rounded-lg font-extrabold uppercase tracking-wider">Refills: ${rx.refills}</span></li>`;
+                        rxHtml += `<li class="flex justify-between items-center p-5 bg-white border border-slate-200 rounded-2xl shadow-sm"><div class="flex items-center gap-4"><div class="w-10 h-10 bg-blue-50 text-blue-500 rounded-lg flex items-center justify-center"><i class="fas fa-prescription"></i></div><div><b class="text-slate-900 text-lg font-extrabold tracking-tight">${rx.name} ${rx.strength ? `<span class="text-sm font-mono text-slate-500 ml-1">${rx.strength}</span>`:''}</b><p class="text-xs font-bold text-slate-500 mt-1 uppercase tracking-wide">Status: <span class="${rx.status.includes('Active')?'text-emerald-500':'text-amber-500'}">${rx.status}</span> <span class="mx-2 opacity-30">|</span> Sig: ${rx.instructions || 'N/A'}</p></div></div><div class="flex items-center gap-3"><span class="text-xs bg-slate-100 text-slate-600 border border-slate-200 px-3 py-1.5 rounded-lg font-extrabold uppercase tracking-wider">Refills: ${rx.refills}</span> <button onclick="confirmDeletion('${d.id}', 'medications')" class="text-red-400 hover:text-red-600 bg-red-50 p-2 rounded-lg"><i class="fas fa-trash"></i></button></div></li>`;
                     });
                     cc.innerHTML = rxHtml + `</ul>`;
-                } catch(e) { cc.innerHTML = `<p class="text-amber-600 font-bold">Failed to load orders. Check rules.</p>`; }
+                } catch(e) { cc.innerHTML = `<p class="text-amber-600 font-bold">Failed to load orders.</p>`; }
             }
         }
-
-        window.confirmDeleteEncounter = (id) => {
-            window.encounterToDelete = id;
-            openModal('modal-confirm-delete');
-        };
-
-        window.executeDeleteEncounter = async () => {
-            if(!window.encounterToDelete) return;
-            try {
-                await deleteDoc(doc(db, "encounters", window.encounterToDelete));
-                showToast("Encounter permanently deleted.", "success");
-                closeModal('modal-confirm-delete');
-                renderChartContent(); // refresh tab
-            } catch(e) { showToast("Failed to delete. Check rules.", "error"); }
-        };
 
         // --- COMPREHENSIVE ENCOUNTER FORM ---
         window.openEncounterForm = (ptId) => {
@@ -1150,17 +1003,25 @@
                         <!-- Orders / Rx -->
                         <div>
                             <h4 class="font-extrabold text-slate-800 text-lg border-b-2 border-slate-100 pb-2 mb-4 flex items-center gap-2"><span class="text-blue-500 opacity-50">4.</span> Orders, Prescriptions & DME</h4>
-                            <div class="flex flex-col md:flex-row gap-4">
-                                <div class="w-full md:w-1/2 relative">
+                            <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+                                <div class="md:col-span-5 relative">
                                     <i class="fas fa-pills absolute left-4 top-3.5 text-slate-400"></i>
                                     <input list="rx-treatments" id="enc-rx" placeholder="Search Drug/DME Database..." class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 outline-none font-bold text-slate-700 transition-all">
                                 </div>
-                                <div class="w-full md:w-1/2 relative">
+                                <div class="md:col-span-4 relative">
+                                    <i class="fas fa-vial absolute left-4 top-3.5 text-slate-400"></i>
+                                    <input type="text" id="enc-rx-strength" placeholder="Strength (e.g., 20mg)" class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 outline-none font-bold text-slate-700 transition-all">
+                                </div>
+                                <div class="md:col-span-3 relative">
+                                    <i class="fas fa-sync-alt absolute left-4 top-3.5 text-slate-400"></i>
+                                    <input type="number" id="enc-rx-refills" placeholder="Refills" min="0" class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 outline-none font-bold text-slate-700 transition-all">
+                                </div>
+                                <div class="md:col-span-12 relative">
                                     <i class="fas fa-pen absolute left-4 top-3.5 text-slate-400"></i>
-                                    <input type="text" id="enc-rx-sig" placeholder="Provider Instructions (Sig)" class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 outline-none font-bold text-slate-700 transition-all">
+                                    <input type="text" id="enc-rx-sig" placeholder="Provider Instructions (Sig) e.g., Take 1 PO Daily" class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 outline-none font-bold text-slate-700 transition-all">
                                 </div>
                             </div>
-                            <p class="text-xs font-bold text-slate-400 mt-2 uppercase tracking-wide"><i class="fas fa-info-circle mr-1"></i>Prescriptions and DME requests route directly to the clinic pharmacy queue.</p>
+                            <p class="text-xs font-bold text-slate-400 mt-2 uppercase tracking-wide"><i class="fas fa-info-circle mr-1"></i>New scripts enter the <span class="text-blue-600">Pending Pharmacy Queue</span>.</p>
                         </div>
 
                         <!-- Clinical Notes -->
@@ -1176,48 +1037,42 @@
         window.saveComprehensiveEncounter = async (ptId) => {
             const complaint = document.getElementById('enc-complaint').value;
             const notes = document.getElementById('enc-notes').value;
-            const bp = document.getElementById('enc-bp').value;
-            const hr = document.getElementById('enc-hr').value;
-            const temp = document.getElementById('enc-temp').value;
-            const weight = document.getElementById('enc-weight').value;
+            const bp = document.getElementById('enc-bp').value; const hr = document.getElementById('enc-hr').value;
+            const temp = document.getElementById('enc-temp').value; const weight = document.getElementById('enc-weight').value;
             const diagnosis = document.getElementById('enc-diagnosis').value;
+            
             const rx = document.getElementById('enc-rx').value;
+            const strength = document.getElementById('enc-rx-strength').value;
             const sig = document.getElementById('enc-rx-sig').value;
+            let refills = parseInt(document.getElementById('enc-rx-refills').value) || 0;
 
             if(!complaint || !notes) return showToast("Chief complaint and notes are required.", "error");
 
             try {
                 const ts = serverTimestamp();
                 
-                // 1. Save Encounter Note
-                try {
-                    await addDoc(collection(db, "encounters"), { patientId: ptId, providerId: currentUser.uid, complaint, notes, timestamp: ts });
-                } catch(e) { throw new Error("Failed to save Encounter Note. Check 'encounters' rules."); }
-
-                // 2. Save Vitals (if any provided)
+                await addDoc(collection(db, "encounters"), { patientId: ptId, providerId: currentUser.uid, complaint, notes, timestamp: ts });
+                
                 if(bp || hr || temp || weight) {
-                    try { await addDoc(collection(db, "vitals"), { patientId: ptId, providerId: currentUser.uid, bp, hr, temp, weight, timestamp: ts }); }
-                    catch(e) { console.error(e); showToast("Vitals failed. Check rules.", "error"); }
+                    await addDoc(collection(db, "vitals"), { patientId: ptId, providerId: currentUser.uid, bp, hr, temp, weight, timestamp: ts }); 
                 }
 
-                // 3. Save Diagnosis to Conditions
                 if(diagnosis) {
-                    try { await addDoc(collection(db, "conditions"), { patientId: ptId, providerId: currentUser.uid, diagnosis, timestamp: ts }); }
-                    catch(e) { console.error(e); showToast("Diagnosis failed. Check rules.", "error"); }
+                    await addDoc(collection(db, "conditions"), { patientId: ptId, providerId: currentUser.uid, diagnosis, timestamp: ts }); 
                 }
 
-                // 4. Save Rx to Medications
                 if(rx) {
-                    try { await addDoc(collection(db, "medications"), { patientId: ptId, providerId: currentUser.uid, name: rx, instructions: sig, status: 'Active', refills: 3, timestamp: ts }); }
-                    catch(e) { console.error(e); showToast("Order failed. Check rules.", "error"); }
+                    const isControlled = rx.includes('Adderall') || rx.includes('Vyvanse') || rx.includes('Methylphenidate');
+                    if (isControlled && refills > 0) {
+                        showToast("Controlled substances forced to 0 refills.", "info");
+                        refills = 0;
+                    }
+                    await addDoc(collection(db, "medications"), { patientId: ptId, providerId: currentUser.uid, name: rx, strength: strength, instructions: sig, status: 'Pending Pharmacy', refills: refills, isControlled: isControlled, timestamp: ts }); 
                 }
 
                 showToast("Encounter signed and synchronized.", "success");
-                loadPatientChart(ptId); // Return to chart
-            } catch (error) {
-                console.error(error);
-                showToast(error.message, "error");
-            }
+                loadPatientChart(ptId); 
+            } catch (error) { showToast(error.message, "error"); }
         };
 
     </script>
