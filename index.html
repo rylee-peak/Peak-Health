@@ -8,8 +8,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
-        .epic-bg { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); }
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
         .hidden { display: none !important; }
         .tab-active { border-bottom: 2px solid #2563eb; color: #1e3a8a; font-weight: 600; }
         .tab-inactive { color: #64748b; font-weight: 500; }
@@ -29,14 +28,24 @@
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
-<body class="h-screen flex overflow-hidden text-slate-800">
+<body class="h-screen flex overflow-hidden text-slate-800 selection:bg-blue-200 selection:text-blue-900">
 
     <!-- Datasets for Autocomplete -->
     <datalist id="icd-10-codes">
-        <!-- Common ICD-10 -->
+        <!-- Common ICD-10 & Specific Requests -->
         <option value="I10 - Essential (primary) hypertension">
         <option value="E11.9 - Type 2 diabetes mellitus without complications">
         <option value="E78.5 - Hyperlipidemia, unspecified">
+        <option value="F90.9 - Attention-deficit hyperactivity disorder, unspecified type (ADHD)">
+        <option value="F90.0 - Attention-deficit hyperactivity disorder, predominantly inattentive type">
+        <option value="F90.1 - Attention-deficit hyperactivity disorder, predominantly hyperactive type">
+        <option value="F90.2 - Attention-deficit hyperactivity disorder, combined type">
+        <option value="G82.20 - Paraplegia, unspecified">
+        <option value="G82.21 - Paraplegia, complete">
+        <option value="G82.22 - Paraplegia, incomplete">
+        <option value="G82.50 - Quadriplegia, unspecified">
+        <option value="G82.51 - Quadriplegia, C1-C4 complete">
+        <option value="G82.52 - Quadriplegia, C1-C4 incomplete">
         <option value="J01.90 - Acute sinusitis, unspecified">
         <option value="J02.9 - Acute pharyngitis, unspecified">
         <option value="J45.909 - Unspecified asthma, uncomplicated">
@@ -58,6 +67,11 @@
 
     <datalist id="rx-treatments">
         <!-- Brand / Generic Meds -->
+        <option value="Amphetamine/Dextroamphetamine (Adderall)">
+        <option value="Amphetamine/Dextroamphetamine ER (Adderall XR)">
+        <option value="Lisdexamfetamine (Vyvanse)">
+        <option value="Methylphenidate (Ritalin)">
+        <option value="Methylphenidate ER (Concerta)">
         <option value="Amoxicillin (Amoxil)">
         <option value="Azithromycin (Zithromax)">
         <option value="Albuterol HFA (ProAir, Ventolin)">
@@ -80,6 +94,7 @@
         <option value="Acetaminophen (Tylenol)">
         <!-- Durable Medical Equipment (DME) -->
         <option value="DME: Standard Manual Wheelchair">
+        <option value="DME: Power Wheelchair">
         <option value="DME: CPAP Machine">
         <option value="DME: BiPAP Machine">
         <option value="DME: Blood Glucose Monitor">
@@ -92,36 +107,73 @@
 
     <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
-    <!-- LOGIN SCREEN -->
-    <div id="login-view" class="w-full h-full flex items-center justify-center epic-bg absolute z-40 transition-opacity duration-300">
-        <div class="bg-white rounded-xl shadow-2xl w-full max-w-4xl flex overflow-hidden h-[600px]">
-            <div class="w-1/2 bg-slate-50 p-12 flex flex-col justify-center items-start border-r border-slate-100 hidden md:flex">
-                <i class="fas fa-mountain text-6xl text-blue-600 mb-6"></i>
-                <h1 class="text-4xl font-bold text-slate-900 mb-4">Peak Health</h1>
-                <p class="text-slate-600 text-lg leading-relaxed">Secure, intuitive, and built for optimal patient care. Manage your health or your practice in one place.</p>
-            </div>
-            <div class="w-full md:w-1/2 p-12 flex flex-col justify-center bg-white relative">
-                <h2 class="text-2xl font-bold text-slate-900 mb-8 text-center" id="login-title">Patient Portal</h2>
-                <form id="patient-login-form" class="space-y-5">
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">Email Address</label>
-                        <input type="email" id="patient-email" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none" required>
+    <!-- REDESIGNED LOGIN SCREEN -->
+    <div id="login-view" class="w-full h-full flex items-center justify-center bg-slate-100 absolute z-40 transition-opacity duration-300">
+        <!-- Abstract Background -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <div class="absolute -top-[20%] -right-[10%] w-[70%] h-[70%] bg-gradient-to-b from-blue-500/20 to-purple-500/20 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-[20%] -left-[10%] w-[70%] h-[70%] bg-gradient-to-t from-blue-500/20 to-emerald-500/20 rounded-full blur-3xl"></div>
+        </div>
+        
+        <!-- Login Card -->
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-5xl flex overflow-hidden min-h-[650px] relative z-10 mx-4 border border-white/50 backdrop-blur-sm">
+            <!-- Left Side: Branding -->
+            <div class="w-full md:w-5/12 bg-blue-600 p-12 flex flex-col justify-between items-start text-white relative hidden md:flex overflow-hidden">
+                <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1551076805-e18690c5e53b?q=80&w=1000&auto=format&fit=crop')] bg-cover bg-center opacity-20 mix-blend-overlay"></div>
+                <div class="absolute inset-0 bg-gradient-to-b from-blue-600/50 to-blue-900/90"></div>
+                
+                <div class="relative z-10 w-full">
+                    <div class="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center backdrop-blur-md border border-white/20 mb-8 shadow-lg">
+                        <i class="fas fa-mountain text-3xl text-white"></i>
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">Password</label>
-                        <input type="password" id="patient-password" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none" required>
-                    </div>
-                    <button type="submit" id="btn-patient-login" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition-colors shadow-md">Sign In as Patient</button>
-                    <div class="text-center mt-4"><a href="#" id="toggle-signup" class="text-sm text-blue-600 hover:underline">Need an account? Register</a></div>
-                </form>
-                <div class="relative flex items-center py-6">
-                    <div class="flex-grow border-t border-slate-200"></div>
-                    <span class="flex-shrink-0 mx-4 text-slate-400 text-sm font-medium">STAFF & PROVIDERS</span>
-                    <div class="flex-grow border-t border-slate-200"></div>
+                    <h1 class="text-4xl font-extrabold mb-4 tracking-tight">Peak Health</h1>
+                    <p class="text-blue-100 text-lg leading-relaxed">Secure, intuitive, and built for optimal patient care. The next-generation EMR.</p>
                 </div>
-                <button id="btn-staff-login" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-semibold py-3 rounded-lg transition-colors shadow-md flex items-center justify-center gap-2">
-                    <i class="fas fa-building-user"></i> Staff SSO Login (SAML)
-                </button>
+                
+                <div class="relative z-10">
+                    <p class="text-sm text-blue-200 font-medium tracking-wide">&copy; 2026 Peak Health Systems</p>
+                </div>
+            </div>
+            
+            <!-- Right Side: Forms -->
+            <div class="w-full md:w-7/12 p-10 md:p-16 flex flex-col justify-center bg-white relative">
+                <div class="w-full max-w-md mx-auto">
+                    <h2 class="text-3xl font-extrabold text-slate-900 mb-2 tracking-tight" id="login-title">Patient Portal</h2>
+                    <p class="text-slate-500 mb-8 font-medium" id="login-subtitle">Sign in to manage your health records.</p>
+                    
+                    <form id="patient-login-form" class="space-y-5">
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1.5">Email Address</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"><i class="fas fa-envelope text-slate-400"></i></div>
+                                <input type="email" id="patient-email" class="w-full pl-11 pr-4 py-3.5 rounded-xl border border-slate-200 focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all font-medium text-slate-800 bg-slate-50 focus:bg-white" placeholder="you@example.com" required>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1.5">Password</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"><i class="fas fa-lock text-slate-400"></i></div>
+                                <input type="password" id="patient-password" class="w-full pl-11 pr-4 py-3.5 rounded-xl border border-slate-200 focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all font-medium text-slate-800 bg-slate-50 focus:bg-white" placeholder="••••••••" required>
+                            </div>
+                        </div>
+                        <button type="submit" id="btn-patient-login" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-blue-600/30 active:scale-[0.98]">
+                            Sign In
+                        </button>
+                        <div class="text-center mt-6">
+                            <a href="#" id="toggle-signup" class="text-sm font-bold text-blue-600 hover:text-blue-800 transition-colors">Need an account? Register</a>
+                        </div>
+                    </form>
+                    
+                    <div class="relative flex items-center py-8">
+                        <div class="flex-grow border-t border-slate-200"></div>
+                        <span class="flex-shrink-0 mx-4 text-slate-400 text-xs font-bold tracking-wider uppercase">Staff & Providers</span>
+                        <div class="flex-grow border-t border-slate-200"></div>
+                    </div>
+                    
+                    <button id="btn-staff-login" class="w-full bg-slate-900 hover:bg-black text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-slate-900/20 active:scale-[0.98] flex items-center justify-center gap-3">
+                        <i class="fas fa-building-user text-lg"></i> Staff SSO Login
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -147,7 +199,7 @@
             <nav class="flex-1 py-4 space-y-1 px-3 overflow-y-auto" id="nav-menu"></nav>
 
             <div class="p-4 border-t border-slate-800">
-                <button id="btn-logout" class="w-full flex items-center gap-3 px-4 py-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors">
+                <button id="btn-logout" class="w-full flex items-center gap-3 px-4 py-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors font-medium">
                     <i class="fas fa-sign-out-alt"></i> Sign Out
                 </button>
             </div>
@@ -169,7 +221,7 @@
                 <!-- Loading -->
                 <div id="loading-state" class="absolute inset-0 bg-slate-50 flex flex-col items-center justify-center text-slate-400 z-50">
                     <i class="fas fa-circle-notch fa-spin text-4xl mb-4 text-blue-500"></i>
-                    <p>Loading application data...</p>
+                    <p class="font-medium">Loading application data...</p>
                 </div>
                 <!-- Dynamic Content injected here -->
                 <div id="dynamic-view-container" class="w-full max-w-7xl mx-auto space-y-6 fade-in pb-10"></div>
@@ -180,117 +232,117 @@
     <!-- MODALS -->
     <!-- Profile Settings -->
     <div id="modal-settings" class="fixed inset-0 bg-slate-900/60 hidden items-center justify-center z-50 backdrop-blur-sm">
-        <div class="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
             <div class="px-6 py-4 border-b border-slate-200 flex justify-between items-center bg-slate-50">
                 <h3 class="text-lg font-bold text-slate-800">Profile Settings</h3>
                 <button onclick="closeModal('modal-settings')" class="text-slate-400 hover:text-slate-600"><i class="fas fa-times"></i></button>
             </div>
             <div class="p-6 space-y-4">
                 <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">Display Name</label>
+                    <label class="block text-sm font-bold text-slate-700 mb-1">Display Name</label>
                     <input type="text" id="setting-name" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none">
                 </div>
                 <div id="setting-photo-container" class="hidden">
-                    <label class="block text-sm font-medium text-slate-700 mb-1">Photo URL (Providers only)</label>
+                    <label class="block text-sm font-bold text-slate-700 mb-1">Photo URL (Providers only)</label>
                     <input type="url" id="setting-photo" placeholder="https://example.com/photo.jpg" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none">
                 </div>
             </div>
             <div class="px-6 py-4 border-t border-slate-200 bg-slate-50 flex justify-end gap-3">
-                <button onclick="closeModal('modal-settings')" class="px-4 py-2 text-slate-600 font-medium hover:bg-slate-200 rounded-lg">Cancel</button>
-                <button onclick="saveSettings()" class="px-4 py-2 bg-blue-600 text-white font-medium hover:bg-blue-700 rounded-lg shadow-sm">Save Changes</button>
+                <button onclick="closeModal('modal-settings')" class="px-4 py-2 text-slate-600 font-bold hover:bg-slate-200 rounded-lg">Cancel</button>
+                <button onclick="saveSettings()" class="px-4 py-2 bg-blue-600 text-white font-bold hover:bg-blue-700 rounded-lg shadow-sm">Save Changes</button>
             </div>
         </div>
     </div>
 
     <!-- Add Patient (Provider/Admin) -->
     <div id="modal-add-patient" class="fixed inset-0 bg-slate-900/60 hidden items-center justify-center z-50 backdrop-blur-sm">
-        <div class="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
             <div class="px-6 py-4 border-b border-slate-200 flex justify-between items-center bg-slate-50">
                 <h3 class="text-lg font-bold text-slate-800">Register New Patient</h3>
                 <button onclick="closeModal('modal-add-patient')" class="text-slate-400 hover:text-slate-600"><i class="fas fa-times"></i></button>
             </div>
             <div class="p-6 space-y-4">
-                <div><label class="block text-sm font-medium text-slate-700 mb-1">Full Name</label>
+                <div><label class="block text-sm font-bold text-slate-700 mb-1">Full Name</label>
                 <input type="text" id="new-pat-name" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none"></div>
-                <div><label class="block text-sm font-medium text-slate-700 mb-1">Email Address (Used for Portal Login)</label>
+                <div><label class="block text-sm font-bold text-slate-700 mb-1">Email Address (Used for Portal Login)</label>
                 <input type="email" id="new-pat-email" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none"></div>
-                <div><label class="block text-sm font-medium text-slate-700 mb-1">Date of Birth</label>
+                <div><label class="block text-sm font-bold text-slate-700 mb-1">Date of Birth</label>
                 <input type="date" id="new-pat-dob" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none"></div>
             </div>
             <div class="px-6 py-4 border-t border-slate-200 bg-slate-50 flex justify-end gap-3">
-                <button onclick="closeModal('modal-add-patient')" class="px-4 py-2 text-slate-600 font-medium hover:bg-slate-200 rounded-lg">Cancel</button>
-                <button onclick="registerPatient()" class="px-4 py-2 bg-emerald-600 text-white font-medium hover:bg-emerald-700 rounded-lg shadow-sm">Add Patient</button>
+                <button onclick="closeModal('modal-add-patient')" class="px-4 py-2 text-slate-600 font-bold hover:bg-slate-200 rounded-lg">Cancel</button>
+                <button onclick="registerPatient()" class="px-4 py-2 bg-emerald-600 text-white font-bold hover:bg-emerald-700 rounded-lg shadow-sm">Add Patient</button>
             </div>
         </div>
     </div>
 
     <!-- Compose Message -->
     <div id="modal-message" class="fixed inset-0 bg-slate-900/60 hidden items-center justify-center z-50 backdrop-blur-sm">
-        <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl overflow-hidden">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden">
             <div class="px-6 py-4 border-b border-slate-200 flex justify-between items-center bg-slate-50">
                 <h3 class="text-lg font-bold text-slate-800" id="msg-modal-title">New Secure Message</h3>
                 <button onclick="closeModal('modal-message')" class="text-slate-400 hover:text-slate-600"><i class="fas fa-times"></i></button>
             </div>
             <div class="p-6 space-y-4">
                 <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">To:</label>
+                    <label class="block text-sm font-bold text-slate-700 mb-1">To:</label>
                     <select id="msg-to" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none"></select>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">Subject</label>
+                    <label class="block text-sm font-bold text-slate-700 mb-1">Subject</label>
                     <input type="text" id="msg-subject" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">Message</label>
+                    <label class="block text-sm font-bold text-slate-700 mb-1">Message</label>
                     <textarea id="msg-body" rows="6" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none"></textarea>
                 </div>
             </div>
             <div class="px-6 py-4 border-t border-slate-200 bg-slate-50 flex justify-end gap-3">
-                <button onclick="closeModal('modal-message')" class="px-4 py-2 text-slate-600 font-medium hover:bg-slate-200 rounded-lg">Cancel</button>
-                <button onclick="sendMessage()" class="px-4 py-2 bg-blue-600 text-white font-medium hover:bg-blue-700 rounded-lg shadow-sm"><i class="fas fa-paper-plane mr-2"></i>Send</button>
+                <button onclick="closeModal('modal-message')" class="px-4 py-2 text-slate-600 font-bold hover:bg-slate-200 rounded-lg">Cancel</button>
+                <button onclick="sendMessage()" class="px-4 py-2 bg-blue-600 text-white font-bold hover:bg-blue-700 rounded-lg shadow-sm"><i class="fas fa-paper-plane mr-2"></i>Send</button>
             </div>
         </div>
     </div>
 
     <!-- Delete Confirmation Modal -->
     <div id="modal-confirm-delete" class="fixed inset-0 bg-slate-900/60 hidden items-center justify-center z-50 backdrop-blur-sm">
-        <div class="bg-white rounded-xl shadow-2xl w-full max-w-sm overflow-hidden">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
             <div class="p-6 text-center">
                 <div class="w-16 h-16 rounded-full bg-red-100 text-red-600 flex items-center justify-center text-2xl mx-auto mb-4"><i class="fas fa-exclamation-triangle"></i></div>
                 <h3 class="text-xl font-bold text-slate-800 mb-2">Delete Encounter?</h3>
                 <p class="text-slate-500 text-sm">This action cannot be undone. Are you sure you want to permanently remove this clinical note?</p>
             </div>
             <div class="px-6 py-4 border-t border-slate-100 bg-slate-50 flex justify-center gap-3">
-                <button onclick="closeModal('modal-confirm-delete')" class="px-4 py-2 text-slate-600 font-medium hover:bg-slate-200 rounded-lg w-1/2">Cancel</button>
-                <button onclick="executeDeleteEncounter()" class="px-4 py-2 bg-red-600 text-white font-medium hover:bg-red-700 rounded-lg shadow-sm w-1/2">Delete</button>
+                <button onclick="closeModal('modal-confirm-delete')" class="px-4 py-2 text-slate-600 font-bold hover:bg-slate-200 rounded-lg w-1/2">Cancel</button>
+                <button onclick="executeDeleteEncounter()" class="px-4 py-2 bg-red-600 text-white font-bold hover:bg-red-700 rounded-lg shadow-sm w-1/2">Delete</button>
             </div>
         </div>
     </div>
 
     <!-- Appointment Scheduling Modal -->
     <div id="modal-appointment" class="fixed inset-0 bg-slate-900/60 hidden items-center justify-center z-50 backdrop-blur-sm">
-        <div class="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
             <div class="px-6 py-4 border-b border-slate-200 flex justify-between items-center bg-slate-50">
                 <h3 class="text-lg font-bold text-slate-800">Schedule Appointment</h3>
                 <button onclick="closeModal('modal-appointment')" class="text-slate-400 hover:text-slate-600"><i class="fas fa-times"></i></button>
             </div>
             <div class="p-6 space-y-4">
                 <div>
-                    <label id="appt-user-label" class="block text-sm font-medium text-slate-700 mb-1">Select User</label>
+                    <label id="appt-user-label" class="block text-sm font-bold text-slate-700 mb-1">Select User</label>
                     <select id="appt-user" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none"></select>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">Date & Time</label>
+                    <label class="block text-sm font-bold text-slate-700 mb-1">Date & Time</label>
                     <input type="datetime-local" id="appt-datetime" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">Reason / Type</label>
+                    <label class="block text-sm font-bold text-slate-700 mb-1">Reason / Type</label>
                     <input type="text" id="appt-reason" placeholder="e.g., Annual Physical, Follow-up" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none">
                 </div>
             </div>
             <div class="px-6 py-4 border-t border-slate-200 bg-slate-50 flex justify-end gap-3">
-                <button onclick="closeModal('modal-appointment')" class="px-4 py-2 text-slate-600 font-medium hover:bg-slate-200 rounded-lg">Cancel</button>
-                <button onclick="saveAppointment()" class="px-4 py-2 bg-blue-600 text-white font-medium hover:bg-blue-700 rounded-lg shadow-sm">Schedule</button>
+                <button onclick="closeModal('modal-appointment')" class="px-4 py-2 text-slate-600 font-bold hover:bg-slate-200 rounded-lg">Cancel</button>
+                <button onclick="saveAppointment()" class="px-4 py-2 bg-blue-600 text-white font-bold hover:bg-blue-700 rounded-lg shadow-sm">Schedule</button>
             </div>
         </div>
     </div>
@@ -330,7 +382,7 @@
             let colors = type === 'error' ? 'bg-red-600' : type === 'success' ? 'bg-emerald-600' : 'bg-slate-800';
             let icon = type === 'error' ? 'fa-exclamation-circle' : type === 'success' ? 'fa-check-circle' : 'fa-info-circle';
             toast.className = `toast-enter ${colors} text-white px-6 py-4 rounded-xl shadow-xl flex items-center gap-3 min-w-[300px] pointer-events-auto`;
-            toast.innerHTML = `<i class="fas ${icon} text-xl"></i><span class="font-medium">${msg}</span>`;
+            toast.innerHTML = `<i class="fas ${icon} text-xl"></i><span class="font-bold">${msg}</span>`;
             container.appendChild(toast);
             setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 4000);
         };
@@ -340,8 +392,9 @@
         // --- AUTH ---
         document.getElementById('toggle-signup').addEventListener('click', (e) => {
             e.preventDefault(); isSignUpMode = !isSignUpMode;
-            document.getElementById('btn-patient-login').innerText = isSignUpMode ? "Register New Account" : "Sign In as Patient";
+            document.getElementById('btn-patient-login').innerText = isSignUpMode ? "Register New Account" : "Sign In";
             document.getElementById('login-title').innerText = isSignUpMode ? "Patient Registration" : "Patient Portal";
+            document.getElementById('login-subtitle').innerText = isSignUpMode ? "Create an account to access your records." : "Sign in to manage your health records.";
             e.target.innerText = isSignUpMode ? "Already have an account? Sign in" : "Need an account? Register";
         });
 
@@ -422,7 +475,7 @@
             document.getElementById('setting-name').value = currentUserData.name || '';
             const rb = document.getElementById('sidebar-user-role');
             rb.innerText = currentUserData.role;
-            rb.className = `text-xs uppercase tracking-wider mt-1 font-semibold px-2 py-1 rounded ${currentUserData.role==='admin'?'bg-purple-500/20 text-purple-400':currentUserData.role==='physician'?'bg-emerald-500/20 text-emerald-400':'bg-blue-500/20 text-blue-400'}`;
+            rb.className = `text-xs uppercase tracking-wider mt-1 font-bold px-2 py-1 rounded ${currentUserData.role==='admin'?'bg-purple-500/20 text-purple-400':currentUserData.role==='physician'?'bg-emerald-500/20 text-emerald-400':'bg-blue-500/20 text-blue-400'}`;
             
             if(currentUserData.photoUrl) {
                 document.getElementById('sidebar-user-photo').src = currentUserData.photoUrl;
@@ -469,7 +522,7 @@
             }
 
             nav.innerHTML = items.filter(i => i.roles.includes(currentUserData.role)).map(i => 
-                `<button data-view="${i.id}" onclick="switchView('${i.id}')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors text-slate-400 hover:bg-slate-800 hover:text-white mb-1">
+                `<button data-view="${i.id}" onclick="switchView('${i.id}')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg font-bold transition-colors text-slate-400 hover:bg-slate-800 hover:text-white mb-1">
                     <i class="fas ${i.icon} w-5 text-center"></i> ${i.text}
                 </button>`
             ).join('');
@@ -495,7 +548,7 @@
                     else if(viewId === 'coverage') await renderCoverage(container);
                     else if(viewId === 'billing') renderBillingAdmin(container);
                     else if(viewId === 'admin') renderAdmin(container);
-                } catch(e) { console.error(e); container.innerHTML = `<div class="p-6 bg-red-100 text-red-700 rounded-lg border border-red-200"><i class="fas fa-exclamation-triangle mr-2"></i>Error rendering view. Please ensure Firestore Rules are applied for this collection.</div>`; }
+                } catch(e) { console.error(e); container.innerHTML = `<div class="p-6 bg-red-100 text-red-700 rounded-lg border border-red-200"><i class="fas fa-exclamation-triangle mr-2"></i>Error rendering view. Please ensure Firestore Rules are applied globally for this prototype.</div>`; }
                 document.getElementById('loading-state').classList.add('hidden');
             }, 50);
         };
@@ -560,9 +613,9 @@
             let html = `
                 <div class="flex justify-between items-center mb-6">
                     <h3 class="text-xl font-bold text-slate-800">Secure Messages</h3>
-                    <button onclick="openMessageModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors shadow-sm"><i class="fas fa-pen mr-2"></i>Compose</button>
+                    <button onclick="openMessageModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors shadow-sm font-bold"><i class="fas fa-pen mr-2"></i>Compose</button>
                 </div>
-                <div class="bg-white rounded-xl shadow-sm border border-slate-200 divide-y divide-slate-100">
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 divide-y divide-slate-100">
             `;
             if(msgs.length === 0) html += `<div class="p-8 text-center text-slate-500">No messages found.</div>`;
             
@@ -581,14 +634,14 @@
                             <div class="flex-1">
                                 <div class="flex justify-between items-start mb-1">
                                     <h4 class="font-bold text-lg ${isUnread?'text-blue-900':'text-slate-800'}">${m.subject}</h4>
-                                    <span class="text-xs text-slate-400 whitespace-nowrap ml-4">${date}</span>
+                                    <span class="text-xs text-slate-400 whitespace-nowrap ml-4 font-bold">${date}</span>
                                 </div>
-                                <p class="text-sm font-medium text-slate-600 mb-2">${displayUser}</p>
-                                <p class="text-sm text-slate-700 bg-slate-50 p-3 rounded border border-slate-100 whitespace-pre-wrap">${m.body}</p>
+                                <p class="text-sm font-bold text-slate-600 mb-2">${displayUser}</p>
+                                <p class="text-sm text-slate-700 bg-slate-50 p-3 rounded-lg border border-slate-100 whitespace-pre-wrap">${m.body}</p>
                                 
                                 <div class="mt-3 flex gap-3">
-                                    ${isReceived && isUnread ? `<button onclick="markRead('${m.id}')" class="text-xs text-blue-600 hover:underline">Mark as Read</button>` : ''}
-                                    ${isReceived ? `<button onclick="openMessageModal('${m.senderId}', 'Re: ${m.subject}')" class="text-xs text-emerald-600 hover:underline font-bold"><i class="fas fa-reply mr-1"></i>Reply</button>` : ''}
+                                    ${isReceived && isUnread ? `<button onclick="markRead('${m.id}')" class="text-xs font-bold text-blue-600 hover:underline">Mark as Read</button>` : ''}
+                                    ${isReceived ? `<button onclick="openMessageModal('${m.senderId}', 'Re: ${m.subject}')" class="text-xs font-bold text-emerald-600 hover:underline"><i class="fas fa-reply mr-1"></i>Reply</button>` : ''}
                                 </div>
                             </div>
                         </div>
@@ -608,47 +661,50 @@
                 try {
                     const snap = await getDocs(query(collection(db, "encounters"), where("patientId", "==", currentUser.uid)));
                     const providerIds = [...new Set(snap.docs.map(d=>d.data().providerId))];
-                    if(providerIds.length === 0) careTeamHtml = '<p class="text-sm text-slate-500">No care team assigned yet. A provider will be assigned when you have your first visit.</p>';
+                    if(providerIds.length === 0) careTeamHtml = '<p class="text-sm font-medium text-slate-500">No care team assigned yet. A provider will be assigned when you have your first visit.</p>';
                     else {
                         providerIds.forEach(pid => {
                             const prov = allUsersCache.find(u=>u.id===pid);
                             if(prov) {
                                 careTeamHtml += `
                                     <div class="flex items-center gap-3 mb-3">
-                                        <div class="w-10 h-10 rounded-full bg-slate-200 overflow-hidden"><img src="${prov.photoUrl || `https://ui-avatars.com/api/?name=${prov.name}`}"></div>
-                                        <div><p class="font-bold text-sm text-slate-800">${prov.name}</p><p class="text-xs text-slate-500 capitalize">${prov.role}</p></div>
+                                        <div class="w-10 h-10 rounded-full bg-slate-200 overflow-hidden border border-slate-300"><img src="${prov.photoUrl || `https://ui-avatars.com/api/?name=${prov.name}`}"></div>
+                                        <div><p class="font-bold text-sm text-slate-800">${prov.name}</p><p class="text-xs font-bold text-blue-600 uppercase tracking-wide">${prov.role}</p></div>
                                     </div>
                                 `;
                             }
                         });
                     }
-                } catch(e) { careTeamHtml = '<p class="text-xs text-amber-600">Update Rules to view Care Team.</p>'; }
+                } catch(e) { careTeamHtml = '<p class="text-xs font-bold text-amber-600">Update Rules to view Care Team.</p>'; }
 
                 container.innerHTML = `
-                    <div class="bg-gradient-to-r from-blue-600 to-blue-800 rounded-2xl p-8 text-white shadow-lg mb-8">
-                        <h2 class="text-3xl font-bold mb-2">Hello, ${currentUserData.name}</h2>
-                        <p class="text-blue-100">Welcome to Peak Health. Your Care Team is here for you.</p>
+                    <div class="bg-gradient-to-r from-blue-700 to-blue-900 rounded-3xl p-10 text-white shadow-xl shadow-blue-900/20 mb-8 relative overflow-hidden">
+                        <div class="absolute -right-20 -top-20 opacity-10 text-9xl"><i class="fas fa-heartbeat"></i></div>
+                        <div class="relative z-10">
+                            <h2 class="text-4xl font-extrabold mb-3 tracking-tight">Hello, ${currentUserData.name}</h2>
+                            <p class="text-blue-200 font-medium text-lg">Welcome to Peak Health. Your Care Team is here for you.</p>
+                        </div>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-                            <div class="flex items-center gap-3 mb-4"><div class="w-10 h-10 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center"><i class="fas fa-shield-virus"></i></div><h4 class="font-bold text-slate-800">Preventive Care</h4></div>
-                            <ul class="space-y-3 text-sm mb-4">
-                                <li class="flex justify-between items-center"><span class="text-slate-600">Annual Flu Vaccine</span><span class="text-red-500 font-medium">Due</span></li>
-                                <li class="flex justify-between items-center"><span class="text-slate-600">Wellness Visit</span><span class="text-emerald-500 font-medium">Up to date</span></li>
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                            <div class="flex items-center gap-3 mb-4"><div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center text-xl shadow-sm"><i class="fas fa-shield-virus"></i></div><h4 class="font-bold text-lg text-slate-800">Preventive Care</h4></div>
+                            <ul class="space-y-3 text-sm mb-6">
+                                <li class="flex justify-between items-center"><span class="text-slate-600 font-medium">Annual Flu Vaccine</span><span class="bg-red-100 text-red-600 px-2 py-0.5 rounded text-xs font-bold uppercase tracking-wide">Due</span></li>
+                                <li class="flex justify-between items-center"><span class="text-slate-600 font-medium">Wellness Visit</span><span class="bg-emerald-100 text-emerald-600 px-2 py-0.5 rounded text-xs font-bold uppercase tracking-wide">Up to date</span></li>
                             </ul>
-                            <button onclick="switchView('appointments')" class="w-full py-2 text-blue-600 border border-blue-200 rounded-lg hover:bg-blue-50 text-sm font-medium">Schedule Now</button>
+                            <button onclick="switchView('appointments')" class="w-full py-2.5 text-blue-600 border-2 border-blue-100 rounded-xl hover:bg-blue-50 text-sm font-bold transition-colors">Schedule Now</button>
                         </div>
-                        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-                            <div class="flex items-center gap-3 mb-4"><div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center"><i class="fas fa-user-md"></i></div><h4 class="font-bold text-slate-800">My Care Team</h4></div>
-                            <div class="mb-4">${careTeamHtml}</div>
-                            <button onclick="openMessageModal()" class="w-full py-2 text-slate-600 border border-slate-200 rounded-lg hover:bg-slate-50 text-sm font-medium"><i class="fas fa-envelope mr-1"></i> Send a Message</button>
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                            <div class="flex items-center gap-3 mb-4"><div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl shadow-sm"><i class="fas fa-user-md"></i></div><h4 class="font-bold text-lg text-slate-800">My Care Team</h4></div>
+                            <div class="mb-6">${careTeamHtml}</div>
+                            <button onclick="openMessageModal()" class="w-full py-2.5 text-slate-600 border-2 border-slate-100 rounded-xl hover:bg-slate-50 text-sm font-bold transition-colors"><i class="fas fa-envelope mr-2"></i> Send a Message</button>
                         </div>
-                        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-                            <div class="flex items-center gap-3 mb-4"><div class="w-10 h-10 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center"><i class="fas fa-hospital"></i></div><h4 class="font-bold text-slate-800">Favorite Facilities</h4></div>
-                            <div class="space-y-3">
-                                <div class="border-l-4 border-blue-500 pl-3">
-                                    <p class="font-bold text-sm text-slate-800">Peak Health Main Campus</p>
-                                    <p class="text-xs text-slate-500">123 Wellness Way, City</p>
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                            <div class="flex items-center gap-3 mb-4"><div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center text-xl shadow-sm"><i class="fas fa-hospital"></i></div><h4 class="font-bold text-lg text-slate-800">Favorite Facilities</h4></div>
+                            <div class="space-y-4">
+                                <div class="border-l-4 border-blue-500 pl-4 py-1">
+                                    <p class="font-bold text-slate-800">Peak Health Main Campus</p>
+                                    <p class="text-xs font-medium text-slate-500 mt-0.5">123 Wellness Way, City</p>
                                 </div>
                             </div>
                         </div>
@@ -658,17 +714,17 @@
                 const ptCount = allUsersCache.filter(u=>u.role==='patient').length;
                 container.innerHTML = `
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between border-l-4 border-l-blue-500">
-                            <div><p class="text-sm text-slate-500 font-medium mb-1">Total Patients</p><h3 class="text-3xl font-bold text-slate-800">${ptCount}</h3></div>
-                            <i class="fas fa-users text-3xl text-slate-200"></i>
+                        <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200 flex items-center justify-between border-l-8 border-l-blue-500">
+                            <div><p class="text-sm font-bold uppercase tracking-wider text-slate-500 mb-1">Total Patients</p><h3 class="text-4xl font-extrabold text-slate-800">${ptCount}</h3></div>
+                            <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center"><i class="fas fa-users text-2xl text-blue-500"></i></div>
                         </div>
                     </div>
-                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-                        <h3 class="font-bold text-lg mb-4">Quick Actions</h3>
+                    <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-8">
+                        <h3 class="font-extrabold text-xl mb-6">Quick Actions</h3>
                         <div class="flex flex-wrap gap-4">
-                            <button onclick="switchView('directory')" class="px-5 py-3 bg-blue-50 text-blue-700 rounded-lg font-medium hover:bg-blue-100 shadow-sm"><i class="fas fa-search mr-2"></i>Find Patient</button>
-                            <button onclick="openModal('modal-add-patient')" class="px-5 py-3 bg-emerald-50 text-emerald-700 rounded-lg font-medium hover:bg-emerald-100 shadow-sm"><i class="fas fa-user-plus mr-2"></i>Register Patient</button>
-                            <button onclick="openAppointmentModal()" class="px-5 py-3 bg-purple-50 text-purple-700 rounded-lg font-medium hover:bg-purple-100 shadow-sm"><i class="fas fa-calendar-plus mr-2"></i>Schedule Appt</button>
+                            <button onclick="switchView('directory')" class="px-6 py-3.5 bg-blue-50 text-blue-700 rounded-xl font-bold hover:bg-blue-100 shadow-sm transition-colors"><i class="fas fa-search mr-2"></i>Find Patient</button>
+                            <button onclick="openModal('modal-add-patient')" class="px-6 py-3.5 bg-emerald-50 text-emerald-700 rounded-xl font-bold hover:bg-emerald-100 shadow-sm transition-colors"><i class="fas fa-user-plus mr-2"></i>Register Patient</button>
+                            <button onclick="openAppointmentModal()" class="px-6 py-3.5 bg-purple-50 text-purple-700 rounded-xl font-bold hover:bg-purple-100 shadow-sm transition-colors"><i class="fas fa-calendar-plus mr-2"></i>Schedule Appt</button>
                         </div>
                     </div>
                 `;
@@ -693,29 +749,29 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             `;
             
-            if(meds.length === 0) html = `<div class="w-full p-8 text-center text-slate-500">No active medications or orders found.</div>`;
+            if(meds.length === 0) html = `<div class="w-full p-8 text-center text-slate-500 font-medium">No active medications or orders found.</div>`;
             
             meds.forEach(m => {
                 const ptName = currentUserData.role !== 'patient' ? allUsersCache.find(u=>u.id===m.patientId)?.name || 'Unknown' : '';
                 const isRequested = m.status === 'Refill Requested';
                 
                 html += `
-                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col ${isRequested && currentUserData.role !== 'patient' ? 'border-l-4 border-l-amber-500' : ''}">
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col ${isRequested && currentUserData.role !== 'patient' ? 'border-l-4 border-l-amber-500' : ''}">
                         <div class="flex justify-between items-start mb-4">
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center"><i class="fas fa-pills"></i></div>
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-xl"><i class="fas fa-pills"></i></div>
                                 <div>
                                     <h4 class="font-bold text-slate-800 text-lg">${m.name}</h4>
-                                    ${m.instructions ? `<p class="text-sm font-medium text-slate-600">Sig: ${m.instructions}</p>` : ''}
-                                    ${currentUserData.role !== 'patient' ? `<p class="text-xs font-medium text-slate-500 mb-1 mt-1">Patient: ${ptName}</p>` : ''}
-                                    <span class="text-xs mt-1 inline-block ${isRequested ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700'} px-2 py-0.5 rounded font-bold uppercase">${m.status}</span>
+                                    ${m.instructions ? `<p class="text-sm font-bold text-slate-600 mt-1">Sig: ${m.instructions}</p>` : ''}
+                                    ${currentUserData.role !== 'patient' ? `<p class="text-xs font-bold text-slate-500 mb-1 mt-1 uppercase tracking-wide">Patient: ${ptName}</p>` : ''}
+                                    <span class="text-[10px] mt-2 inline-block ${isRequested ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700'} px-2 py-1 rounded font-extrabold uppercase tracking-wider">${m.status}</span>
                                 </div>
                             </div>
                         </div>
                         <div class="mt-auto pt-4 border-t border-slate-100 flex justify-between items-center">
-                            <span class="text-sm text-slate-500">Ordered by: ${allUsersCache.find(u=>u.id===m.providerId)?.name || 'Provider'}</span>
-                            ${currentUserData.role === 'patient' && m.status !== 'Refill Requested' ? `<button onclick="requestRefill('${m.id}')" class="text-sm font-medium text-blue-600 hover:text-blue-800 border border-blue-200 px-3 py-1 rounded">Request Refill</button>` : ''}
-                            ${currentUserData.role !== 'patient' && isRequested ? `<button onclick="fillPrescription('${m.id}')" class="text-sm font-medium text-emerald-600 hover:text-emerald-800 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded">Mark Filled</button>` : ''}
+                            <span class="text-xs font-bold text-slate-400 uppercase tracking-wide">Ordered by: ${allUsersCache.find(u=>u.id===m.providerId)?.name || 'Provider'}</span>
+                            ${currentUserData.role === 'patient' && m.status !== 'Refill Requested' ? `<button onclick="requestRefill('${m.id}')" class="text-xs font-bold text-blue-600 hover:bg-blue-50 border-2 border-blue-100 px-3 py-1.5 rounded-lg transition-colors">Request Refill</button>` : ''}
+                            ${currentUserData.role !== 'patient' && isRequested ? `<button onclick="fillPrescription('${m.id}')" class="text-xs font-bold text-emerald-600 hover:bg-emerald-100 bg-emerald-50 border-2 border-emerald-200 px-3 py-1.5 rounded-lg transition-colors">Mark Filled</button>` : ''}
                         </div>
                     </div>
                 `;
@@ -746,10 +802,10 @@
 
             let html = `
                 <h3 class="text-2xl font-bold text-slate-800 mb-6">My Medical Records</h3>
-                <div class="flex overflow-x-auto border-b border-slate-200 mb-6 space-x-6 hide-scrollbar">
+                <div class="flex overflow-x-auto border-b border-slate-200 mb-6 space-x-8 hide-scrollbar">
                     ${tabs.map(t => `<button onclick="setRecordTab('${t.id}')" class="pb-3 whitespace-nowrap ${activeRecordTab===t.id?'tab-active':'tab-inactive'}"><i class="fas ${t.icon} mr-2"></i>${t.label}</button>`).join('')}
                 </div>
-                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 min-h-[400px]">
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 min-h-[400px]">
             `;
 
             try {
@@ -757,43 +813,43 @@
                     const snap = await getDocs(query(collection(db, "encounters"), where("patientId", "==", currentUser.uid)));
                     const visits = snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(b.timestamp?.toMillis()||0)-(a.timestamp?.toMillis()||0));
                     
-                    if(visits.length === 0) html += `<p class="text-slate-500 text-center py-10">No past visits recorded.</p>`;
+                    if(visits.length === 0) html += `<p class="text-slate-500 text-center py-10 font-medium">No past visits recorded.</p>`;
                     visits.forEach(v => {
                         const d = v.timestamp ? new Date(v.timestamp.toDate()).toLocaleDateString() : '';
                         html += `
-                            <div class="border-b border-slate-100 py-4 last:border-0">
-                                <div class="flex justify-between items-start mb-2">
-                                    <div><h4 class="font-bold text-lg text-slate-800">${v.complaint}</h4><p class="text-sm text-slate-500">Provider: ${allUsersCache.find(u=>u.id===v.providerId)?.name||'Unknown'}</p></div>
-                                    <span class="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-xs font-bold">${d}</span>
+                            <div class="border-b border-slate-100 py-6 last:border-0">
+                                <div class="flex justify-between items-start mb-3">
+                                    <div><h4 class="font-extrabold text-xl text-slate-800">${v.complaint}</h4><p class="text-sm font-bold text-slate-500 mt-1">Provider: ${allUsersCache.find(u=>u.id===v.providerId)?.name||'Unknown'}</p></div>
+                                    <span class="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider">${d}</span>
                                 </div>
-                                <div class="bg-slate-50 p-4 rounded text-sm text-slate-700 font-mono mt-3">${v.notes}</div>
+                                <div class="bg-slate-50 p-5 rounded-xl text-sm text-slate-700 font-mono mt-4 leading-relaxed">${v.notes}</div>
                             </div>
                         `;
                     });
                 } else if(activeRecordTab === 'conditions') {
                     const snap = await getDocs(query(collection(db, "conditions"), where("patientId", "==", currentUser.uid)));
-                    if(snap.empty) html += `<p class="text-slate-500 text-center py-10">No active conditions recorded.</p>`;
+                    if(snap.empty) html += `<p class="text-slate-500 text-center py-10 font-medium">No active conditions recorded.</p>`;
                     else {
-                        html += `<ul class="space-y-3">`;
+                        html += `<ul class="space-y-4">`;
                         snap.forEach(doc => {
                             const d = doc.data();
-                            html += `<li class="flex items-center gap-3 p-3 bg-slate-50 rounded border border-slate-100"><i class="fas fa-stethoscope text-blue-500"></i> <span class="font-medium text-slate-800">${d.diagnosis}</span> <span class="text-xs text-slate-400 ml-auto">Added: ${d.timestamp?new Date(d.timestamp.toDate()).toLocaleDateString():''}</span></li>`;
+                            html += `<li class="flex items-center gap-4 p-4 bg-slate-50 rounded-xl border border-slate-100"><div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center"><i class="fas fa-stethoscope"></i></div> <span class="font-bold text-slate-800 text-lg">${d.diagnosis}</span> <span class="text-xs font-bold text-slate-400 ml-auto uppercase tracking-wide">Added: ${d.timestamp?new Date(d.timestamp.toDate()).toLocaleDateString():''}</span></li>`;
                         });
                         html += `</ul>`;
                     }
                 } else if(activeRecordTab === 'vitals') {
                     const snap = await getDocs(query(collection(db, "vitals"), where("patientId", "==", currentUser.uid)));
                     const vitals = snap.docs.map(d=>d.data()).sort((a,b)=>(b.timestamp?.toMillis()||0)-(a.timestamp?.toMillis()||0));
-                    if(vitals.length === 0) html += `<p class="text-slate-500 text-center py-10">No vitals recorded.</p>`;
+                    if(vitals.length === 0) html += `<p class="text-slate-500 text-center py-10 font-medium">No vitals recorded.</p>`;
                     else {
-                        html += `<table class="w-full text-left text-sm"><thead class="bg-slate-50 text-slate-500 uppercase tracking-wider text-xs"><tr><th class="p-3 rounded-tl">Date</th><th class="p-3">BP</th><th class="p-3">HR</th><th class="p-3">Temp</th><th class="p-3 rounded-tr">Weight</th></tr></thead><tbody class="divide-y divide-slate-100">`;
+                        html += `<table class="w-full text-left text-sm"><thead class="bg-slate-50 text-slate-500 uppercase tracking-wider text-xs font-extrabold"><tr><th class="p-4 rounded-tl-lg">Date</th><th class="p-4">BP</th><th class="p-4">HR</th><th class="p-4">Temp</th><th class="p-4 rounded-tr-lg">Weight</th></tr></thead><tbody class="divide-y divide-slate-100">`;
                         vitals.forEach(v => {
-                            html += `<tr><td class="p-3 font-medium">${v.timestamp?new Date(v.timestamp.toDate()).toLocaleDateString():''}</td><td class="p-3">${v.bp||'--'}</td><td class="p-3">${v.hr||'--'}</td><td class="p-3">${v.temp||'--'}</td><td class="p-3">${v.weight||'--'}</td></tr>`;
+                            html += `<tr><td class="p-4 font-bold text-slate-700">${v.timestamp?new Date(v.timestamp.toDate()).toLocaleDateString():''}</td><td class="p-4 font-mono font-medium">${v.bp||'--'}</td><td class="p-4 font-mono font-medium">${v.hr||'--'}</td><td class="p-4 font-mono font-medium">${v.temp||'--'}</td><td class="p-4 font-mono font-medium">${v.weight||'--'}</td></tr>`;
                         });
                         html += `</tbody></table>`;
                     }
                 }
-            } catch(e) { html += `<p class="text-amber-600 p-4 bg-amber-50 rounded">Failed to load data. Update Firestore rules.</p>`; }
+            } catch(e) { html += `<p class="text-amber-600 p-4 bg-amber-50 rounded font-bold">Failed to load data. Update Firestore rules to allow read.</p>`; }
             container.innerHTML = html + `</div>`;
         }
 
@@ -802,16 +858,16 @@
             let billsHtml = '';
             try {
                 const snap = await getDocs(query(collection(db, "bills"), where("patientId", "==", currentUser.uid)));
-                if(snap.empty) billsHtml = `<div class="flex items-center justify-between p-4 bg-emerald-50 rounded-lg border border-emerald-100 mb-4"><div class="flex items-center gap-3"><i class="fas fa-check-circle text-emerald-500 text-xl"></i><div><p class="font-bold text-emerald-900">No Amount Due</p><p class="text-xs text-emerald-700">Your accounts are up to date.</p></div></div><span class="text-xl font-bold text-emerald-700">$0.00</span></div>`;
+                if(snap.empty) billsHtml = `<div class="flex items-center justify-between p-5 bg-emerald-50 rounded-xl border border-emerald-100 mb-4"><div class="flex items-center gap-4"><i class="fas fa-check-circle text-emerald-500 text-2xl"></i><div><p class="font-extrabold text-emerald-900">No Amount Due</p><p class="text-sm font-medium text-emerald-700">Your accounts are up to date.</p></div></div><span class="text-2xl font-black text-emerald-700">$0.00</span></div>`;
                 else {
                     snap.forEach(doc => {
                         const b = doc.data();
-                        billsHtml += `<div class="flex items-center justify-between p-4 bg-red-50 rounded-lg border border-red-100 mb-3"><div class="flex items-center gap-3"><i class="fas fa-file-invoice text-red-500 text-xl"></i><div><p class="font-bold text-red-900">${b.reason}</p><p class="text-xs text-red-700">Due immediately</p></div></div><span class="text-xl font-bold text-red-700">$${parseFloat(b.amount).toFixed(2)}</span></div>`;
+                        billsHtml += `<div class="flex items-center justify-between p-5 bg-red-50 rounded-xl border border-red-100 mb-3"><div class="flex items-center gap-4"><i class="fas fa-file-invoice text-red-500 text-2xl"></i><div><p class="font-extrabold text-red-900">${b.reason}</p><p class="text-sm font-bold text-red-700 uppercase tracking-wide">Due immediately</p></div></div><span class="text-2xl font-black text-red-700">$${parseFloat(b.amount).toFixed(2)}</span></div>`;
                     });
                 }
-            } catch(e) { billsHtml = `<p class="text-amber-600 text-sm">Update rules to view bills.</p>`; }
+            } catch(e) { billsHtml = `<p class="text-amber-600 font-bold text-sm">Update rules to view bills.</p>`; }
 
-            container.innerHTML = `<h3 class="text-2xl font-bold text-slate-800 mb-6">Benefits & Billing</h3><div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-8 text-white shadow-lg relative overflow-hidden"><div class="absolute top-0 right-0 p-6 opacity-20"><i class="fas fa-shield-alt text-6xl"></i></div><h4 class="text-slate-300 text-sm tracking-wider uppercase mb-1">Health Insurance</h4><h2 class="text-2xl font-bold mb-6">Peak Health Premium Plan</h2><div class="space-y-4"><div class="flex justify-between border-b border-slate-700 pb-2"><span class="text-slate-400">Member ID</span><span class="font-mono">${currentUser.uid.substring(0,10).toUpperCase()}</span></div><div class="flex justify-between border-b border-slate-700 pb-2"><span class="text-slate-400">Group</span><span class="font-mono">PH-2026</span></div><div class="flex justify-between"><span class="text-slate-400">Primary Care Copay</span><span class="font-bold">$20.00</span></div></div></div><div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6"><h4 class="font-bold text-slate-800 mb-4"><i class="fas fa-file-invoice-dollar text-slate-400 mr-2"></i>Recent Claims & Balances</h4>${billsHtml}</div></div>`;
+            container.innerHTML = `<h3 class="text-2xl font-bold text-slate-800 mb-6">Benefits & Billing</h3><div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl p-10 text-white shadow-xl shadow-slate-900/20 relative overflow-hidden"><div class="absolute -top-10 -right-10 p-6 opacity-10 text-9xl"><i class="fas fa-shield-alt"></i></div><h4 class="text-slate-400 text-xs font-bold tracking-widest uppercase mb-2">Health Insurance</h4><h2 class="text-3xl font-extrabold mb-8 tracking-tight">Peak Health Premium Plan</h2><div class="space-y-5"><div class="flex justify-between border-b border-slate-700 pb-3"><span class="text-slate-400 font-bold text-sm uppercase tracking-wide">Member ID</span><span class="font-mono font-bold">${currentUser.uid.substring(0,10).toUpperCase()}</span></div><div class="flex justify-between border-b border-slate-700 pb-3"><span class="text-slate-400 font-bold text-sm uppercase tracking-wide">Group</span><span class="font-mono font-bold">PH-2026</span></div><div class="flex justify-between"><span class="text-slate-400 font-bold text-sm uppercase tracking-wide">Primary Care Copay</span><span class="font-black text-lg text-emerald-400">$20.00</span></div></div></div><div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-8"><h4 class="font-extrabold text-slate-800 mb-6 flex items-center"><i class="fas fa-file-invoice-dollar text-slate-400 mr-3 text-xl"></i>Recent Claims & Balances</h4>${billsHtml}</div></div>`;
         }
 
         // --- ADMIN: BILLING PORTAL ---
@@ -823,23 +879,23 @@
                 <div class="flex justify-between items-center mb-6">
                     <h3 class="text-2xl font-bold text-slate-800">Billing Administration</h3>
                 </div>
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 mb-6">
-                    <h4 class="font-bold text-slate-800 mb-4 border-b pb-2">Generate New Patient Bill</h4>
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200 mb-6">
+                    <h4 class="font-extrabold text-slate-800 mb-6 border-b pb-3">Generate New Patient Bill</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
                         <div class="md:col-span-2">
-                            <label class="block text-sm font-medium text-slate-700 mb-1">Select Patient</label>
-                            <select id="bill-patient" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-blue-500 outline-none"><option value="">Select...</option>${ptOptions}</select>
+                            <label class="block text-sm font-bold text-slate-700 mb-2">Select Patient</label>
+                            <select id="bill-patient" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 outline-none"><option value="">Select...</option>${ptOptions}</select>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">Amount ($)</label>
-                            <input type="number" id="bill-amount" placeholder="0.00" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-blue-500 outline-none">
+                            <label class="block text-sm font-bold text-slate-700 mb-2">Amount ($)</label>
+                            <input type="number" id="bill-amount" placeholder="0.00" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 outline-none">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">Reason/Service</label>
-                            <input type="text" id="bill-reason" placeholder="e.g., Copay, Lab Fee" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-blue-500 outline-none">
+                            <label class="block text-sm font-bold text-slate-700 mb-2">Reason/Service</label>
+                            <input type="text" id="bill-reason" placeholder="e.g., Copay, Lab Fee" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 outline-none">
                         </div>
                     </div>
-                    <button onclick="createBill()" class="mt-4 bg-purple-600 text-white px-6 py-2 rounded-lg font-medium shadow-sm hover:bg-purple-700">Issue Bill</button>
+                    <button onclick="createBill()" class="mt-6 bg-purple-600 text-white px-8 py-3 rounded-xl font-bold shadow-md hover:bg-purple-700 transition-colors">Issue Bill</button>
                 </div>
             `;
         };
@@ -897,21 +953,21 @@
                 const q = query(collection(db, "appointments"), where(currentUserData.role==='patient'?"patientId":"providerId", "==", currentUser.uid));
                 const snap = await getDocs(q);
                 appts = snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b) => new Date(a.date) - new Date(b.date));
-            } catch(e) { return container.innerHTML = `<div class="p-6 bg-amber-50 text-amber-700 rounded-lg">Update Rules to view Appointments.</div>`; }
+            } catch(e) { return container.innerHTML = `<div class="p-6 bg-amber-50 text-amber-700 rounded-lg font-bold">Update Rules to view Appointments.</div>`; }
 
-            let html = `<div class="flex justify-between items-center mb-6"><h3 class="text-2xl font-bold text-slate-800">${currentUserData.role === 'patient' ? 'My Appointments' : 'My Schedule'}</h3><button onclick="openAppointmentModal()" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium shadow-sm"><i class="fas fa-calendar-plus mr-2"></i>Schedule New</button></div><div class="bg-white rounded-xl shadow-sm border border-slate-200 divide-y divide-slate-100">`;
-            if(appts.length === 0) html += `<div class="p-8 text-center text-slate-500"><i class="fas fa-calendar-times text-4xl mb-3 text-slate-300"></i><p>No upcoming appointments.</p></div>`;
+            let html = `<div class="flex justify-between items-center mb-6"><h3 class="text-2xl font-bold text-slate-800">${currentUserData.role === 'patient' ? 'My Appointments' : 'My Schedule'}</h3><button onclick="openAppointmentModal()" class="bg-blue-600 text-white px-5 py-2.5 rounded-xl font-bold shadow-sm hover:bg-blue-700 transition-colors"><i class="fas fa-calendar-plus mr-2"></i>Schedule New</button></div><div class="bg-white rounded-3xl shadow-sm border border-slate-200 divide-y divide-slate-100">`;
+            if(appts.length === 0) html += `<div class="p-10 text-center text-slate-500"><i class="fas fa-calendar-times text-5xl mb-4 text-slate-300"></i><p class="font-medium text-lg">No upcoming appointments.</p></div>`;
             
             appts.forEach(a => { 
                 const d = new Date(a.date);
-                html += `<div class="p-6 flex justify-between items-center"><div class="flex items-start gap-4"><div class="bg-blue-50 text-blue-700 w-16 h-16 rounded-lg flex flex-col items-center justify-center border border-blue-100"><span class="text-xs font-bold uppercase">${d.toLocaleString('default',{month:'short'})}</span><span class="text-xl font-bold">${d.getDate()}</span></div><div><h4 class="font-bold text-lg text-slate-800">${a.type}</h4><p class="text-sm text-slate-500">${currentUserData.role==='patient'?'Provider':'Patient'}: ${a.withName}</p><p class="text-xs text-slate-400 mt-1"><i class="fas fa-clock mr-1"></i>${d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</p></div></div><span class="px-3 py-1 bg-amber-100 text-amber-800 text-xs font-bold rounded-full uppercase">Scheduled</span></div>`; 
+                html += `<div class="p-6 flex justify-between items-center"><div class="flex items-start gap-5"><div class="bg-blue-50 text-blue-700 w-16 h-16 rounded-2xl flex flex-col items-center justify-center border border-blue-100 shadow-sm"><span class="text-xs font-black uppercase tracking-widest">${d.toLocaleString('default',{month:'short'})}</span><span class="text-2xl font-black leading-none">${d.getDate()}</span></div><div><h4 class="font-bold text-xl text-slate-800 mb-1">${a.type}</h4><p class="text-sm font-bold text-slate-500 uppercase tracking-wide">${currentUserData.role==='patient'?'Provider':'Patient'}: <span class="text-slate-700">${a.withName}</span></p><p class="text-xs font-bold text-slate-400 mt-2 bg-slate-100 inline-block px-2 py-1 rounded"><i class="fas fa-clock mr-1.5"></i>${d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</p></div></div><span class="px-3 py-1 bg-amber-100 text-amber-800 text-xs font-extrabold rounded-md uppercase tracking-wider">Scheduled</span></div>`; 
             });
             container.innerHTML = html + `</div>`;
         }
 
         // --- ADMIN CONTROLS ---
         function renderAdmin(container) {
-            container.innerHTML = `<div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm"><div class="bg-slate-50 px-6 py-4 border-b border-slate-200 flex justify-between items-center"><h3 class="font-bold text-slate-800"><i class="fas fa-shield-halved text-purple-600 mr-2"></i> System Administration</h3></div><div class="p-6"><div class="bg-amber-50 border-l-4 border-amber-500 p-4 text-amber-800 text-sm mb-6"><strong>Admin Access Confirmed:</strong> You have full system rights. Ensure rules are configured securely in production.</div><h4 class="font-bold mb-3 border-b pb-2">All System Users</h4><table class="w-full text-left text-sm"><thead><tr class="text-slate-500"><th class="pb-2">Name</th><th class="pb-2">Email</th><th class="pb-2">Role</th><th class="pb-2">UID</th></tr></thead><tbody class="divide-y divide-slate-100">${allUsersCache.map(u => `<tr><td class="py-2">${u.name}</td><td class="py-2">${u.email}</td><td class="py-2 font-mono ${u.role==='admin'?'text-purple-600':u.role==='physician'?'text-emerald-600':'text-blue-600'}">${u.role}</td><td class="py-2 text-xs text-slate-400">${u.id}</td></tr>`).join('')}</tbody></table></div></div>`;
+            container.innerHTML = `<div class="bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-sm"><div class="bg-slate-50 px-8 py-5 border-b border-slate-200 flex justify-between items-center"><h3 class="font-extrabold text-slate-800 text-xl"><i class="fas fa-shield-halved text-purple-600 mr-3"></i> System Administration</h3></div><div class="p-8"><div class="bg-amber-50 border-l-4 border-amber-500 p-5 text-amber-900 text-sm font-bold mb-8 rounded-r-xl shadow-sm"><strong>Admin Access Confirmed:</strong> You have full system rights. Ensure rules are configured securely in production.</div><h4 class="font-extrabold text-lg mb-4 border-b pb-2 text-slate-800">All System Users</h4><table class="w-full text-left text-sm"><thead><tr class="text-slate-500 font-extrabold uppercase tracking-wider text-xs"><th class="pb-3">Name</th><th class="pb-3">Email</th><th class="pb-3">Role</th><th class="pb-3">UID</th></tr></thead><tbody class="divide-y divide-slate-100">${allUsersCache.map(u => `<tr><td class="py-3 font-bold text-slate-800">${u.name}</td><td class="py-3 font-medium text-slate-600">${u.email}</td><td class="py-3 font-mono font-bold text-xs uppercase ${u.role==='admin'?'text-purple-600 bg-purple-50 inline-block px-2 rounded':u.role==='physician'?'text-emerald-600 bg-emerald-50 inline-block px-2 rounded':'text-blue-600'}">${u.role}</td><td class="py-3 text-xs font-mono text-slate-400">${u.id}</td></tr>`).join('')}</tbody></table></div></div>`;
         }
 
         // --- PROVIDER: DIRECTORY & PATIENT CHART ---
@@ -920,18 +976,18 @@
             let html = `
                 <div class="flex justify-between items-center mb-6">
                     <h3 class="text-2xl font-bold text-slate-800">Patient Directory</h3>
-                    <button onclick="openModal('modal-add-patient')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium shadow-sm transition-colors"><i class="fas fa-plus mr-2"></i>Register Patient</button>
+                    <button onclick="openModal('modal-add-patient')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-xl font-bold shadow-sm transition-colors"><i class="fas fa-plus mr-2"></i>Register Patient</button>
                 </div>
-                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
                     <table class="w-full text-left">
-                        <thead class="bg-slate-50 border-b border-slate-200 text-xs uppercase text-slate-500 font-bold tracking-wider"><tr><th class="px-6 py-4">Patient</th><th class="px-6 py-4">Contact</th><th class="px-6 py-4">Action</th></tr></thead>
+                        <thead class="bg-slate-50 border-b border-slate-200 text-xs uppercase text-slate-500 font-extrabold tracking-wider"><tr><th class="px-6 py-5">Patient</th><th class="px-6 py-5">Contact</th><th class="px-6 py-5 text-right">Action</th></tr></thead>
                         <tbody class="divide-y divide-slate-100">
             `;
             pts.forEach(p => {
-                html += `<tr class="hover:bg-slate-50">
-                    <td class="px-6 py-4"><div class="font-bold text-slate-900">${p.name}</div><div class="text-xs text-slate-400 font-mono">ID: ${p.id.substring(0,8)}</div></td>
-                    <td class="px-6 py-4 text-sm text-slate-600">${p.email}</td>
-                    <td class="px-6 py-4"><button onclick="loadPatientChart('${p.id}')" class="text-blue-600 hover:text-blue-800 text-sm font-medium bg-blue-50 px-3 py-1 rounded border border-blue-200">Open Chart</button></td>
+                html += `<tr class="hover:bg-slate-50 transition-colors">
+                    <td class="px-6 py-4"><div class="font-extrabold text-slate-900 text-lg">${p.name}</div><div class="text-[10px] text-slate-400 font-mono font-bold mt-1 uppercase tracking-widest">ID: ${p.id.substring(0,8)}</div></td>
+                    <td class="px-6 py-4 text-sm font-medium text-slate-600">${p.email}</td>
+                    <td class="px-6 py-4 text-right"><button onclick="loadPatientChart('${p.id}')" class="text-blue-600 hover:bg-blue-50 text-sm font-bold border-2 border-blue-100 px-4 py-2 rounded-lg transition-colors shadow-sm">Open Chart</button></td>
                 </tr>`;
             });
             container.innerHTML = html + `</tbody></table></div>`;
@@ -949,7 +1005,7 @@
                 const allUsersSnap = await getDocs(collection(db, "users"));
                 allUsersCache = allUsersSnap.docs.map(d => ({id: d.id, ...d.data()}));
                 if(document.getElementById('header-title').innerText === 'Patient Directory') switchView('directory');
-            } catch(e) { showToast("Error registering patient", "error"); }
+            } catch(e) { showToast("Error registering patient. Check Rules.", "error"); }
         };
 
         window.chartTab = 'overview';
@@ -957,23 +1013,23 @@
         window.loadPatientChart = async (ptId) => {
             window.currentPatientId = ptId;
             const pt = allUsersCache.find(u=>u.id===ptId);
-            document.getElementById('header-title').innerHTML = `<button onclick="switchView('directory')" class="text-slate-400 hover:text-slate-600 mr-2"><i class="fas fa-arrow-left"></i></button> Chart: ${pt.name}`;
+            document.getElementById('header-title').innerHTML = `<button onclick="switchView('directory')" class="text-slate-400 hover:text-slate-600 mr-3"><i class="fas fa-arrow-left"></i></button> Chart: <span class="text-slate-600 font-medium ml-1">${pt.name}</span>`;
             
             const container = document.getElementById('dynamic-view-container');
             const tabs = [{id: 'overview', label: 'Overview'},{id: 'encounters', label: 'Encounters'},{id: 'vitals', label: 'Flowsheets'},{id: 'orders', label: 'Orders & Rx'}];
 
             let html = `
-                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm mb-6 flex items-center justify-between border-t-4 border-t-blue-600">
-                    <div class="flex items-center gap-4">
-                        <div class="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center text-2xl text-slate-400 overflow-hidden"><img src="${pt.photoUrl || `https://ui-avatars.com/api/?name=${pt.name}&background=f1f5f9&color=64748b`}"></div>
-                        <div><h2 class="text-2xl font-bold text-slate-900">${pt.name}</h2><p class="text-sm text-slate-500">${pt.dob ? `DOB: ${pt.dob}` : 'DOB: Unknown'} | ${pt.email}</p></div>
+                <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm mb-6 flex items-center justify-between border-l-8 border-l-blue-600">
+                    <div class="flex items-center gap-5">
+                        <div class="w-20 h-20 rounded-2xl bg-slate-100 flex items-center justify-center text-3xl text-slate-400 overflow-hidden shadow-inner border border-slate-200"><img src="${pt.photoUrl || `https://ui-avatars.com/api/?name=${pt.name}&background=f8fafc&color=334155`}"></div>
+                        <div><h2 class="text-3xl font-extrabold text-slate-900 mb-1 tracking-tight">${pt.name}</h2><p class="text-sm font-bold text-slate-500 uppercase tracking-wider">${pt.dob ? `DOB: ${pt.dob}` : 'DOB: Unknown'} <span class="mx-2 opacity-50">|</span> <span class="text-slate-400 lowercase tracking-normal font-medium">${pt.email}</span></p></div>
                     </div>
-                    <div><button onclick="openEncounterForm('${pt.id}')" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium shadow-sm transition-colors"><i class="fas fa-notes-medical mr-2"></i>New Clinical Note</button></div>
+                    <div><button onclick="openEncounterForm('${pt.id}')" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-bold shadow-md transition-all active:scale-95"><i class="fas fa-notes-medical mr-2"></i>New Clinical Note</button></div>
                 </div>
-                <div class="flex border-b border-slate-200 mb-6 space-x-6">
-                    ${tabs.map(t => `<button onclick="switchChartTab('${t.id}')" class="pb-3 ${chartTab===t.id?'tab-active':'tab-inactive'}">${t.label}</button>`).join('')}
+                <div class="flex border-b border-slate-200 mb-6 space-x-8 px-2">
+                    ${tabs.map(t => `<button onclick="switchChartTab('${t.id}')" class="pb-3 text-sm tracking-wide ${chartTab===t.id?'tab-active':'tab-inactive'}">${t.label}</button>`).join('')}
                 </div>
-                <div id="chart-content" class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm min-h-[400px]"></div>
+                <div id="chart-content" class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm min-h-[400px]"></div>
             `;
             container.innerHTML = html;
             renderChartContent();
@@ -987,48 +1043,48 @@
             if(chartTab === 'overview') {
                 try {
                     const snapC = await getDocs(query(collection(db, "conditions"), where("patientId", "==", window.currentPatientId)));
-                    let html = `<div class="grid grid-cols-2 gap-6"><div><h4 class="font-bold text-slate-700 mb-3 border-b pb-2">Active Problems</h4><ul class="list-disc pl-5 text-sm text-slate-600 space-y-1">`;
-                    if(snapC.empty) html += `<li>No active conditions</li>`;
-                    snapC.forEach(d => html += `<li>${d.data().diagnosis}</li>`);
-                    html += `</ul></div><div><h4 class="font-bold text-slate-700 mb-3 border-b pb-2">Allergies</h4><p class="text-sm text-slate-500">NKDA (No known drug allergies)</p></div></div>`;
+                    let html = `<div class="grid grid-cols-2 gap-8"><div><h4 class="font-extrabold text-slate-800 text-lg mb-4 border-b border-slate-100 pb-2">Active Problems</h4><ul class="space-y-3">`;
+                    if(snapC.empty) html += `<li class="text-slate-500 font-medium">No active conditions</li>`;
+                    snapC.forEach(d => html += `<li class="flex items-start gap-3"><i class="fas fa-check-circle text-blue-500 mt-1"></i><span class="font-bold text-slate-700">${d.data().diagnosis}</span></li>`);
+                    html += `</ul></div><div><h4 class="font-extrabold text-slate-800 text-lg mb-4 border-b border-slate-100 pb-2">Allergies</h4><p class="text-sm font-bold text-slate-500 bg-slate-50 inline-block px-3 py-1.5 rounded-lg border border-slate-100">NKDA (No known drug allergies)</p></div></div>`;
                     cc.innerHTML = html;
-                } catch(e) { cc.innerHTML = `<p class="text-amber-600">Failed to load overview. Check rules.</p>`; }
+                } catch(e) { cc.innerHTML = `<p class="text-amber-600 font-bold">Failed to load overview. Check rules.</p>`; }
                 
             } else if (chartTab === 'encounters') {
                 try {
                     const snap = await getDocs(query(collection(db, "encounters"), where("patientId", "==", window.currentPatientId)));
                     const encounters = snap.docs.map(d=>({id: d.id, ...d.data()})).sort((a,b)=>(b.timestamp?.toMillis()||0)-(a.timestamp?.toMillis()||0));
                     
-                    let eh = `<div class="space-y-4">`;
-                    if(encounters.length === 0) eh += `<p class="text-slate-500">No encounters found.</p>`;
+                    let eh = `<div class="space-y-5">`;
+                    if(encounters.length === 0) eh += `<p class="text-slate-500 font-medium">No encounters found.</p>`;
                     encounters.forEach(v => {
-                        eh += `<div class="border border-slate-200 rounded p-4 bg-slate-50"><div class="flex justify-between items-center mb-2"><div class="flex items-center gap-3"><b class="text-slate-800">${v.complaint}</b><span class="text-xs font-bold text-slate-500 bg-white px-2 py-1 rounded border shadow-sm">${v.timestamp?new Date(v.timestamp.toDate()).toLocaleDateString():''}</span></div><button onclick="confirmDeleteEncounter('${v.id}')" class="text-red-400 hover:text-red-600 transition-colors p-1" title="Delete Note"><i class="fas fa-trash"></i></button></div><pre class="text-sm font-mono text-slate-700 whitespace-pre-wrap mt-3">${v.notes}</pre></div>`;
+                        eh += `<div class="border border-slate-200 rounded-2xl p-6 bg-slate-50 shadow-sm"><div class="flex justify-between items-center mb-4"><div class="flex items-center gap-4"><b class="text-slate-900 text-xl font-extrabold">${v.complaint}</b><span class="text-[11px] font-black tracking-widest text-slate-500 bg-white px-3 py-1 rounded-md border border-slate-200 shadow-sm uppercase">${v.timestamp?new Date(v.timestamp.toDate()).toLocaleDateString():''}</span></div><button onclick="confirmDeleteEncounter('${v.id}')" class="text-red-400 hover:text-red-600 bg-white border border-red-100 hover:bg-red-50 rounded-lg transition-colors p-2 shadow-sm" title="Delete Note"><i class="fas fa-trash"></i></button></div><pre class="text-sm font-mono font-medium text-slate-700 whitespace-pre-wrap leading-relaxed bg-white p-4 rounded-xl border border-slate-100">${v.notes}</pre></div>`;
                     });
                     cc.innerHTML = eh + `</div>`;
-                } catch(e) { cc.innerHTML = `<p class="text-amber-600">Failed to load encounters. Check rules.</p>`; }
+                } catch(e) { cc.innerHTML = `<p class="text-amber-600 font-bold">Failed to load encounters. Check rules.</p>`; }
                 
             } else if (chartTab === 'vitals') {
                 try {
                     const snap = await getDocs(query(collection(db, "vitals"), where("patientId", "==", window.currentPatientId)));
                     const vitals = snap.docs.map(d=>d.data()).sort((a,b)=>(b.timestamp?.toMillis()||0)-(a.timestamp?.toMillis()||0));
                     
-                    let vh = `<table class="w-full text-left text-sm"><thead class="bg-slate-100 text-slate-600"><tr><th class="p-2">Date</th><th class="p-2">BP</th><th class="p-2">HR</th><th class="p-2">Temp</th><th class="p-2">Weight</th></tr></thead><tbody>`;
-                    if(vitals.length === 0) vh += `<tr><td colspan="5" class="p-4 text-center text-slate-500">No flowsheets available.</td></tr>`;
-                    vitals.forEach(v => { vh += `<tr class="border-b border-slate-100"><td class="p-2">${v.timestamp?new Date(v.timestamp.toDate()).toLocaleDateString():''}</td><td class="p-2 font-medium">${v.bp||'--'}</td><td class="p-2">${v.hr||'--'}</td><td class="p-2">${v.temp||'--'}</td><td class="p-2">${v.weight||'--'}</td></tr>`; });
+                    let vh = `<table class="w-full text-left text-sm"><thead class="bg-slate-50 text-slate-500 uppercase font-extrabold tracking-wider text-xs"><tr><th class="p-4 rounded-tl-lg">Date</th><th class="p-4">BP</th><th class="p-4">HR</th><th class="p-4">Temp</th><th class="p-4 rounded-tr-lg">Weight</th></tr></thead><tbody>`;
+                    if(vitals.length === 0) vh += `<tr><td colspan="5" class="p-6 text-center text-slate-500 font-medium">No flowsheets available.</td></tr>`;
+                    vitals.forEach(v => { vh += `<tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors"><td class="p-4 font-bold text-slate-700">${v.timestamp?new Date(v.timestamp.toDate()).toLocaleDateString():''}</td><td class="p-4 font-mono font-bold">${v.bp||'--'}</td><td class="p-4 font-mono font-bold">${v.hr||'--'}</td><td class="p-4 font-mono font-bold">${v.temp||'--'}</td><td class="p-4 font-mono font-bold">${v.weight||'--'}</td></tr>`; });
                     cc.innerHTML = vh + `</tbody></table>`;
-                } catch(e) { cc.innerHTML = `<p class="text-amber-600">Failed to load vitals. Check rules.</p>`; }
+                } catch(e) { cc.innerHTML = `<p class="text-amber-600 font-bold">Failed to load vitals. Check rules.</p>`; }
                 
             } else {
                 try {
                     const snap = await getDocs(query(collection(db, "medications"), where("patientId", "==", window.currentPatientId)));
-                    let rxHtml = `<ul class="space-y-2">`;
-                    if(snap.empty) rxHtml += `<p class="text-slate-500">No active orders or prescriptions.</p>`;
+                    let rxHtml = `<ul class="space-y-3">`;
+                    if(snap.empty) rxHtml += `<p class="text-slate-500 font-medium">No active orders or prescriptions.</p>`;
                     snap.forEach(d => {
                         const rx = d.data();
-                        rxHtml += `<li class="flex justify-between items-center p-3 bg-slate-50 border border-slate-100 rounded"><div><b class="text-slate-800">${rx.name}</b><p class="text-xs text-slate-500 mt-1">Status: ${rx.status} | Sig: ${rx.instructions || 'N/A'}</p></div><span class="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded font-bold">Refills: ${rx.refills}</span></li>`;
+                        rxHtml += `<li class="flex justify-between items-center p-5 bg-white border border-slate-200 rounded-2xl shadow-sm"><div class="flex items-center gap-4"><div class="w-10 h-10 bg-blue-50 text-blue-500 rounded-lg flex items-center justify-center"><i class="fas fa-prescription"></i></div><div><b class="text-slate-900 text-lg font-extrabold tracking-tight">${rx.name}</b><p class="text-xs font-bold text-slate-500 mt-1 uppercase tracking-wide">Status: <span class="${rx.status==='Active'?'text-emerald-500':'text-amber-500'}">${rx.status}</span> <span class="mx-2 opacity-30">|</span> Sig: ${rx.instructions || 'N/A'}</p></div></div><span class="text-xs bg-slate-100 text-slate-600 border border-slate-200 px-3 py-1.5 rounded-lg font-extrabold uppercase tracking-wider">Refills: ${rx.refills}</span></li>`;
                     });
                     cc.innerHTML = rxHtml + `</ul>`;
-                } catch(e) { cc.innerHTML = `<p class="text-amber-600">Failed to load orders. Check rules.</p>`; }
+                } catch(e) { cc.innerHTML = `<p class="text-amber-600 font-bold">Failed to load orders. Check rules.</p>`; }
             }
         }
 
@@ -1050,61 +1106,67 @@
         // --- COMPREHENSIVE ENCOUNTER FORM ---
         window.openEncounterForm = (ptId) => {
             const pt = allUsersCache.find(u=>u.id===ptId);
-            document.getElementById('header-title').innerHTML = `<button onclick="loadPatientChart('${ptId}')" class="text-slate-400 hover:text-slate-600 mr-2"><i class="fas fa-arrow-left"></i></button> New Clinical Encounter: ${pt.name}`;
+            document.getElementById('header-title').innerHTML = `<button onclick="loadPatientChart('${ptId}')" class="text-slate-400 hover:text-slate-600 mr-3"><i class="fas fa-arrow-left"></i></button> New Clinical Encounter: <span class="text-slate-600 font-medium ml-1">${pt.name}</span>`;
             const container = document.getElementById('dynamic-view-container');
             
             container.innerHTML = `
-                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden fade-in">
-                    <div class="bg-slate-800 p-4 text-white flex justify-between items-center">
-                        <div><h3 class="font-bold text-lg">Encounter Documentation</h3><p class="text-xs text-slate-300">Provider: ${currentUserData.name}</p></div>
-                        <button onclick="saveComprehensiveEncounter('${ptId}')" class="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-2 rounded font-bold shadow transition-colors">Sign & Save Note</button>
+                <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden fade-in">
+                    <div class="bg-slate-900 p-6 text-white flex justify-between items-center">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-slate-800 rounded-xl flex items-center justify-center text-blue-400"><i class="fas fa-file-medical text-xl"></i></div>
+                            <div><h3 class="font-extrabold text-xl tracking-tight">Encounter Documentation</h3><p class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Provider: ${currentUserData.name}</p></div>
+                        </div>
+                        <button onclick="saveComprehensiveEncounter('${ptId}')" class="bg-emerald-500 hover:bg-emerald-400 text-white px-6 py-3 rounded-xl font-bold shadow-lg transition-colors border border-emerald-400 active:scale-95"><i class="fas fa-check-circle mr-2"></i>Sign & Save Note</button>
                     </div>
                     
-                    <div class="p-6 space-y-8">
+                    <div class="p-8 space-y-10">
                         <!-- Chief Complaint -->
                         <div>
-                            <h4 class="font-bold text-slate-800 border-b border-slate-200 pb-2 mb-4">1. Chief Complaint</h4>
-                            <input type="text" id="enc-complaint" placeholder="e.g., Follow-up for hypertension, sore throat, etc." class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none">
+                            <h4 class="font-extrabold text-slate-800 text-lg border-b-2 border-slate-100 pb-2 mb-4 flex items-center gap-2"><span class="text-blue-500 opacity-50">1.</span> Chief Complaint</h4>
+                            <input type="text" id="enc-complaint" placeholder="e.g., Follow-up for hypertension, sore throat, etc." class="w-full px-5 py-3 rounded-xl border border-slate-300 focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 outline-none font-bold text-slate-700 transition-all">
                         </div>
 
                         <!-- Vitals -->
                         <div>
-                            <h4 class="font-bold text-slate-800 border-b border-slate-200 pb-2 mb-4">2. Vitals</h4>
-                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                <div><label class="text-xs text-slate-500 font-bold uppercase">Blood Pressure</label><input type="text" id="enc-bp" placeholder="120/80" class="w-full mt-1 px-3 py-2 rounded border border-slate-300 outline-none"></div>
-                                <div><label class="text-xs text-slate-500 font-bold uppercase">Heart Rate</label><input type="text" id="enc-hr" placeholder="bpm" class="w-full mt-1 px-3 py-2 rounded border border-slate-300 outline-none"></div>
-                                <div><label class="text-xs text-slate-500 font-bold uppercase">Temperature</label><input type="text" id="enc-temp" placeholder="°F" class="w-full mt-1 px-3 py-2 rounded border border-slate-300 outline-none"></div>
-                                <div><label class="text-xs text-slate-500 font-bold uppercase">Weight</label><input type="text" id="enc-weight" placeholder="lbs" class="w-full mt-1 px-3 py-2 rounded border border-slate-300 outline-none"></div>
+                            <h4 class="font-extrabold text-slate-800 text-lg border-b-2 border-slate-100 pb-2 mb-4 flex items-center gap-2"><span class="text-blue-500 opacity-50">2.</span> Vitals</h4>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                                <div><label class="text-xs text-slate-500 font-extrabold uppercase tracking-widest">Blood Pressure</label><input type="text" id="enc-bp" placeholder="120/80" class="w-full mt-2 px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none font-mono font-bold"></div>
+                                <div><label class="text-xs text-slate-500 font-extrabold uppercase tracking-widest">Heart Rate</label><input type="text" id="enc-hr" placeholder="bpm" class="w-full mt-2 px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none font-mono font-bold"></div>
+                                <div><label class="text-xs text-slate-500 font-extrabold uppercase tracking-widest">Temperature</label><input type="text" id="enc-temp" placeholder="°F" class="w-full mt-2 px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none font-mono font-bold"></div>
+                                <div><label class="text-xs text-slate-500 font-extrabold uppercase tracking-widest">Weight</label><input type="text" id="enc-weight" placeholder="lbs" class="w-full mt-2 px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none font-mono font-bold"></div>
                             </div>
                         </div>
 
                         <!-- Diagnoses (ICD-10) -->
                         <div>
-                            <h4 class="font-bold text-slate-800 border-b border-slate-200 pb-2 mb-4">3. Diagnoses (ICD-10)</h4>
-                            <div class="flex gap-2">
-                                <input list="icd-10-codes" id="enc-diagnosis" placeholder="Search ICD-10 database..." class="flex-1 px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none">
+                            <h4 class="font-extrabold text-slate-800 text-lg border-b-2 border-slate-100 pb-2 mb-4 flex items-center gap-2"><span class="text-blue-500 opacity-50">3.</span> Diagnoses (ICD-10)</h4>
+                            <div class="flex gap-2 relative">
+                                <i class="fas fa-search absolute left-4 top-3.5 text-slate-400"></i>
+                                <input list="icd-10-codes" id="enc-diagnosis" placeholder="Search ICD-10 database..." class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 outline-none font-bold text-slate-700 transition-all">
                             </div>
-                            <p class="text-xs text-slate-400 mt-1">This will be added to the patient's active conditions list.</p>
+                            <p class="text-xs font-bold text-slate-400 mt-2 uppercase tracking-wide"><i class="fas fa-info-circle mr-1"></i>This will be automatically added to the patient's active conditions list.</p>
                         </div>
 
                         <!-- Orders / Rx -->
                         <div>
-                            <h4 class="font-bold text-slate-800 border-b border-slate-200 pb-2 mb-4">4. Orders, Prescriptions & DME</h4>
-                            <div class="flex gap-4">
-                                <div class="w-1/2">
-                                    <input list="rx-treatments" id="enc-rx" placeholder="Search Drug/DME Database..." class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none">
+                            <h4 class="font-extrabold text-slate-800 text-lg border-b-2 border-slate-100 pb-2 mb-4 flex items-center gap-2"><span class="text-blue-500 opacity-50">4.</span> Orders, Prescriptions & DME</h4>
+                            <div class="flex flex-col md:flex-row gap-4">
+                                <div class="w-full md:w-1/2 relative">
+                                    <i class="fas fa-pills absolute left-4 top-3.5 text-slate-400"></i>
+                                    <input list="rx-treatments" id="enc-rx" placeholder="Search Drug/DME Database..." class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 outline-none font-bold text-slate-700 transition-all">
                                 </div>
-                                <div class="w-1/2">
-                                    <input type="text" id="enc-rx-sig" placeholder="Provider Instructions (Sig) e.g., Take 1 PO Daily" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none">
+                                <div class="w-full md:w-1/2 relative">
+                                    <i class="fas fa-pen absolute left-4 top-3.5 text-slate-400"></i>
+                                    <input type="text" id="enc-rx-sig" placeholder="Provider Instructions (Sig)" class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 outline-none font-bold text-slate-700 transition-all">
                                 </div>
                             </div>
-                            <p class="text-xs text-slate-400 mt-1">This will be sent directly to the clinic pharmacy queue.</p>
+                            <p class="text-xs font-bold text-slate-400 mt-2 uppercase tracking-wide"><i class="fas fa-info-circle mr-1"></i>Prescriptions and DME requests route directly to the clinic pharmacy queue.</p>
                         </div>
 
                         <!-- Clinical Notes -->
                         <div>
-                            <h4 class="font-bold text-slate-800 border-b border-slate-200 pb-2 mb-4">5. Clinical Notes (SOAP)</h4>
-                            <textarea id="enc-notes" rows="8" placeholder="Subjective, Objective, Assessment, Plan..." class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none font-mono text-sm"></textarea>
+                            <h4 class="font-extrabold text-slate-800 text-lg border-b-2 border-slate-100 pb-2 mb-4 flex items-center gap-2"><span class="text-blue-500 opacity-50">5.</span> Clinical Notes (SOAP)</h4>
+                            <textarea id="enc-notes" rows="8" placeholder="Subjective, Objective, Assessment, Plan..." class="w-full p-5 rounded-xl border border-slate-300 focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 outline-none font-mono text-sm leading-relaxed transition-all"></textarea>
                         </div>
                     </div>
                 </div>
