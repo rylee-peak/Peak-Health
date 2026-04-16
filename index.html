@@ -33,6 +33,7 @@
 
     <!-- Datasets for Autocomplete -->
     <datalist id="icd-10-codes">
+        <!-- Common ICD-10 -->
         <option value="I10 - Essential (primary) hypertension">
         <option value="E11.9 - Type 2 diabetes mellitus without complications">
         <option value="E78.5 - Hyperlipidemia, unspecified">
@@ -43,22 +44,53 @@
         <option value="M54.5 - Low back pain">
         <option value="F41.1 - Generalized anxiety disorder">
         <option value="F32.9 - Major depressive disorder, single episode">
+        <option value="E03.9 - Hypothyroidism, unspecified">
+        <option value="I48.91 - Unspecified atrial fibrillation">
+        <option value="M19.90 - Unspecified osteoarthritis, unspecified site">
+        <option value="N39.0 - Urinary tract infection, site not specified">
+        <option value="R07.9 - Chest pain, unspecified">
+        <option value="R51 - Headache">
+        <option value="G43.909 - Migraine, unspecified, not intractable">
+        <option value="L20.9 - Atopic dermatitis, unspecified">
+        <option value="R53.83 - Other fatigue">
+        <option value="Z00.00 - Encounter for general adult medical examination">
     </datalist>
 
     <datalist id="rx-treatments">
-        <option value="Amoxicillin 500mg cap - 1 PO TID x 7 days">
-        <option value="Azithromycin 250mg tab - 2 PO day 1, then 1 PO daily">
-        <option value="Albuterol 90mcg HFA inhaler - 2 puffs Q4H PRN">
-        <option value="Lisinopril 10mg tab - 1 PO daily">
-        <option value="Metformin 500mg tab - 1 PO BID">
-        <option value="Atorvastatin 20mg tab - 1 PO daily">
-        <option value="Omeprazole 20mg cap - 1 PO daily">
-        <option value="Ibuprofen 800mg tab - 1 PO Q8H PRN pain">
-        <option value="Sertraline 50mg tab - 1 PO daily">
-        <option value="Escitalopram 10mg tab - 1 PO daily">
+        <!-- Brand / Generic Meds -->
+        <option value="Amoxicillin (Amoxil)">
+        <option value="Azithromycin (Zithromax)">
+        <option value="Albuterol HFA (ProAir, Ventolin)">
+        <option value="Lisinopril (Prinivil, Zestril)">
+        <option value="Metformin (Glucophage)">
+        <option value="Atorvastatin (Lipitor)">
+        <option value="Omeprazole (Prilosec)">
+        <option value="Ibuprofen (Advil, Motrin)">
+        <option value="Sertraline (Zoloft)">
+        <option value="Escitalopram (Lexapro)">
+        <option value="Amlodipine (Norvasc)">
+        <option value="Levothyroxine (Synthroid)">
+        <option value="Losartan (Cozaar)">
+        <option value="Gabapentin (Neurontin)">
+        <option value="Hydrochlorothiazide (Microzide)">
+        <option value="Pantoprazole (Protonix)">
+        <option value="Fluoxetine (Prozac)">
+        <option value="Trazodone (Desyrel)">
+        <option value="Fluticasone (Flonase)">
+        <option value="Acetaminophen (Tylenol)">
+        <!-- Durable Medical Equipment (DME) -->
+        <option value="DME: Standard Manual Wheelchair">
+        <option value="DME: CPAP Machine">
+        <option value="DME: BiPAP Machine">
+        <option value="DME: Blood Glucose Monitor">
+        <option value="DME: Aluminum Crutches (Pair)">
+        <option value="DME: Four-Wheel Rollator Walker">
+        <option value="DME: Standard Walker">
+        <option value="DME: Oxygen Concentrator">
+        <option value="DME: Nebulizer Compressor">
     </datalist>
 
-    <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2"></div>
+    <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
     <!-- LOGIN SCREEN -->
     <div id="login-view" class="w-full h-full flex items-center justify-center epic-bg absolute z-40 transition-opacity duration-300">
@@ -97,7 +129,7 @@
     <!-- MAIN APP -->
     <div id="app-view" class="w-full h-full flex hidden">
         <!-- Sidebar -->
-        <aside class="w-64 bg-slate-900 text-slate-300 flex flex-col transition-all duration-300 flex-shrink-0">
+        <aside class="w-64 bg-slate-900 text-slate-300 flex flex-col transition-all duration-300 flex-shrink-0 z-20 shadow-xl">
             <div class="h-16 flex items-center px-6 bg-slate-950 border-b border-slate-800 cursor-pointer" onclick="switchView('dashboard')">
                 <i class="fas fa-mountain text-blue-500 text-xl mr-3"></i>
                 <span class="text-white font-bold text-lg tracking-wide">Peak Health</span>
@@ -140,7 +172,7 @@
                     <p>Loading application data...</p>
                 </div>
                 <!-- Dynamic Content injected here -->
-                <div id="dynamic-view-container" class="w-full max-w-7xl mx-auto space-y-6 fade-in"></div>
+                <div id="dynamic-view-container" class="w-full max-w-7xl mx-auto space-y-6 fade-in pb-10"></div>
             </div>
         </main>
     </div>
@@ -220,11 +252,54 @@
         </div>
     </div>
 
+    <!-- Delete Confirmation Modal -->
+    <div id="modal-confirm-delete" class="fixed inset-0 bg-slate-900/60 hidden items-center justify-center z-50 backdrop-blur-sm">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-sm overflow-hidden">
+            <div class="p-6 text-center">
+                <div class="w-16 h-16 rounded-full bg-red-100 text-red-600 flex items-center justify-center text-2xl mx-auto mb-4"><i class="fas fa-exclamation-triangle"></i></div>
+                <h3 class="text-xl font-bold text-slate-800 mb-2">Delete Encounter?</h3>
+                <p class="text-slate-500 text-sm">This action cannot be undone. Are you sure you want to permanently remove this clinical note?</p>
+            </div>
+            <div class="px-6 py-4 border-t border-slate-100 bg-slate-50 flex justify-center gap-3">
+                <button onclick="closeModal('modal-confirm-delete')" class="px-4 py-2 text-slate-600 font-medium hover:bg-slate-200 rounded-lg w-1/2">Cancel</button>
+                <button onclick="executeDeleteEncounter()" class="px-4 py-2 bg-red-600 text-white font-medium hover:bg-red-700 rounded-lg shadow-sm w-1/2">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Appointment Scheduling Modal -->
+    <div id="modal-appointment" class="fixed inset-0 bg-slate-900/60 hidden items-center justify-center z-50 backdrop-blur-sm">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden">
+            <div class="px-6 py-4 border-b border-slate-200 flex justify-between items-center bg-slate-50">
+                <h3 class="text-lg font-bold text-slate-800">Schedule Appointment</h3>
+                <button onclick="closeModal('modal-appointment')" class="text-slate-400 hover:text-slate-600"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-6 space-y-4">
+                <div>
+                    <label id="appt-user-label" class="block text-sm font-medium text-slate-700 mb-1">Select User</label>
+                    <select id="appt-user" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none"></select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Date & Time</label>
+                    <input type="datetime-local" id="appt-datetime" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Reason / Type</label>
+                    <input type="text" id="appt-reason" placeholder="e.g., Annual Physical, Follow-up" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+            </div>
+            <div class="px-6 py-4 border-t border-slate-200 bg-slate-50 flex justify-end gap-3">
+                <button onclick="closeModal('modal-appointment')" class="px-4 py-2 text-slate-600 font-medium hover:bg-slate-200 rounded-lg">Cancel</button>
+                <button onclick="saveAppointment()" class="px-4 py-2 bg-blue-600 text-white font-medium hover:bg-blue-700 rounded-lg shadow-sm">Schedule</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Firebase Logic -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, SAMLAuthProvider, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc, collection, query, where, getDocs, addDoc, updateDoc, serverTimestamp, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, getDoc, collection, query, where, getDocs, addDoc, updateDoc, deleteDoc, serverTimestamp, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyC6ZyHElipTNDwiSXZLazue7KRxcQBOERs",
@@ -246,6 +321,7 @@
         let isSignUpMode = false;
         let allUsersCache = [];
         let unsubscribeMessages = null;
+        window.encounterToDelete = null;
 
         // --- UTILS ---
         window.showToast = (msg, type = 'info') => {
@@ -253,7 +329,7 @@
             const toast = document.createElement('div');
             let colors = type === 'error' ? 'bg-red-600' : type === 'success' ? 'bg-emerald-600' : 'bg-slate-800';
             let icon = type === 'error' ? 'fa-exclamation-circle' : type === 'success' ? 'fa-check-circle' : 'fa-info-circle';
-            toast.className = `toast-enter ${colors} text-white px-6 py-4 rounded-xl shadow-xl flex items-center gap-3 min-w-[300px]`;
+            toast.className = `toast-enter ${colors} text-white px-6 py-4 rounded-xl shadow-xl flex items-center gap-3 min-w-[300px] pointer-events-auto`;
             toast.innerHTML = `<i class="fas ${icon} text-xl"></i><span class="font-medium">${msg}</span>`;
             container.appendChild(toast);
             setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 4000);
@@ -277,11 +353,14 @@
             try {
                 btn.disabled = true; btn.innerText = "Processing...";
                 if (isSignUpMode) {
-                    const q = query(collection(db, "users"), where("email", "==", email));
-                    const snap = await getDocs(q);
-                    const cred = await createUserWithEmailAndPassword(auth, email, pass);
                     let baseData = { email: email, role: 'patient', name: email.split('@')[0], createdAt: serverTimestamp() };
-                    if(!snap.empty) { baseData = { ...baseData, ...snap.docs[0].data(), stub: false }; }
+                    try {
+                        const q = query(collection(db, "users"), where("email", "==", email));
+                        const snap = await getDocs(q);
+                        if(!snap.empty) { baseData = { ...baseData, ...snap.docs[0].data(), stub: false }; }
+                    } catch(e) { console.warn("Could not check stub user due to rules"); }
+                    
+                    const cred = await createUserWithEmailAndPassword(auth, email, pass);
                     await setDoc(doc(db, "users", cred.user.uid), baseData);
                     showToast("Account registered", "success");
                 } else {
@@ -314,19 +393,24 @@
 
         async function initUserSession(user) {
             document.getElementById('loading-state').classList.remove('hidden');
-            const userRef = doc(db, "users", user.uid);
-            const userSnap = await getDoc(userRef);
-            
             let role = 'patient'; let name = user.displayName || user.email.split('@')[0];
-            if (!userSnap.exists()) {
-                if (user.email === 'rylee.peak@rpeak.org') role = 'admin';
-                else if (user.email?.includes('@rpeak.org')) role = 'physician';
-                window.currentUserData = { email: user.email, role, name, createdAt: serverTimestamp() };
-                await setDoc(userRef, window.currentUserData);
-            } else { window.currentUserData = userSnap.data(); }
+            
+            try {
+                const userRef = doc(db, "users", user.uid);
+                const userSnap = await getDoc(userRef);
+                
+                if (!userSnap.exists()) {
+                    if (user.email === 'rylee.peak@rpeak.org') role = 'admin';
+                    else if (user.email?.includes('@rpeak.org')) role = 'physician';
+                    window.currentUserData = { email: user.email, role, name, createdAt: serverTimestamp() };
+                    await setDoc(userRef, window.currentUserData);
+                } else { window.currentUserData = userSnap.data(); }
+            } catch(e) { console.error(e); showToast("Error loading user profile", "error"); }
 
-            const allUsersSnap = await getDocs(collection(db, "users"));
-            allUsersCache = allUsersSnap.docs.map(d => ({id: d.id, ...d.data()}));
+            try {
+                const allUsersSnap = await getDocs(collection(db, "users"));
+                allUsersCache = allUsersSnap.docs.map(d => ({id: d.id, ...d.data()}));
+            } catch(e) { console.error("Could not cache users. Check rules."); allUsersCache = [window.currentUserData]; allUsersCache[0].id = currentUser.uid; }
 
             updateProfileUI();
             buildNav();
@@ -353,11 +437,13 @@
         window.saveSettings = async () => {
             const name = document.getElementById('setting-name').value;
             const photo = document.getElementById('setting-photo').value;
-            await updateDoc(doc(db, "users", currentUser.uid), { name, photoUrl: photo });
-            currentUserData.name = name; currentUserData.photoUrl = photo;
-            updateProfileUI();
-            closeModal('modal-settings');
-            showToast("Profile updated", "success");
+            try {
+                await updateDoc(doc(db, "users", currentUser.uid), { name, photoUrl: photo });
+                currentUserData.name = name; currentUserData.photoUrl = photo;
+                updateProfileUI();
+                closeModal('modal-settings');
+                showToast("Profile updated", "success");
+            } catch(e) { showToast("Failed to update profile", "error"); }
         };
 
         // --- NAVIGATION & ROUTING ---
@@ -376,7 +462,10 @@
                 items.push({id:'appointments', icon:'fa-calendar-alt', text:'Schedule', roles:['physician','admin']});
                 items.push({id:'pharmacy', icon:'fa-pills', text:'Clinic Pharmacy', roles:['physician','admin']});
                 items.push({id:'messages', icon:'fa-envelope', text:'Secure Inbox', roles:['physician','admin']});
-                if(currentUserData.role === 'admin') items.push({id:'admin', icon:'fa-shield-halved', text:'Admin Controls', roles:['admin']});
+                if(currentUserData.role === 'admin') {
+                    items.push({id:'billing', icon:'fa-file-invoice-dollar', text:'Billing Admin', roles:['admin']});
+                    items.push({id:'admin', icon:'fa-shield-halved', text:'System Admin', roles:['admin']});
+                }
             }
 
             nav.innerHTML = items.filter(i => i.roles.includes(currentUserData.role)).map(i => 
@@ -403,21 +492,24 @@
                     else if(viewId === 'directory') await renderDirectory(container);
                     else if(viewId === 'messages') await renderMessages(container);
                     else if(viewId === 'appointments') await renderAppointments(container);
-                    else if(viewId === 'coverage') renderCoverage(container);
+                    else if(viewId === 'coverage') await renderCoverage(container);
+                    else if(viewId === 'billing') renderBillingAdmin(container);
                     else if(viewId === 'admin') renderAdmin(container);
-                } catch(e) { console.error(e); container.innerHTML = `<div class="p-6 bg-red-100 text-red-700 rounded">Error loading view</div>`; }
+                } catch(e) { console.error(e); container.innerHTML = `<div class="p-6 bg-red-100 text-red-700 rounded-lg border border-red-200"><i class="fas fa-exclamation-triangle mr-2"></i>Error rendering view. Please ensure Firestore Rules are applied for this collection.</div>`; }
                 document.getElementById('loading-state').classList.add('hidden');
-            }, 100);
+            }, 50);
         };
 
         // --- NOTIFICATIONS & MESSAGING ---
         function listenToNotifications() {
-            const q = query(collection(db, "messages"), where("receiverId", "==", currentUser.uid), where("read", "==", false));
-            unsubscribeMessages = onSnapshot(q, (snapshot) => {
-                const badge = document.getElementById('notification-badge');
-                if(snapshot.empty) badge.classList.add('hidden');
-                else { badge.classList.remove('hidden'); badge.innerText = snapshot.size; }
-            });
+            try {
+                const q = query(collection(db, "messages"), where("receiverId", "==", currentUser.uid), where("read", "==", false));
+                unsubscribeMessages = onSnapshot(q, (snapshot) => {
+                    const badge = document.getElementById('notification-badge');
+                    if(snapshot.empty) badge.classList.add('hidden');
+                    else { badge.classList.remove('hidden'); badge.innerText = snapshot.size; }
+                }, (error) => { console.warn("Messages rules not set yet:", error); });
+            } catch(e) {}
         }
 
         window.openMessageModal = (toUserId = '', prefillSubject = '') => {
@@ -444,26 +536,31 @@
             const body = document.getElementById('msg-body').value;
             if(!to || !body) return showToast("Recipient and message required", "error");
             
-            await addDoc(collection(db, "messages"), {
-                senderId: currentUser.uid, senderName: currentUserData.name,
-                receiverId: to, subject: sub || 'No Subject', body: body,
-                timestamp: serverTimestamp(), read: false
-            });
-            closeModal('modal-message'); showToast("Message sent", "success");
-            if(document.getElementById('header-title').innerText.includes('Inbox')) switchView('messages');
+            try {
+                await addDoc(collection(db, "messages"), {
+                    senderId: currentUser.uid, senderName: currentUserData.name,
+                    receiverId: to, subject: sub || 'No Subject', body: body,
+                    timestamp: serverTimestamp(), read: false
+                });
+                closeModal('modal-message'); showToast("Message sent", "success");
+                if(document.getElementById('header-title').innerText.includes('Inbox') || document.getElementById('header-title').innerText.includes('Messages')) switchView('messages');
+            } catch(e) { showToast("Failed to send message. Check rules.", "error"); }
         };
 
         async function renderMessages(container) {
-            const q = query(collection(db, "messages"));
-            const snap = await getDocs(q);
-            const msgs = snap.docs.map(d=>({id:d.id, ...d.data()}))
-                                  .filter(m => m.receiverId === currentUser.uid || m.senderId === currentUser.uid)
-                                  .sort((a,b)=>(b.timestamp?.toMillis()||0)-(a.timestamp?.toMillis()||0));
+            let msgs = [];
+            try {
+                const q = query(collection(db, "messages"));
+                const snap = await getDocs(q);
+                msgs = snap.docs.map(d=>({id:d.id, ...d.data()}))
+                                .filter(m => m.receiverId === currentUser.uid || m.senderId === currentUser.uid)
+                                .sort((a,b)=>(b.timestamp?.toMillis()||0)-(a.timestamp?.toMillis()||0));
+            } catch(e) { console.warn("Messages rule issue:", e); return container.innerHTML = `<div class="p-6 bg-amber-50 text-amber-700 rounded-lg">Update Firestore Rules to view Messages.</div>`; }
 
             let html = `
                 <div class="flex justify-between items-center mb-6">
                     <h3 class="text-xl font-bold text-slate-800">Secure Messages</h3>
-                    <button onclick="openMessageModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"><i class="fas fa-pen mr-2"></i>Compose</button>
+                    <button onclick="openMessageModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors shadow-sm"><i class="fas fa-pen mr-2"></i>Compose</button>
                 </div>
                 <div class="bg-white rounded-xl shadow-sm border border-slate-200 divide-y divide-slate-100">
             `;
@@ -505,6 +602,28 @@
         // --- DASHBOARD ---
         async function renderDashboard(container) {
             if(currentUserData.role === 'patient') {
+                
+                // Fetch dynamic care team
+                let careTeamHtml = '';
+                try {
+                    const snap = await getDocs(query(collection(db, "encounters"), where("patientId", "==", currentUser.uid)));
+                    const providerIds = [...new Set(snap.docs.map(d=>d.data().providerId))];
+                    if(providerIds.length === 0) careTeamHtml = '<p class="text-sm text-slate-500">No care team assigned yet. A provider will be assigned when you have your first visit.</p>';
+                    else {
+                        providerIds.forEach(pid => {
+                            const prov = allUsersCache.find(u=>u.id===pid);
+                            if(prov) {
+                                careTeamHtml += `
+                                    <div class="flex items-center gap-3 mb-3">
+                                        <div class="w-10 h-10 rounded-full bg-slate-200 overflow-hidden"><img src="${prov.photoUrl || `https://ui-avatars.com/api/?name=${prov.name}`}"></div>
+                                        <div><p class="font-bold text-sm text-slate-800">${prov.name}</p><p class="text-xs text-slate-500 capitalize">${prov.role}</p></div>
+                                    </div>
+                                `;
+                            }
+                        });
+                    }
+                } catch(e) { careTeamHtml = '<p class="text-xs text-amber-600">Update Rules to view Care Team.</p>'; }
+
                 container.innerHTML = `
                     <div class="bg-gradient-to-r from-blue-600 to-blue-800 rounded-2xl p-8 text-white shadow-lg mb-8">
                         <h2 class="text-3xl font-bold mb-2">Hello, ${currentUserData.name}</h2>
@@ -513,10 +632,16 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
                             <div class="flex items-center gap-3 mb-4"><div class="w-10 h-10 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center"><i class="fas fa-shield-virus"></i></div><h4 class="font-bold text-slate-800">Preventive Care</h4></div>
-                            <ul class="space-y-3 text-sm">
+                            <ul class="space-y-3 text-sm mb-4">
                                 <li class="flex justify-between items-center"><span class="text-slate-600">Annual Flu Vaccine</span><span class="text-red-500 font-medium">Due</span></li>
                                 <li class="flex justify-between items-center"><span class="text-slate-600">Wellness Visit</span><span class="text-emerald-500 font-medium">Up to date</span></li>
                             </ul>
+                            <button onclick="switchView('appointments')" class="w-full py-2 text-blue-600 border border-blue-200 rounded-lg hover:bg-blue-50 text-sm font-medium">Schedule Now</button>
+                        </div>
+                        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                            <div class="flex items-center gap-3 mb-4"><div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center"><i class="fas fa-user-md"></i></div><h4 class="font-bold text-slate-800">My Care Team</h4></div>
+                            <div class="mb-4">${careTeamHtml}</div>
+                            <button onclick="openMessageModal()" class="w-full py-2 text-slate-600 border border-slate-200 rounded-lg hover:bg-slate-50 text-sm font-medium"><i class="fas fa-envelope mr-1"></i> Send a Message</button>
                         </div>
                         <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
                             <div class="flex items-center gap-3 mb-4"><div class="w-10 h-10 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center"><i class="fas fa-hospital"></i></div><h4 class="font-bold text-slate-800">Favorite Facilities</h4></div>
@@ -526,10 +651,6 @@
                                     <p class="text-xs text-slate-500">123 Wellness Way, City</p>
                                 </div>
                             </div>
-                        </div>
-                        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-                            <div class="flex items-center gap-3 mb-4"><div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center"><i class="fas fa-user-md"></i></div><h4 class="font-bold text-slate-800">Care Team</h4></div>
-                            <button onclick="openMessageModal()" class="w-full py-2 text-slate-600 border border-slate-200 rounded-lg hover:bg-slate-50 text-sm font-medium"><i class="fas fa-envelope mr-1"></i> Send a Message</button>
                         </div>
                     </div>
                 `;
@@ -545,8 +666,9 @@
                     <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
                         <h3 class="font-bold text-lg mb-4">Quick Actions</h3>
                         <div class="flex flex-wrap gap-4">
-                            <button onclick="switchView('directory')" class="px-5 py-3 bg-blue-50 text-blue-700 rounded-lg font-medium hover:bg-blue-100"><i class="fas fa-search mr-2"></i>Find Patient</button>
-                            <button onclick="openModal('modal-add-patient')" class="px-5 py-3 bg-emerald-50 text-emerald-700 rounded-lg font-medium hover:bg-emerald-100"><i class="fas fa-user-plus mr-2"></i>Register Patient</button>
+                            <button onclick="switchView('directory')" class="px-5 py-3 bg-blue-50 text-blue-700 rounded-lg font-medium hover:bg-blue-100 shadow-sm"><i class="fas fa-search mr-2"></i>Find Patient</button>
+                            <button onclick="openModal('modal-add-patient')" class="px-5 py-3 bg-emerald-50 text-emerald-700 rounded-lg font-medium hover:bg-emerald-100 shadow-sm"><i class="fas fa-user-plus mr-2"></i>Register Patient</button>
+                            <button onclick="openAppointmentModal()" class="px-5 py-3 bg-purple-50 text-purple-700 rounded-lg font-medium hover:bg-purple-100 shadow-sm"><i class="fas fa-calendar-plus mr-2"></i>Schedule Appt</button>
                         </div>
                     </div>
                 `;
@@ -555,15 +677,14 @@
 
         // --- PATIENT / CLINIC PHARMACY ---
         async function renderPharmacy(container) {
-            let q;
-            if (currentUserData.role === 'patient') {
-                q = query(collection(db, "medications"), where("patientId", "==", currentUser.uid));
-            } else {
-                q = query(collection(db, "medications")); // Providers see all clinic meds
-            }
-            
-            const snap = await getDocs(q);
-            const meds = snap.docs.map(d=>({id:d.id,...d.data()}));
+            let meds = [];
+            try {
+                let q = currentUserData.role === 'patient' 
+                    ? query(collection(db, "medications"), where("patientId", "==", currentUser.uid))
+                    : query(collection(db, "medications"));
+                const snap = await getDocs(q);
+                meds = snap.docs.map(d=>({id:d.id,...d.data()}));
+            } catch(e) { return container.innerHTML = `<div class="p-6 bg-amber-50 text-amber-700 rounded-lg">Update Rules to view Pharmacy.</div>`; }
 
             let html = `
                 <div class="flex justify-between items-center mb-6">
@@ -585,8 +706,9 @@
                                 <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center"><i class="fas fa-pills"></i></div>
                                 <div>
                                     <h4 class="font-bold text-slate-800 text-lg">${m.name}</h4>
-                                    ${currentUserData.role !== 'patient' ? `<p class="text-xs font-medium text-slate-500 mb-1">Patient: ${ptName}</p>` : ''}
-                                    <span class="text-xs ${isRequested ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700'} px-2 py-0.5 rounded font-bold uppercase">${m.status}</span>
+                                    ${m.instructions ? `<p class="text-sm font-medium text-slate-600">Sig: ${m.instructions}</p>` : ''}
+                                    ${currentUserData.role !== 'patient' ? `<p class="text-xs font-medium text-slate-500 mb-1 mt-1">Patient: ${ptName}</p>` : ''}
+                                    <span class="text-xs mt-1 inline-block ${isRequested ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700'} px-2 py-0.5 rounded font-bold uppercase">${m.status}</span>
                                 </div>
                             </div>
                         </div>
@@ -602,15 +724,13 @@
         }
         
         window.requestRefill = async (id) => {
-            await updateDoc(doc(db, "medications", id), { status: 'Refill Requested' });
-            showToast("Refill requested successfully.", "success");
-            switchView('pharmacy');
+            try { await updateDoc(doc(db, "medications", id), { status: 'Refill Requested' }); showToast("Refill requested.", "success"); switchView('pharmacy'); }
+            catch(e){ showToast("Failed to request. Check rules.", "error"); }
         };
         
         window.fillPrescription = async (id) => {
-            await updateDoc(doc(db, "medications", id), { status: 'Active' });
-            showToast("Prescription marked as filled.", "success");
-            switchView('pharmacy');
+            try { await updateDoc(doc(db, "medications", id), { status: 'Active' }); showToast("Marked as filled.", "success"); switchView('pharmacy'); }
+            catch(e){ showToast("Failed. Check rules.", "error"); }
         };
 
         // --- PATIENT: MY RECORDS ---
@@ -632,66 +752,166 @@
                 <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 min-h-[400px]">
             `;
 
-            if(activeRecordTab === 'visits') {
-                const snap = await getDocs(query(collection(db, "encounters"), where("patientId", "==", currentUser.uid)));
-                const visits = snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(b.timestamp?.toMillis()||0)-(a.timestamp?.toMillis()||0));
-                
-                if(visits.length === 0) html += `<p class="text-slate-500 text-center py-10">No past visits recorded.</p>`;
-                visits.forEach(v => {
-                    const d = v.timestamp ? new Date(v.timestamp.toDate()).toLocaleDateString() : '';
-                    html += `
-                        <div class="border-b border-slate-100 py-4 last:border-0">
-                            <div class="flex justify-between items-start mb-2">
-                                <div><h4 class="font-bold text-lg text-slate-800">${v.complaint}</h4><p class="text-sm text-slate-500">Provider: ${allUsersCache.find(u=>u.id===v.providerId)?.name||'Unknown'}</p></div>
-                                <span class="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-xs font-bold">${d}</span>
+            try {
+                if(activeRecordTab === 'visits') {
+                    const snap = await getDocs(query(collection(db, "encounters"), where("patientId", "==", currentUser.uid)));
+                    const visits = snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(b.timestamp?.toMillis()||0)-(a.timestamp?.toMillis()||0));
+                    
+                    if(visits.length === 0) html += `<p class="text-slate-500 text-center py-10">No past visits recorded.</p>`;
+                    visits.forEach(v => {
+                        const d = v.timestamp ? new Date(v.timestamp.toDate()).toLocaleDateString() : '';
+                        html += `
+                            <div class="border-b border-slate-100 py-4 last:border-0">
+                                <div class="flex justify-between items-start mb-2">
+                                    <div><h4 class="font-bold text-lg text-slate-800">${v.complaint}</h4><p class="text-sm text-slate-500">Provider: ${allUsersCache.find(u=>u.id===v.providerId)?.name||'Unknown'}</p></div>
+                                    <span class="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-xs font-bold">${d}</span>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded text-sm text-slate-700 font-mono mt-3">${v.notes}</div>
                             </div>
-                            <div class="bg-slate-50 p-4 rounded text-sm text-slate-700 font-mono mt-3">${v.notes}</div>
-                        </div>
-                    `;
-                });
-            } else if(activeRecordTab === 'conditions') {
-                const snap = await getDocs(query(collection(db, "conditions"), where("patientId", "==", currentUser.uid)));
-                if(snap.empty) html += `<p class="text-slate-500 text-center py-10">No active conditions recorded.</p>`;
+                        `;
+                    });
+                } else if(activeRecordTab === 'conditions') {
+                    const snap = await getDocs(query(collection(db, "conditions"), where("patientId", "==", currentUser.uid)));
+                    if(snap.empty) html += `<p class="text-slate-500 text-center py-10">No active conditions recorded.</p>`;
+                    else {
+                        html += `<ul class="space-y-3">`;
+                        snap.forEach(doc => {
+                            const d = doc.data();
+                            html += `<li class="flex items-center gap-3 p-3 bg-slate-50 rounded border border-slate-100"><i class="fas fa-stethoscope text-blue-500"></i> <span class="font-medium text-slate-800">${d.diagnosis}</span> <span class="text-xs text-slate-400 ml-auto">Added: ${d.timestamp?new Date(d.timestamp.toDate()).toLocaleDateString():''}</span></li>`;
+                        });
+                        html += `</ul>`;
+                    }
+                } else if(activeRecordTab === 'vitals') {
+                    const snap = await getDocs(query(collection(db, "vitals"), where("patientId", "==", currentUser.uid)));
+                    const vitals = snap.docs.map(d=>d.data()).sort((a,b)=>(b.timestamp?.toMillis()||0)-(a.timestamp?.toMillis()||0));
+                    if(vitals.length === 0) html += `<p class="text-slate-500 text-center py-10">No vitals recorded.</p>`;
+                    else {
+                        html += `<table class="w-full text-left text-sm"><thead class="bg-slate-50 text-slate-500 uppercase tracking-wider text-xs"><tr><th class="p-3 rounded-tl">Date</th><th class="p-3">BP</th><th class="p-3">HR</th><th class="p-3">Temp</th><th class="p-3 rounded-tr">Weight</th></tr></thead><tbody class="divide-y divide-slate-100">`;
+                        vitals.forEach(v => {
+                            html += `<tr><td class="p-3 font-medium">${v.timestamp?new Date(v.timestamp.toDate()).toLocaleDateString():''}</td><td class="p-3">${v.bp||'--'}</td><td class="p-3">${v.hr||'--'}</td><td class="p-3">${v.temp||'--'}</td><td class="p-3">${v.weight||'--'}</td></tr>`;
+                        });
+                        html += `</tbody></table>`;
+                    }
+                }
+            } catch(e) { html += `<p class="text-amber-600 p-4 bg-amber-50 rounded">Failed to load data. Update Firestore rules.</p>`; }
+            container.innerHTML = html + `</div>`;
+        }
+
+        // --- COVERAGE & BILLING ---
+        async function renderCoverage(container) {
+            let billsHtml = '';
+            try {
+                const snap = await getDocs(query(collection(db, "bills"), where("patientId", "==", currentUser.uid)));
+                if(snap.empty) billsHtml = `<div class="flex items-center justify-between p-4 bg-emerald-50 rounded-lg border border-emerald-100 mb-4"><div class="flex items-center gap-3"><i class="fas fa-check-circle text-emerald-500 text-xl"></i><div><p class="font-bold text-emerald-900">No Amount Due</p><p class="text-xs text-emerald-700">Your accounts are up to date.</p></div></div><span class="text-xl font-bold text-emerald-700">$0.00</span></div>`;
                 else {
-                    html += `<ul class="space-y-3">`;
                     snap.forEach(doc => {
-                        const d = doc.data();
-                        html += `<li class="flex items-center gap-3 p-3 bg-slate-50 rounded border border-slate-100"><i class="fas fa-stethoscope text-blue-500"></i> <span class="font-medium text-slate-800">${d.diagnosis}</span> <span class="text-xs text-slate-400 ml-auto">Added: ${d.timestamp?new Date(d.timestamp.toDate()).toLocaleDateString():''}</span></li>`;
+                        const b = doc.data();
+                        billsHtml += `<div class="flex items-center justify-between p-4 bg-red-50 rounded-lg border border-red-100 mb-3"><div class="flex items-center gap-3"><i class="fas fa-file-invoice text-red-500 text-xl"></i><div><p class="font-bold text-red-900">${b.reason}</p><p class="text-xs text-red-700">Due immediately</p></div></div><span class="text-xl font-bold text-red-700">$${parseFloat(b.amount).toFixed(2)}</span></div>`;
                     });
-                    html += `</ul>`;
                 }
-            } else if(activeRecordTab === 'vitals') {
-                const snap = await getDocs(query(collection(db, "vitals"), where("patientId", "==", currentUser.uid)));
-                const vitals = snap.docs.map(d=>d.data()).sort((a,b)=>(b.timestamp?.toMillis()||0)-(a.timestamp?.toMillis()||0));
-                if(vitals.length === 0) html += `<p class="text-slate-500 text-center py-10">No vitals recorded.</p>`;
-                else {
-                    html += `<table class="w-full text-left text-sm"><thead class="bg-slate-50 text-slate-500 uppercase tracking-wider text-xs"><tr><th class="p-3 rounded-tl">Date</th><th class="p-3">BP</th><th class="p-3">HR</th><th class="p-3">Temp</th><th class="p-3 rounded-tr">Weight</th></tr></thead><tbody class="divide-y divide-slate-100">`;
-                    vitals.forEach(v => {
-                        html += `<tr><td class="p-3 font-medium">${v.timestamp?new Date(v.timestamp.toDate()).toLocaleDateString():''}</td><td class="p-3">${v.bp||'--'}</td><td class="p-3">${v.hr||'--'}</td><td class="p-3">${v.temp||'--'}</td><td class="p-3">${v.weight||'--'}</td></tr>`;
-                    });
-                    html += `</tbody></table>`;
-                }
+            } catch(e) { billsHtml = `<p class="text-amber-600 text-sm">Update rules to view bills.</p>`; }
+
+            container.innerHTML = `<h3 class="text-2xl font-bold text-slate-800 mb-6">Benefits & Billing</h3><div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-8 text-white shadow-lg relative overflow-hidden"><div class="absolute top-0 right-0 p-6 opacity-20"><i class="fas fa-shield-alt text-6xl"></i></div><h4 class="text-slate-300 text-sm tracking-wider uppercase mb-1">Health Insurance</h4><h2 class="text-2xl font-bold mb-6">Peak Health Premium Plan</h2><div class="space-y-4"><div class="flex justify-between border-b border-slate-700 pb-2"><span class="text-slate-400">Member ID</span><span class="font-mono">${currentUser.uid.substring(0,10).toUpperCase()}</span></div><div class="flex justify-between border-b border-slate-700 pb-2"><span class="text-slate-400">Group</span><span class="font-mono">PH-2026</span></div><div class="flex justify-between"><span class="text-slate-400">Primary Care Copay</span><span class="font-bold">$20.00</span></div></div></div><div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6"><h4 class="font-bold text-slate-800 mb-4"><i class="fas fa-file-invoice-dollar text-slate-400 mr-2"></i>Recent Claims & Balances</h4>${billsHtml}</div></div>`;
+        }
+
+        // --- ADMIN: BILLING PORTAL ---
+        window.renderBillingAdmin = async (container) => {
+            const pts = allUsersCache.filter(u=>u.role==='patient');
+            let ptOptions = pts.map(p => `<option value="${p.id}">${p.name} (${p.email})</option>`).join('');
+            
+            container.innerHTML = `
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl font-bold text-slate-800">Billing Administration</h3>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 mb-6">
+                    <h4 class="font-bold text-slate-800 mb-4 border-b pb-2">Generate New Patient Bill</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Select Patient</label>
+                            <select id="bill-patient" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-blue-500 outline-none"><option value="">Select...</option>${ptOptions}</select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Amount ($)</label>
+                            <input type="number" id="bill-amount" placeholder="0.00" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-blue-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Reason/Service</label>
+                            <input type="text" id="bill-reason" placeholder="e.g., Copay, Lab Fee" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-blue-500 outline-none">
+                        </div>
+                    </div>
+                    <button onclick="createBill()" class="mt-4 bg-purple-600 text-white px-6 py-2 rounded-lg font-medium shadow-sm hover:bg-purple-700">Issue Bill</button>
+                </div>
+            `;
+        };
+
+        window.createBill = async () => {
+            const patientId = document.getElementById('bill-patient').value;
+            const amount = document.getElementById('bill-amount').value;
+            const reason = document.getElementById('bill-reason').value;
+            if(!patientId || !amount || !reason) return showToast("All fields required", "error");
+            try {
+                await addDoc(collection(db, "bills"), { patientId, amount, reason, timestamp: serverTimestamp() });
+                showToast("Bill issued to patient.", "success");
+                document.getElementById('bill-amount').value = ''; document.getElementById('bill-reason').value = '';
+            } catch(e) { showToast("Failed to create bill. Check rules.", "error"); }
+        };
+
+        // --- APPOINTMENTS ---
+        window.openAppointmentModal = () => {
+            openModal('modal-appointment');
+            const select = document.getElementById('appt-user');
+            const lbl = document.getElementById('appt-user-label');
+            select.innerHTML = '<option value="">Select...</option>';
+            
+            if(currentUserData.role === 'patient') {
+                lbl.innerText = "Select Provider";
+                allUsersCache.filter(u=>u.role!=='patient').forEach(u => select.innerHTML += `<option value="${u.id}">${u.name} (${u.role})</option>`);
+            } else {
+                lbl.innerText = "Select Patient";
+                allUsersCache.filter(u=>u.role==='patient').forEach(u => select.innerHTML += `<option value="${u.id}">${u.name}</option>`);
             }
-            container.innerHTML = html + `</div>`;
-        }
+        };
 
-        // --- APPOINTMENTS, COVERAGE, ADMIN (UNCHANGED CORE LOGIC) ---
-        function renderCoverage(container) { /* ... same as previous ... */ 
-            container.innerHTML = `<h3 class="text-2xl font-bold text-slate-800 mb-6">Benefits & Billing</h3><div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-8 text-white shadow-lg relative overflow-hidden"><div class="absolute top-0 right-0 p-6 opacity-20"><i class="fas fa-shield-alt text-6xl"></i></div><h4 class="text-slate-300 text-sm tracking-wider uppercase mb-1">Health Insurance</h4><h2 class="text-2xl font-bold mb-6">Peak Health Premium Plan</h2><div class="space-y-4"><div class="flex justify-between border-b border-slate-700 pb-2"><span class="text-slate-400">Member ID</span><span class="font-mono">${currentUser.uid.substring(0,10).toUpperCase()}</span></div><div class="flex justify-between border-b border-slate-700 pb-2"><span class="text-slate-400">Group</span><span class="font-mono">PH-2026</span></div><div class="flex justify-between"><span class="text-slate-400">Primary Care Copay</span><span class="font-bold">$20.00</span></div></div></div><div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6"><h4 class="font-bold text-slate-800 mb-4"><i class="fas fa-file-invoice-dollar text-slate-400 mr-2"></i>Recent Claims & Balances</h4><div class="flex items-center justify-between p-4 bg-emerald-50 rounded-lg border border-emerald-100 mb-4"><div class="flex items-center gap-3"><i class="fas fa-check-circle text-emerald-500 text-xl"></i><div><p class="font-bold text-emerald-900">No Amount Due</p><p class="text-xs text-emerald-700">Your accounts are up to date.</p></div></div><span class="text-xl font-bold text-emerald-700">$0.00</span></div><p class="text-sm text-slate-500 text-center mt-8">Recent claims will appear here once processed by Peak Health.</p></div></div>`;
-        }
+        window.saveAppointment = async () => {
+            const userId = document.getElementById('appt-user').value;
+            const date = document.getElementById('appt-datetime').value;
+            const type = document.getElementById('appt-reason').value;
+            
+            if(!userId || !date || !type) return showToast("All fields required", "error");
+            
+            const ptId = currentUserData.role === 'patient' ? currentUser.uid : userId;
+            const provId = currentUserData.role === 'patient' ? userId : currentUser.uid;
+            const withName = currentUserData.role === 'patient' ? allUsersCache.find(u=>u.id===provId)?.name : allUsersCache.find(u=>u.id===ptId)?.name;
 
-        async function renderAppointments(container) { /* ... same as previous ... */ 
-            const q = query(collection(db, "appointments"), where(currentUserData.role==='patient'?"patientId":"providerId", "==", currentUser.uid));
-            const snap = await getDocs(q);
-            const appts = snap.docs.map(d=>({id:d.id,...d.data()}));
-            let html = `<div class="flex justify-between items-center mb-6"><h3 class="text-2xl font-bold text-slate-800">Appointments</h3>${currentUserData.role === 'patient' ? `<button onclick="showToast('Scheduling system requires clinic confirmation. Please message your provider.', 'info')" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium">Schedule New</button>` : ''}</div><div class="bg-white rounded-xl shadow-sm border border-slate-200 divide-y divide-slate-100">`;
+            try {
+                await addDoc(collection(db, "appointments"), { patientId: ptId, providerId: provId, withName, date, type, timestamp: serverTimestamp() });
+                showToast("Appointment Scheduled", "success");
+                closeModal('modal-appointment');
+                if(document.getElementById('header-title').innerText.includes('Schedule') || document.getElementById('header-title').innerText.includes('Appointments')) switchView('appointments');
+            } catch(e) { showToast("Failed to schedule. Check rules.", "error"); }
+        };
+
+        async function renderAppointments(container) {
+            let appts = [];
+            try {
+                const q = query(collection(db, "appointments"), where(currentUserData.role==='patient'?"patientId":"providerId", "==", currentUser.uid));
+                const snap = await getDocs(q);
+                appts = snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b) => new Date(a.date) - new Date(b.date));
+            } catch(e) { return container.innerHTML = `<div class="p-6 bg-amber-50 text-amber-700 rounded-lg">Update Rules to view Appointments.</div>`; }
+
+            let html = `<div class="flex justify-between items-center mb-6"><h3 class="text-2xl font-bold text-slate-800">${currentUserData.role === 'patient' ? 'My Appointments' : 'My Schedule'}</h3><button onclick="openAppointmentModal()" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium shadow-sm"><i class="fas fa-calendar-plus mr-2"></i>Schedule New</button></div><div class="bg-white rounded-xl shadow-sm border border-slate-200 divide-y divide-slate-100">`;
             if(appts.length === 0) html += `<div class="p-8 text-center text-slate-500"><i class="fas fa-calendar-times text-4xl mb-3 text-slate-300"></i><p>No upcoming appointments.</p></div>`;
-            appts.forEach(a => { html += `<div class="p-6 flex justify-between items-center"><div class="flex items-start gap-4"><div class="bg-blue-50 text-blue-700 w-16 h-16 rounded-lg flex flex-col items-center justify-center border border-blue-100"><span class="text-xs font-bold uppercase">${new Date(a.date).toLocaleString('default',{month:'short'})}</span><span class="text-xl font-bold">${new Date(a.date).getDate()}</span></div><div><h4 class="font-bold text-lg text-slate-800">${a.type}</h4><p class="text-sm text-slate-500">${currentUserData.role==='patient'?'Provider':'Patient'}: ${a.withName}</p><p class="text-xs text-slate-400 mt-1"><i class="fas fa-clock mr-1"></i>${new Date(a.date).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</p></div></div><span class="px-3 py-1 bg-amber-100 text-amber-800 text-xs font-bold rounded-full uppercase">Scheduled</span></div>`; });
+            
+            appts.forEach(a => { 
+                const d = new Date(a.date);
+                html += `<div class="p-6 flex justify-between items-center"><div class="flex items-start gap-4"><div class="bg-blue-50 text-blue-700 w-16 h-16 rounded-lg flex flex-col items-center justify-center border border-blue-100"><span class="text-xs font-bold uppercase">${d.toLocaleString('default',{month:'short'})}</span><span class="text-xl font-bold">${d.getDate()}</span></div><div><h4 class="font-bold text-lg text-slate-800">${a.type}</h4><p class="text-sm text-slate-500">${currentUserData.role==='patient'?'Provider':'Patient'}: ${a.withName}</p><p class="text-xs text-slate-400 mt-1"><i class="fas fa-clock mr-1"></i>${d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</p></div></div><span class="px-3 py-1 bg-amber-100 text-amber-800 text-xs font-bold rounded-full uppercase">Scheduled</span></div>`; 
+            });
             container.innerHTML = html + `</div>`;
         }
 
-        function renderAdmin(container) { /* ... same as previous ... */ 
-            container.innerHTML = `<div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm"><div class="bg-slate-50 px-6 py-4 border-b border-slate-200 flex justify-between items-center"><h3 class="font-bold text-slate-800"><i class="fas fa-shield-halved text-purple-600 mr-2"></i> System Administration</h3></div><div class="p-6"><div class="bg-amber-50 border-l-4 border-amber-500 p-4 text-amber-800 text-sm mb-6"><strong>Admin Access Confirmed:</strong> You have full system rights via SAML mapping.</div><h4 class="font-bold mb-3 border-b pb-2">All System Users</h4><table class="w-full text-left text-sm"><thead><tr class="text-slate-500"><th class="pb-2">Name</th><th class="pb-2">Email</th><th class="pb-2">Role</th><th class="pb-2">UID</th></tr></thead><tbody class="divide-y divide-slate-100">${allUsersCache.map(u => `<tr><td class="py-2">${u.name}</td><td class="py-2">${u.email}</td><td class="py-2 font-mono ${u.role==='admin'?'text-purple-600':u.role==='physician'?'text-emerald-600':'text-blue-600'}">${u.role}</td><td class="py-2 text-xs text-slate-400">${u.id}</td></tr>`).join('')}</tbody></table></div></div>`;
+        // --- ADMIN CONTROLS ---
+        function renderAdmin(container) {
+            container.innerHTML = `<div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm"><div class="bg-slate-50 px-6 py-4 border-b border-slate-200 flex justify-between items-center"><h3 class="font-bold text-slate-800"><i class="fas fa-shield-halved text-purple-600 mr-2"></i> System Administration</h3></div><div class="p-6"><div class="bg-amber-50 border-l-4 border-amber-500 p-4 text-amber-800 text-sm mb-6"><strong>Admin Access Confirmed:</strong> You have full system rights. Ensure rules are configured securely in production.</div><h4 class="font-bold mb-3 border-b pb-2">All System Users</h4><table class="w-full text-left text-sm"><thead><tr class="text-slate-500"><th class="pb-2">Name</th><th class="pb-2">Email</th><th class="pb-2">Role</th><th class="pb-2">UID</th></tr></thead><tbody class="divide-y divide-slate-100">${allUsersCache.map(u => `<tr><td class="py-2">${u.name}</td><td class="py-2">${u.email}</td><td class="py-2 font-mono ${u.role==='admin'?'text-purple-600':u.role==='physician'?'text-emerald-600':'text-blue-600'}">${u.role}</td><td class="py-2 text-xs text-slate-400">${u.id}</td></tr>`).join('')}</tbody></table></div></div>`;
         }
 
         // --- PROVIDER: DIRECTORY & PATIENT CHART ---
@@ -711,13 +931,13 @@
                 html += `<tr class="hover:bg-slate-50">
                     <td class="px-6 py-4"><div class="font-bold text-slate-900">${p.name}</div><div class="text-xs text-slate-400 font-mono">ID: ${p.id.substring(0,8)}</div></td>
                     <td class="px-6 py-4 text-sm text-slate-600">${p.email}</td>
-                    <td class="px-6 py-4"><button onclick="loadPatientChart('${p.id}')" class="text-blue-600 hover:text-blue-800 text-sm font-medium bg-blue-50 px-3 py-1 rounded">Open Chart</button></td>
+                    <td class="px-6 py-4"><button onclick="loadPatientChart('${p.id}')" class="text-blue-600 hover:text-blue-800 text-sm font-medium bg-blue-50 px-3 py-1 rounded border border-blue-200">Open Chart</button></td>
                 </tr>`;
             });
             container.innerHTML = html + `</tbody></table></div>`;
         }
 
-        window.registerPatient = async () => { /* ... unchanged ... */ 
+        window.registerPatient = async () => {
             const name = document.getElementById('new-pat-name').value;
             const email = document.getElementById('new-pat-email').value;
             const dob = document.getElementById('new-pat-dob').value;
@@ -740,15 +960,15 @@
             document.getElementById('header-title').innerHTML = `<button onclick="switchView('directory')" class="text-slate-400 hover:text-slate-600 mr-2"><i class="fas fa-arrow-left"></i></button> Chart: ${pt.name}`;
             
             const container = document.getElementById('dynamic-view-container');
-            const tabs = [{id: 'overview', label: 'Overview'},{id: 'encounters', label: 'Encounters'},{id: 'vitals', label: 'Flowsheets / Vitals'},{id: 'orders', label: 'Orders / Rx'}];
+            const tabs = [{id: 'overview', label: 'Overview'},{id: 'encounters', label: 'Encounters'},{id: 'vitals', label: 'Flowsheets'},{id: 'orders', label: 'Orders & Rx'}];
 
             let html = `
                 <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm mb-6 flex items-center justify-between border-t-4 border-t-blue-600">
                     <div class="flex items-center gap-4">
-                        <div class="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center text-2xl text-slate-400"><i class="fas fa-user"></i></div>
+                        <div class="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center text-2xl text-slate-400 overflow-hidden"><img src="${pt.photoUrl || `https://ui-avatars.com/api/?name=${pt.name}&background=f1f5f9&color=64748b`}"></div>
                         <div><h2 class="text-2xl font-bold text-slate-900">${pt.name}</h2><p class="text-sm text-slate-500">${pt.dob ? `DOB: ${pt.dob}` : 'DOB: Unknown'} | ${pt.email}</p></div>
                     </div>
-                    <div><button onclick="openEncounterForm('${pt.id}')" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium shadow-sm transition-colors"><i class="fas fa-notes-medical mr-2"></i>Full Encounter Note</button></div>
+                    <div><button onclick="openEncounterForm('${pt.id}')" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium shadow-sm transition-colors"><i class="fas fa-notes-medical mr-2"></i>New Clinical Note</button></div>
                 </div>
                 <div class="flex border-b border-slate-200 mb-6 space-x-6">
                     ${tabs.map(t => `<button onclick="switchChartTab('${t.id}')" class="pb-3 ${chartTab===t.id?'tab-active':'tab-inactive'}">${t.label}</button>`).join('')}
@@ -765,44 +985,67 @@
             const cc = document.getElementById('chart-content');
             
             if(chartTab === 'overview') {
-                const snapC = await getDocs(query(collection(db, "conditions"), where("patientId", "==", window.currentPatientId)));
-                let html = `<div class="grid grid-cols-2 gap-6"><div><h4 class="font-bold text-slate-700 mb-3 border-b pb-2">Active Problems</h4><ul class="list-disc pl-5 text-sm text-slate-600 space-y-1">`;
-                if(snapC.empty) html += `<li>No active conditions</li>`;
-                snapC.forEach(d => html += `<li>${d.data().diagnosis}</li>`);
-                html += `</ul></div><div><h4 class="font-bold text-slate-700 mb-3 border-b pb-2">Allergies</h4><p class="text-sm text-slate-500">NKDA (No known drug allergies)</p></div></div>`;
-                cc.innerHTML = html;
+                try {
+                    const snapC = await getDocs(query(collection(db, "conditions"), where("patientId", "==", window.currentPatientId)));
+                    let html = `<div class="grid grid-cols-2 gap-6"><div><h4 class="font-bold text-slate-700 mb-3 border-b pb-2">Active Problems</h4><ul class="list-disc pl-5 text-sm text-slate-600 space-y-1">`;
+                    if(snapC.empty) html += `<li>No active conditions</li>`;
+                    snapC.forEach(d => html += `<li>${d.data().diagnosis}</li>`);
+                    html += `</ul></div><div><h4 class="font-bold text-slate-700 mb-3 border-b pb-2">Allergies</h4><p class="text-sm text-slate-500">NKDA (No known drug allergies)</p></div></div>`;
+                    cc.innerHTML = html;
+                } catch(e) { cc.innerHTML = `<p class="text-amber-600">Failed to load overview. Check rules.</p>`; }
                 
             } else if (chartTab === 'encounters') {
-                const snap = await getDocs(query(collection(db, "encounters"), where("patientId", "==", window.currentPatientId)));
-                const encounters = snap.docs.map(d=>d.data()).sort((a,b)=>(b.timestamp?.toMillis()||0)-(a.timestamp?.toMillis()||0));
-                
-                let eh = `<div class="space-y-4">`;
-                if(encounters.length === 0) eh += `<p class="text-slate-500">No encounters found.</p>`;
-                encounters.forEach(v => {
-                    eh += `<div class="border border-slate-200 rounded p-4 bg-slate-50"><div class="flex justify-between mb-2"><b class="text-slate-800">${v.complaint}</b><span class="text-xs font-bold text-slate-500 bg-white px-2 py-1 rounded border">${v.timestamp?new Date(v.timestamp.toDate()).toLocaleDateString():''}</span></div><pre class="text-sm font-mono text-slate-700 whitespace-pre-wrap">${v.notes}</pre></div>`;
-                });
-                cc.innerHTML = eh + `</div>`;
+                try {
+                    const snap = await getDocs(query(collection(db, "encounters"), where("patientId", "==", window.currentPatientId)));
+                    const encounters = snap.docs.map(d=>({id: d.id, ...d.data()})).sort((a,b)=>(b.timestamp?.toMillis()||0)-(a.timestamp?.toMillis()||0));
+                    
+                    let eh = `<div class="space-y-4">`;
+                    if(encounters.length === 0) eh += `<p class="text-slate-500">No encounters found.</p>`;
+                    encounters.forEach(v => {
+                        eh += `<div class="border border-slate-200 rounded p-4 bg-slate-50"><div class="flex justify-between items-center mb-2"><div class="flex items-center gap-3"><b class="text-slate-800">${v.complaint}</b><span class="text-xs font-bold text-slate-500 bg-white px-2 py-1 rounded border shadow-sm">${v.timestamp?new Date(v.timestamp.toDate()).toLocaleDateString():''}</span></div><button onclick="confirmDeleteEncounter('${v.id}')" class="text-red-400 hover:text-red-600 transition-colors p-1" title="Delete Note"><i class="fas fa-trash"></i></button></div><pre class="text-sm font-mono text-slate-700 whitespace-pre-wrap mt-3">${v.notes}</pre></div>`;
+                    });
+                    cc.innerHTML = eh + `</div>`;
+                } catch(e) { cc.innerHTML = `<p class="text-amber-600">Failed to load encounters. Check rules.</p>`; }
                 
             } else if (chartTab === 'vitals') {
-                const snap = await getDocs(query(collection(db, "vitals"), where("patientId", "==", window.currentPatientId)));
-                const vitals = snap.docs.map(d=>d.data()).sort((a,b)=>(b.timestamp?.toMillis()||0)-(a.timestamp?.toMillis()||0));
-                
-                let vh = `<table class="w-full text-left text-sm"><thead class="bg-slate-100 text-slate-600"><tr><th class="p-2">Date</th><th class="p-2">BP</th><th class="p-2">HR</th><th class="p-2">Temp</th><th class="p-2">Weight</th></tr></thead><tbody>`;
-                if(vitals.length === 0) vh += `<tr><td colspan="5" class="p-4 text-center text-slate-500">No flowsheets available.</td></tr>`;
-                vitals.forEach(v => { vh += `<tr class="border-b border-slate-100"><td class="p-2">${v.timestamp?new Date(v.timestamp.toDate()).toLocaleDateString():''}</td><td class="p-2 font-medium">${v.bp||'--'}</td><td class="p-2">${v.hr||'--'}</td><td class="p-2">${v.temp||'--'}</td><td class="p-2">${v.weight||'--'}</td></tr>`; });
-                cc.innerHTML = vh + `</tbody></table>`;
+                try {
+                    const snap = await getDocs(query(collection(db, "vitals"), where("patientId", "==", window.currentPatientId)));
+                    const vitals = snap.docs.map(d=>d.data()).sort((a,b)=>(b.timestamp?.toMillis()||0)-(a.timestamp?.toMillis()||0));
+                    
+                    let vh = `<table class="w-full text-left text-sm"><thead class="bg-slate-100 text-slate-600"><tr><th class="p-2">Date</th><th class="p-2">BP</th><th class="p-2">HR</th><th class="p-2">Temp</th><th class="p-2">Weight</th></tr></thead><tbody>`;
+                    if(vitals.length === 0) vh += `<tr><td colspan="5" class="p-4 text-center text-slate-500">No flowsheets available.</td></tr>`;
+                    vitals.forEach(v => { vh += `<tr class="border-b border-slate-100"><td class="p-2">${v.timestamp?new Date(v.timestamp.toDate()).toLocaleDateString():''}</td><td class="p-2 font-medium">${v.bp||'--'}</td><td class="p-2">${v.hr||'--'}</td><td class="p-2">${v.temp||'--'}</td><td class="p-2">${v.weight||'--'}</td></tr>`; });
+                    cc.innerHTML = vh + `</tbody></table>`;
+                } catch(e) { cc.innerHTML = `<p class="text-amber-600">Failed to load vitals. Check rules.</p>`; }
                 
             } else {
-                const snap = await getDocs(query(collection(db, "medications"), where("patientId", "==", window.currentPatientId)));
-                let rxHtml = `<ul class="space-y-2">`;
-                if(snap.empty) rxHtml += `<p class="text-slate-500">No active orders or prescriptions.</p>`;
-                snap.forEach(d => {
-                    const rx = d.data();
-                    rxHtml += `<li class="flex justify-between items-center p-3 bg-slate-50 border border-slate-100 rounded"><div><b class="text-slate-800">${rx.name}</b><p class="text-xs text-slate-500 mt-1">Status: ${rx.status}</p></div><span class="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">Refills: ${rx.refills}</span></li>`;
-                });
-                cc.innerHTML = rxHtml + `</ul>`;
+                try {
+                    const snap = await getDocs(query(collection(db, "medications"), where("patientId", "==", window.currentPatientId)));
+                    let rxHtml = `<ul class="space-y-2">`;
+                    if(snap.empty) rxHtml += `<p class="text-slate-500">No active orders or prescriptions.</p>`;
+                    snap.forEach(d => {
+                        const rx = d.data();
+                        rxHtml += `<li class="flex justify-between items-center p-3 bg-slate-50 border border-slate-100 rounded"><div><b class="text-slate-800">${rx.name}</b><p class="text-xs text-slate-500 mt-1">Status: ${rx.status} | Sig: ${rx.instructions || 'N/A'}</p></div><span class="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded font-bold">Refills: ${rx.refills}</span></li>`;
+                    });
+                    cc.innerHTML = rxHtml + `</ul>`;
+                } catch(e) { cc.innerHTML = `<p class="text-amber-600">Failed to load orders. Check rules.</p>`; }
             }
         }
+
+        window.confirmDeleteEncounter = (id) => {
+            window.encounterToDelete = id;
+            openModal('modal-confirm-delete');
+        };
+
+        window.executeDeleteEncounter = async () => {
+            if(!window.encounterToDelete) return;
+            try {
+                await deleteDoc(doc(db, "encounters", window.encounterToDelete));
+                showToast("Encounter permanently deleted.", "success");
+                closeModal('modal-confirm-delete');
+                renderChartContent(); // refresh tab
+            } catch(e) { showToast("Failed to delete. Check rules.", "error"); }
+        };
 
         // --- COMPREHENSIVE ENCOUNTER FORM ---
         window.openEncounterForm = (ptId) => {
@@ -846,9 +1089,14 @@
 
                         <!-- Orders / Rx -->
                         <div>
-                            <h4 class="font-bold text-slate-800 border-b border-slate-200 pb-2 mb-4">4. Orders & Prescriptions</h4>
-                            <div class="flex gap-2">
-                                <input list="rx-treatments" id="enc-rx" placeholder="Search RxNorm database..." class="flex-1 px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none">
+                            <h4 class="font-bold text-slate-800 border-b border-slate-200 pb-2 mb-4">4. Orders, Prescriptions & DME</h4>
+                            <div class="flex gap-4">
+                                <div class="w-1/2">
+                                    <input list="rx-treatments" id="enc-rx" placeholder="Search Drug/DME Database..." class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none">
+                                </div>
+                                <div class="w-1/2">
+                                    <input type="text" id="enc-rx-sig" placeholder="Provider Instructions (Sig) e.g., Take 1 PO Daily" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none">
+                                </div>
                             </div>
                             <p class="text-xs text-slate-400 mt-1">This will be sent directly to the clinic pharmacy queue.</p>
                         </div>
@@ -872,6 +1120,7 @@
             const weight = document.getElementById('enc-weight').value;
             const diagnosis = document.getElementById('enc-diagnosis').value;
             const rx = document.getElementById('enc-rx').value;
+            const sig = document.getElementById('enc-rx-sig').value;
 
             if(!complaint || !notes) return showToast("Chief complaint and notes are required.", "error");
 
@@ -879,36 +1128,33 @@
                 const ts = serverTimestamp();
                 
                 // 1. Save Encounter Note
-                await addDoc(collection(db, "encounters"), {
-                    patientId: ptId, providerId: currentUser.uid, complaint, notes, timestamp: ts
-                });
+                try {
+                    await addDoc(collection(db, "encounters"), { patientId: ptId, providerId: currentUser.uid, complaint, notes, timestamp: ts });
+                } catch(e) { throw new Error("Failed to save Encounter Note. Check 'encounters' rules."); }
 
                 // 2. Save Vitals (if any provided)
                 if(bp || hr || temp || weight) {
-                    await addDoc(collection(db, "vitals"), {
-                        patientId: ptId, providerId: currentUser.uid, bp, hr, temp, weight, timestamp: ts
-                    });
+                    try { await addDoc(collection(db, "vitals"), { patientId: ptId, providerId: currentUser.uid, bp, hr, temp, weight, timestamp: ts }); }
+                    catch(e) { console.error(e); showToast("Vitals failed. Check rules.", "error"); }
                 }
 
                 // 3. Save Diagnosis to Conditions
                 if(diagnosis) {
-                    await addDoc(collection(db, "conditions"), {
-                        patientId: ptId, providerId: currentUser.uid, diagnosis, timestamp: ts
-                    });
+                    try { await addDoc(collection(db, "conditions"), { patientId: ptId, providerId: currentUser.uid, diagnosis, timestamp: ts }); }
+                    catch(e) { console.error(e); showToast("Diagnosis failed. Check rules.", "error"); }
                 }
 
                 // 4. Save Rx to Medications
                 if(rx) {
-                    await addDoc(collection(db, "medications"), {
-                        patientId: ptId, providerId: currentUser.uid, name: rx, status: 'Active', refills: 3, timestamp: ts
-                    });
+                    try { await addDoc(collection(db, "medications"), { patientId: ptId, providerId: currentUser.uid, name: rx, instructions: sig, status: 'Active', refills: 3, timestamp: ts }); }
+                    catch(e) { console.error(e); showToast("Order failed. Check rules.", "error"); }
                 }
 
-                showToast("Encounter signed and all data synchronized.", "success");
+                showToast("Encounter signed and synchronized.", "success");
                 loadPatientChart(ptId); // Return to chart
             } catch (error) {
                 console.error(error);
-                showToast("Error saving encounter. Check permissions.", "error");
+                showToast(error.message, "error");
             }
         };
 
