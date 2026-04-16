@@ -11,9 +11,11 @@
         body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
         .epic-bg { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); }
         .hidden { display: none !important; }
+        .tab-active { border-bottom: 2px solid #2563eb; color: #1e3a8a; font-weight: 600; }
+        .tab-inactive { color: #64748b; font-weight: 500; }
+        .tab-inactive:hover { color: #334155; }
         
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #f1f1f1; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
@@ -23,87 +25,67 @@
             from { transform: translateX(100%); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
         }
+        .fade-in { animation: fadeIn 0.2s ease-in forwards; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body class="h-screen flex overflow-hidden text-slate-800">
 
-    <!-- Toast Notification Container -->
     <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2"></div>
 
     <!-- LOGIN SCREEN -->
     <div id="login-view" class="w-full h-full flex items-center justify-center epic-bg absolute z-40 transition-opacity duration-300">
         <div class="bg-white rounded-xl shadow-2xl w-full max-w-4xl flex overflow-hidden h-[600px]">
-            <!-- Left Side: Branding -->
             <div class="w-1/2 bg-slate-50 p-12 flex flex-col justify-center items-start border-r border-slate-100 hidden md:flex">
                 <i class="fas fa-mountain text-6xl text-blue-600 mb-6"></i>
                 <h1 class="text-4xl font-bold text-slate-900 mb-4">Peak Health</h1>
-                <p class="text-slate-600 text-lg leading-relaxed">
-                    Welcome to the next generation of Electronic Medical Records. Secure, intuitive, and built for optimal patient care.
-                </p>
+                <p class="text-slate-600 text-lg leading-relaxed">Secure, intuitive, and built for optimal patient care. Manage your health or your practice in one place.</p>
             </div>
-            
-            <!-- Right Side: Forms -->
             <div class="w-full md:w-1/2 p-12 flex flex-col justify-center bg-white relative">
                 <h2 class="text-2xl font-bold text-slate-900 mb-8 text-center" id="login-title">Patient Portal</h2>
-                
-                <!-- Patient Login (Email/Password) -->
                 <form id="patient-login-form" class="space-y-5">
                     <div>
                         <label class="block text-sm font-medium text-slate-700 mb-1">Email Address</label>
-                        <input type="email" id="patient-email" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all" placeholder="Enter your email" required>
+                        <input type="email" id="patient-email" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none" required>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-slate-700 mb-1">Password</label>
-                        <input type="password" id="patient-password" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all" placeholder="Enter your password" required>
+                        <input type="password" id="patient-password" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none" required>
                     </div>
-                    <button type="submit" id="btn-patient-login" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition-colors shadow-md">
-                        Sign In as Patient
-                    </button>
-                    <div class="text-center mt-4">
-                        <a href="#" id="toggle-signup" class="text-sm text-blue-600 hover:underline">Need an account? Register</a>
-                    </div>
+                    <button type="submit" id="btn-patient-login" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition-colors shadow-md">Sign In as Patient</button>
+                    <div class="text-center mt-4"><a href="#" id="toggle-signup" class="text-sm text-blue-600 hover:underline">Need an account? Register</a></div>
                 </form>
-
-                <!-- Divider -->
                 <div class="relative flex items-center py-6">
                     <div class="flex-grow border-t border-slate-200"></div>
                     <span class="flex-shrink-0 mx-4 text-slate-400 text-sm font-medium">STAFF & PROVIDERS</span>
                     <div class="flex-grow border-t border-slate-200"></div>
                 </div>
-
-                <!-- Staff Login (SAML) -->
                 <button id="btn-staff-login" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-semibold py-3 rounded-lg transition-colors shadow-md flex items-center justify-center gap-2">
                     <i class="fas fa-building-user"></i> Staff SSO Login (SAML)
                 </button>
-                
-                <p class="text-xs text-center text-slate-400 mt-6">
-                    Authorized personnel only. Access is logged and monitored.
-                </p>
             </div>
         </div>
     </div>
 
-    <!-- MAIN APP LAYOUT (Hidden until authenticated) -->
+    <!-- MAIN APP -->
     <div id="app-view" class="w-full h-full flex hidden">
-        
-        <!-- Sidebar Navigation -->
+        <!-- Sidebar -->
         <aside class="w-64 bg-slate-900 text-slate-300 flex flex-col transition-all duration-300 flex-shrink-0">
-            <div class="h-16 flex items-center px-6 bg-slate-950 border-b border-slate-800">
+            <div class="h-16 flex items-center px-6 bg-slate-950 border-b border-slate-800 cursor-pointer" onclick="switchView('dashboard')">
                 <i class="fas fa-mountain text-blue-500 text-xl mr-3"></i>
                 <span class="text-white font-bold text-lg tracking-wide">Peak Health</span>
             </div>
             
-            <div class="p-6 flex flex-col items-center border-b border-slate-800">
-                <div class="w-16 h-16 rounded-full bg-slate-700 flex items-center justify-center text-2xl text-white mb-3 shadow-inner">
-                    <i class="fas fa-user"></i>
+            <div class="p-5 flex flex-col items-center border-b border-slate-800 hover:bg-slate-800 cursor-pointer transition-colors group" onclick="openModal('modal-settings')">
+                <div class="relative">
+                    <img id="sidebar-user-photo" src="https://ui-avatars.com/api/?name=User&background=0D8ABC&color=fff" class="w-16 h-16 rounded-full object-cover border-2 border-slate-700 group-hover:border-blue-500 transition-colors">
+                    <div class="absolute bottom-0 right-0 bg-slate-800 rounded-full p-1 border border-slate-700 text-xs"><i class="fas fa-cog"></i></div>
                 </div>
-                <h3 id="sidebar-user-name" class="text-white font-medium text-center">Loading...</h3>
-                <span id="sidebar-user-role" class="text-xs uppercase tracking-wider text-blue-400 mt-1 font-semibold bg-blue-500/10 px-2 py-1 rounded">Role</span>
+                <h3 id="sidebar-user-name" class="text-white font-medium text-center mt-3">Loading...</h3>
+                <span id="sidebar-user-role" class="text-xs uppercase tracking-wider mt-1 font-semibold px-2 py-1 rounded">Role</span>
             </div>
 
-            <nav class="flex-1 py-4 space-y-1 px-3 overflow-y-auto" id="nav-menu">
-                <!-- Navigation items injected via JS based on role -->
-            </nav>
+            <nav class="flex-1 py-4 space-y-1 px-3 overflow-y-auto" id="nav-menu"></nav>
 
             <div class="p-4 border-t border-slate-800">
                 <button id="btn-logout" class="w-full flex items-center gap-3 px-4 py-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors">
@@ -114,61 +96,99 @@
 
         <!-- Main Content Area -->
         <main class="flex-1 flex flex-col bg-slate-50 overflow-hidden relative">
-            <!-- Header -->
-            <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-8 flex-shrink-0 shadow-sm">
-                <h2 id="header-title" class="text-xl font-semibold text-slate-800">Dashboard</h2>
-                <div class="flex items-center gap-4">
-                    <button class="text-slate-400 hover:text-slate-600 transition-colors relative">
-                        <i class="fas fa-bell text-lg"></i>
-                        <span class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></span>
+            <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-8 flex-shrink-0 shadow-sm z-10">
+                <h2 id="header-title" class="text-xl font-bold text-slate-800">Dashboard</h2>
+                <div class="flex items-center gap-6">
+                    <button onclick="switchView('messages')" class="text-slate-400 hover:text-blue-600 transition-colors relative group">
+                        <i class="fas fa-bell text-xl"></i>
+                        <span id="notification-badge" class="absolute -top-1.5 -right-1.5 w-4 h-4 bg-red-500 rounded-full border-2 border-white text-[9px] text-white flex items-center justify-center font-bold hidden">0</span>
                     </button>
                 </div>
             </header>
 
-            <!-- Dynamic Content Container -->
-            <div id="content-container" class="flex-1 overflow-y-auto p-8">
-                <!-- Loading State -->
-                <div id="loading-state" class="w-full h-full flex flex-col items-center justify-center text-slate-400">
+            <div id="content-container" class="flex-1 overflow-y-auto p-6 md:p-8 relative">
+                <!-- Loading -->
+                <div id="loading-state" class="absolute inset-0 bg-slate-50 flex flex-col items-center justify-center text-slate-400 z-50">
                     <i class="fas fa-circle-notch fa-spin text-4xl mb-4 text-blue-500"></i>
                     <p>Loading application data...</p>
                 </div>
-
-                <!-- Views will be injected here -->
-                <div id="view-dashboard" class="hidden space-y-6"></div>
-                <div id="view-patients" class="hidden space-y-6"></div>
-                <div id="view-records" class="hidden space-y-6"></div>
-                <div id="view-admin" class="hidden space-y-6"></div>
+                <!-- Dynamic Content injected here -->
+                <div id="dynamic-view-container" class="w-full max-w-7xl mx-auto space-y-6 fade-in"></div>
             </div>
         </main>
     </div>
 
-    <!-- Modals -->
-    <!-- New Encounter Modal -->
-    <div id="modal-encounter" class="fixed inset-0 bg-slate-900/50 hidden items-center justify-center z-50 backdrop-blur-sm">
-        <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl overflow-hidden">
+    <!-- MODALS -->
+    <!-- Profile Settings -->
+    <div id="modal-settings" class="fixed inset-0 bg-slate-900/60 hidden items-center justify-center z-50 backdrop-blur-sm">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden">
             <div class="px-6 py-4 border-b border-slate-200 flex justify-between items-center bg-slate-50">
-                <h3 class="text-lg font-bold text-slate-800">New Clinical Encounter</h3>
-                <button onclick="closeModal('modal-encounter')" class="text-slate-400 hover:text-slate-600"><i class="fas fa-times"></i></button>
+                <h3 class="text-lg font-bold text-slate-800">Profile Settings</h3>
+                <button onclick="closeModal('modal-settings')" class="text-slate-400 hover:text-slate-600"><i class="fas fa-times"></i></button>
             </div>
             <div class="p-6 space-y-4">
                 <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">Patient</label>
-                    <select id="encounter-patient-select" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none">
-                        <option value="">Select a patient...</option>
-                    </select>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Display Name</label>
+                    <input type="text" id="setting-name" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none">
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">Chief Complaint</label>
-                    <input type="text" id="encounter-complaint" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">Clinical Notes (SOAP)</label>
-                    <textarea id="encounter-notes" rows="6" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none"></textarea>
+                <div id="setting-photo-container" class="hidden">
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Photo URL (Providers only)</label>
+                    <input type="url" id="setting-photo" placeholder="https://example.com/photo.jpg" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none">
                 </div>
             </div>
             <div class="px-6 py-4 border-t border-slate-200 bg-slate-50 flex justify-end gap-3">
-                <button onclick="closeModal('modal-encounter')" class="px-4 py-2 text-slate-600 font-medium hover:bg-slate-200 rounded-lg transition-colors">Cancel</button>
-                <button id="btn-save-encounter" class="px-4 py-2 bg-blue-600 text-white font-medium hover:bg-blue-700 rounded-lg transition-colors shadow-sm">Sign & Save Note</button>
+                <button onclick="closeModal('modal-settings')" class="px-4 py-2 text-slate-600 font-medium hover:bg-slate-200 rounded-lg">Cancel</button>
+                <button onclick="saveSettings()" class="px-4 py-2 bg-blue-600 text-white font-medium hover:bg-blue-700 rounded-lg shadow-sm">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Patient (Provider/Admin) -->
+    <div id="modal-add-patient" class="fixed inset-0 bg-slate-900/60 hidden items-center justify-center z-50 backdrop-blur-sm">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden">
+            <div class="px-6 py-4 border-b border-slate-200 flex justify-between items-center bg-slate-50">
+                <h3 class="text-lg font-bold text-slate-800">Register New Patient</h3>
+                <button onclick="closeModal('modal-add-patient')" class="text-slate-400 hover:text-slate-600"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-6 space-y-4">
+                <div><label class="block text-sm font-medium text-slate-700 mb-1">Full Name</label>
+                <input type="text" id="new-pat-name" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none"></div>
+                <div><label class="block text-sm font-medium text-slate-700 mb-1">Email Address (Used for Portal Login)</label>
+                <input type="email" id="new-pat-email" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none"></div>
+                <div><label class="block text-sm font-medium text-slate-700 mb-1">Date of Birth</label>
+                <input type="date" id="new-pat-dob" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none"></div>
+            </div>
+            <div class="px-6 py-4 border-t border-slate-200 bg-slate-50 flex justify-end gap-3">
+                <button onclick="closeModal('modal-add-patient')" class="px-4 py-2 text-slate-600 font-medium hover:bg-slate-200 rounded-lg">Cancel</button>
+                <button onclick="registerPatient()" class="px-4 py-2 bg-emerald-600 text-white font-medium hover:bg-emerald-700 rounded-lg shadow-sm">Add Patient</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Compose Message -->
+    <div id="modal-message" class="fixed inset-0 bg-slate-900/60 hidden items-center justify-center z-50 backdrop-blur-sm">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl overflow-hidden">
+            <div class="px-6 py-4 border-b border-slate-200 flex justify-between items-center bg-slate-50">
+                <h3 class="text-lg font-bold text-slate-800">New Secure Message</h3>
+                <button onclick="closeModal('modal-message')" class="text-slate-400 hover:text-slate-600"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-6 space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">To:</label>
+                    <select id="msg-to" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none"></select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Subject</label>
+                    <input type="text" id="msg-subject" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Message</label>
+                    <textarea id="msg-body" rows="6" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none"></textarea>
+                </div>
+            </div>
+            <div class="px-6 py-4 border-t border-slate-200 bg-slate-50 flex justify-end gap-3">
+                <button onclick="closeModal('modal-message')" class="px-4 py-2 text-slate-600 font-medium hover:bg-slate-200 rounded-lg">Cancel</button>
+                <button onclick="sendMessage()" class="px-4 py-2 bg-blue-600 text-white font-medium hover:bg-blue-700 rounded-lg shadow-sm"><i class="fas fa-paper-plane mr-2"></i>Send</button>
             </div>
         </div>
     </div>
@@ -176,30 +196,9 @@
     <!-- Firebase Logic -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { 
-            getAuth, 
-            SAMLAuthProvider, 
-            signInWithPopup, 
-            signInWithEmailAndPassword, 
-            createUserWithEmailAndPassword,
-            signOut, 
-            onAuthStateChanged 
-        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { 
-            getFirestore, 
-            doc, 
-            setDoc, 
-            getDoc, 
-            collection, 
-            query, 
-            where, 
-            getDocs, 
-            addDoc, 
-            serverTimestamp,
-            orderBy
-        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, SAMLAuthProvider, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, collection, query, where, getDocs, addDoc, updateDoc, serverTimestamp, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // User provided configuration
         const firebaseConfig = {
             apiKey: "AIzaSyC6ZyHElipTNDwiSXZLazue7KRxcQBOERs",
             authDomain: "peak-health-410e5.firebaseapp.com",
@@ -210,517 +209,595 @@
             measurementId: "G-5G5X8ZZ3Z9"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
         // Global State
-        let currentUser = null;
-        let currentUserData = null;
+        window.currentUser = null;
+        window.currentUserData = null;
         let isSignUpMode = false;
+        let allUsersCache = [];
+        let unsubscribeMessages = null;
 
-        // UI Elements
-        const views = {
-            login: document.getElementById('login-view'),
-            app: document.getElementById('app-view'),
-            dashboard: document.getElementById('view-dashboard'),
-            patients: document.getElementById('view-patients'),
-            records: document.getElementById('view-records'),
-            admin: document.getElementById('view-admin'),
-            loading: document.getElementById('loading-state')
-        };
-
-        // --- UTILITY FUNCTIONS ---
-        window.showToast = function(message, type = 'info') {
+        // --- UTILS ---
+        window.showToast = (msg, type = 'info') => {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
-            
-            let bgColor = 'bg-slate-800';
-            let icon = 'fa-info-circle';
-            if(type === 'error') { bgColor = 'bg-red-600'; icon = 'fa-exclamation-circle'; }
-            if(type === 'success') { bgColor = 'bg-emerald-600'; icon = 'fa-check-circle'; }
-
-            toast.className = `toast-enter ${bgColor} text-white px-6 py-4 rounded-xl shadow-xl flex items-center gap-3 min-w-[300px]`;
-            toast.innerHTML = `<i class="fas ${icon} text-xl"></i><span class="font-medium">${message}</span>`;
-            
+            let colors = type === 'error' ? 'bg-red-600' : type === 'success' ? 'bg-emerald-600' : 'bg-slate-800';
+            let icon = type === 'error' ? 'fa-exclamation-circle' : type === 'success' ? 'fa-check-circle' : 'fa-info-circle';
+            toast.className = `toast-enter ${colors} text-white px-6 py-4 rounded-xl shadow-xl flex items-center gap-3 min-w-[300px]`;
+            toast.innerHTML = `<i class="fas ${icon} text-xl"></i><span class="font-medium">${msg}</span>`;
             container.appendChild(toast);
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                toast.style.transform = 'translateX(100%)';
-                toast.style.transition = 'all 0.3s ease';
-                setTimeout(() => toast.remove(), 300);
-            }, 4000);
-        }
+            setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 4000);
+        };
+        window.closeModal = id => { document.getElementById(id).classList.add('hidden'); document.getElementById(id).classList.remove('flex'); };
+        window.openModal = id => { document.getElementById(id).classList.remove('hidden'); document.getElementById(id).classList.add('flex'); };
 
-        window.closeModal = function(modalId) {
-            document.getElementById(modalId).classList.add('hidden');
-            document.getElementById(modalId).classList.remove('flex');
-        }
-
-        window.openModal = function(modalId) {
-            document.getElementById(modalId).classList.remove('hidden');
-            document.getElementById(modalId).classList.add('flex');
-        }
-
-        function switchView(viewId, title) {
-            ['dashboard', 'patients', 'records', 'admin', 'loading'].forEach(v => {
-                views[v].classList.add('hidden');
-            });
-            views[viewId].classList.remove('hidden');
-            document.getElementById('header-title').innerText = title;
-            
-            // Update active nav state
-            document.querySelectorAll('#nav-menu button').forEach(btn => {
-                btn.classList.remove('bg-blue-600', 'text-white');
-                btn.classList.add('text-slate-400', 'hover:bg-slate-800');
-                if(btn.dataset.target === viewId) {
-                    btn.classList.add('bg-blue-600', 'text-white');
-                    btn.classList.remove('text-slate-400', 'hover:bg-slate-800');
-                }
-            });
-        }
-
-        // --- AUTHENTICATION LOGIC ---
-
-        // Toggle Sign Up / Login form
+        // --- AUTH ---
         document.getElementById('toggle-signup').addEventListener('click', (e) => {
-            e.preventDefault();
-            isSignUpMode = !isSignUpMode;
-            const btn = document.getElementById('btn-patient-login');
-            const title = document.getElementById('login-title');
-            
-            if(isSignUpMode) {
-                btn.innerText = "Register New Account";
-                title.innerText = "Patient Registration";
-                e.target.innerText = "Already have an account? Sign in";
-            } else {
-                btn.innerText = "Sign In as Patient";
-                title.innerText = "Patient Portal";
-                e.target.innerText = "Need an account? Register";
-            }
+            e.preventDefault(); isSignUpMode = !isSignUpMode;
+            document.getElementById('btn-patient-login').innerText = isSignUpMode ? "Register New Account" : "Sign In as Patient";
+            document.getElementById('login-title').innerText = isSignUpMode ? "Patient Registration" : "Patient Portal";
+            e.target.innerText = isSignUpMode ? "Already have an account? Sign in" : "Need an account? Register";
         });
 
-        // Patient Email/Password Login
         document.getElementById('patient-login-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = document.getElementById('patient-email').value;
-            const password = document.getElementById('patient-password').value;
+            const pass = document.getElementById('patient-password').value;
             const btn = document.getElementById('btn-patient-login');
-            const originalText = btn.innerText;
-            
             try {
-                btn.innerText = "Processing...";
-                btn.disabled = true;
-                
+                btn.disabled = true; btn.innerText = "Processing...";
                 if (isSignUpMode) {
-                    const cred = await createUserWithEmailAndPassword(auth, email, password);
-                    // Create initial user doc as patient
-                    await setDoc(doc(db, "users", cred.user.uid), {
-                        email: email,
-                        role: 'patient',
-                        name: email.split('@')[0], // placeholder name
-                        createdAt: serverTimestamp()
-                    });
-                    showToast("Account created successfully", "success");
+                    // Check if an admin already created a stub for this email
+                    const q = query(collection(db, "users"), where("email", "==", email));
+                    const snap = await getDocs(q);
+                    
+                    const cred = await createUserWithEmailAndPassword(auth, email, pass);
+                    let baseData = { email: email, role: 'patient', name: email.split('@')[0], createdAt: serverTimestamp() };
+                    
+                    if(!snap.empty) {
+                        // Merge stub data
+                        baseData = { ...baseData, ...snap.docs[0].data(), stub: false };
+                    }
+                    await setDoc(doc(db, "users", cred.user.uid), baseData);
+                    showToast("Account registered", "success");
                 } else {
-                    await signInWithEmailAndPassword(auth, email, password);
-                    showToast("Logged in successfully", "success");
+                    await signInWithEmailAndPassword(auth, email, pass);
                 }
-            } catch (error) {
-                console.error(error);
-                showToast(error.message, "error");
-                btn.innerText = originalText;
-                btn.disabled = false;
-            }
+            } catch (err) { showToast(err.message, "error"); } finally { btn.disabled = false; btn.innerText = isSignUpMode ? "Register" : "Sign In"; }
         });
 
-        // Staff SAML Login
         document.getElementById('btn-staff-login').addEventListener('click', async () => {
-            const provider = new SAMLAuthProvider('saml.office-of-commissioner-rylee-peak-sso');
-            try {
-                const result = await signInWithPopup(auth, provider);
-                showToast(`SSO Login Successful: ${result.user.email}`, "success");
-            } catch (error) {
-                console.error("SAML Error:", error);
-                showToast("SSO Authentication Failed. Check Configuration.", "error");
-            }
+            try { await signInWithPopup(auth, new SAMLAuthProvider('saml.office-of-commissioner-rylee-peak-sso')); } 
+            catch (err) { showToast("SSO Failed. Check Auth Domains.", "error"); }
         });
 
-        // Logout
-        document.getElementById('btn-logout').addEventListener('click', () => {
-            signOut(auth);
-        });
+        document.getElementById('btn-logout').addEventListener('click', () => signOut(auth));
 
-        // --- APPLICATION LOGIC ---
-
-        // Auth State Observer
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                currentUser = user;
-                views.login.classList.add('hidden');
-                views.app.classList.remove('hidden');
-                switchView('loading', 'Loading Data');
-                await initializeUserSession(user);
+                window.currentUser = user;
+                document.getElementById('login-view').classList.add('hidden');
+                document.getElementById('app-view').classList.remove('hidden');
+                await initUserSession(user);
+                listenToNotifications();
             } else {
-                currentUser = null;
-                currentUserData = null;
-                views.app.classList.add('hidden');
-                views.login.classList.remove('hidden');
-                // Reset form buttons
-                document.getElementById('btn-patient-login').innerText = isSignUpMode ? "Register New Account" : "Sign In as Patient";
-                document.getElementById('btn-patient-login').disabled = false;
+                if(unsubscribeMessages) unsubscribeMessages();
+                window.currentUser = null; window.currentUserData = null;
+                document.getElementById('app-view').classList.add('hidden');
+                document.getElementById('login-view').classList.remove('hidden');
             }
         });
 
-        // Setup User Data & Permissions
-        async function initializeUserSession(user) {
-            try {
-                const userRef = doc(db, "users", user.uid);
-                const userSnap = await getDoc(userRef);
+        async function initUserSession(user) {
+            document.getElementById('loading-state').classList.remove('hidden');
+            const userRef = doc(db, "users", user.uid);
+            const userSnap = await getDoc(userRef);
+            
+            let role = 'patient'; let name = user.displayName || user.email.split('@')[0];
+            if (!userSnap.exists()) {
+                if (user.email === 'rylee.peak@rpeak.org') role = 'admin';
+                else if (user.email?.includes('@rpeak.org')) role = 'physician';
+                window.currentUserData = { email: user.email, role, name, createdAt: serverTimestamp() };
+                await setDoc(userRef, window.currentUserData);
+            } else { window.currentUserData = userSnap.data(); }
 
-                let role = 'patient';
-                let name = user.displayName || user.email.split('@')[0];
+            // Cache all users for dropdowns
+            const allUsersSnap = await getDocs(collection(db, "users"));
+            allUsersCache = allUsersSnap.docs.map(d => ({id: d.id, ...d.data()}));
 
-                if (!userSnap.exists()) {
-                    // Critical Business Logic: Auto-assign Hospital Administrator
-                    if (user.email === 'rylee.peak@rpeak.org') {
-                        role = 'admin';
-                    } else if (user.email && user.email.includes('@rpeak.org')) {
-                        role = 'physician'; // Assumption for SSO users on domain
-                    }
-
-                    const newUserData = {
-                        email: user.email,
-                        role: role,
-                        name: name,
-                        createdAt: serverTimestamp()
-                    };
-                    await setDoc(userRef, newUserData);
-                    currentUserData = newUserData;
-                } else {
-                    currentUserData = userSnap.data();
-                }
-
-                // Update UI Profile
-                document.getElementById('sidebar-user-name').innerText = currentUserData.name || user.email;
-                const roleBadge = document.getElementById('sidebar-user-role');
-                roleBadge.innerText = currentUserData.role;
-                
-                if(currentUserData.role === 'admin') {
-                    roleBadge.className = "text-xs uppercase tracking-wider text-purple-400 mt-1 font-semibold bg-purple-500/10 px-2 py-1 rounded";
-                } else if(currentUserData.role === 'physician') {
-                    roleBadge.className = "text-xs uppercase tracking-wider text-emerald-400 mt-1 font-semibold bg-emerald-500/10 px-2 py-1 rounded";
-                } else {
-                    roleBadge.className = "text-xs uppercase tracking-wider text-blue-400 mt-1 font-semibold bg-blue-500/10 px-2 py-1 rounded";
-                }
-
-                buildNavigation(currentUserData.role);
-                loadDashboard(currentUserData.role);
-
-            } catch (error) {
-                console.error("Error fetching user data:", error);
-                showToast("Error loading profile data", "error");
-                signOut(auth);
-            }
+            updateProfileUI();
+            buildNav();
+            switchView('dashboard');
         }
 
-        // Build Sidebar Navigation dynamically
-        function buildNavigation(role) {
+        function updateProfileUI() {
+            document.getElementById('sidebar-user-name').innerText = currentUserData.name;
+            document.getElementById('setting-name').value = currentUserData.name || '';
+            const rb = document.getElementById('sidebar-user-role');
+            rb.innerText = currentUserData.role;
+            rb.className = `text-xs uppercase tracking-wider mt-1 font-semibold px-2 py-1 rounded ${currentUserData.role==='admin'?'bg-purple-500/20 text-purple-400':currentUserData.role==='physician'?'bg-emerald-500/20 text-emerald-400':'bg-blue-500/20 text-blue-400'}`;
+            
+            if(currentUserData.photoUrl) {
+                document.getElementById('sidebar-user-photo').src = currentUserData.photoUrl;
+                document.getElementById('setting-photo').value = currentUserData.photoUrl;
+            } else {
+                document.getElementById('sidebar-user-photo').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUserData.name)}&background=0D8ABC&color=fff`;
+            }
+
+            if(currentUserData.role !== 'patient') document.getElementById('setting-photo-container').classList.remove('hidden');
+        }
+
+        window.saveSettings = async () => {
+            const name = document.getElementById('setting-name').value;
+            const photo = document.getElementById('setting-photo').value;
+            await updateDoc(doc(db, "users", currentUser.uid), { name, photoUrl: photo });
+            currentUserData.name = name; currentUserData.photoUrl = photo;
+            updateProfileUI();
+            closeModal('modal-settings');
+            showToast("Profile updated", "success");
+        };
+
+        // --- NAVIGATION & ROUTING ---
+        function buildNav() {
             const nav = document.getElementById('nav-menu');
-            nav.innerHTML = ''; // Clear existing
-
-            const createNavItem = (id, icon, text, viewTarget) => {
-                const btn = document.createElement('button');
-                btn.className = "w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors text-slate-400 hover:bg-slate-800 hover:text-white mb-1";
-                btn.dataset.target = viewTarget;
-                btn.innerHTML = `<i class="fas ${icon} w-5 text-center"></i> ${text}`;
-                btn.onclick = () => {
-                    switchView(viewTarget, text);
-                    if(viewTarget === 'patients') loadPatientsList();
-                    if(viewTarget === 'records') loadRecordsList();
-                };
-                return btn;
-            };
-
-            // Base Nav
-            nav.appendChild(createNavItem('nav-dashboard', 'fa-chart-pie', 'Dashboard', 'dashboard'));
-
-            if (role === 'patient') {
-                nav.appendChild(createNavItem('nav-records', 'fa-file-medical', 'My Records', 'records'));
+            const items = [{id:'dashboard', icon:'fa-chart-pie', text:'Dashboard', roles:['patient','physician','admin']}];
+            
+            if(currentUserData.role === 'patient') {
+                items.push({id:'appointments', icon:'fa-calendar-alt', text:'Appointments', roles:['patient']});
+                items.push({id:'records', icon:'fa-notes-medical', text:'My Records', roles:['patient']});
+                items.push({id:'pharmacy', icon:'fa-pills', text:'Pharmacy', roles:['patient']});
+                items.push({id:'coverage', icon:'fa-file-invoice-dollar', text:'Benefits & Billing', roles:['patient']});
+                items.push({id:'messages', icon:'fa-envelope', text:'Messages', roles:['patient']});
+            } else {
+                items.push({id:'directory', icon:'fa-users', text:'Patient Directory', roles:['physician','admin']});
+                items.push({id:'appointments', icon:'fa-calendar-alt', text:'Schedule', roles:['physician','admin']});
+                items.push({id:'messages', icon:'fa-envelope', text:'Secure Inbox', roles:['physician','admin']});
+                if(currentUserData.role === 'admin') items.push({id:'admin', icon:'fa-shield-halved', text:'Admin Controls', roles:['admin']});
             }
 
-            if (role === 'physician' || role === 'admin') {
-                nav.appendChild(createNavItem('nav-patients', 'fa-users', 'Patient Directory', 'patients'));
-                nav.appendChild(createNavItem('nav-records', 'fa-stethoscope', 'Clinical Encounters', 'records'));
-            }
-
-            if (role === 'admin') {
-                nav.appendChild(createNavItem('nav-admin', 'fa-shield-halved', 'System Admin', 'admin'));
-            }
+            nav.innerHTML = items.filter(i => i.roles.includes(currentUserData.role)).map(i => 
+                `<button data-view="${i.id}" onclick="switchView('${i.id}')" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors text-slate-400 hover:bg-slate-800 hover:text-white mb-1">
+                    <i class="fas ${i.icon} w-5 text-center"></i> ${i.text}
+                </button>`
+            ).join('');
         }
 
-        // --- DASHBOARD RENDERERS ---
+        window.switchView = (viewId) => {
+            document.querySelectorAll('.nav-btn').forEach(b => {
+                if(b.dataset.view === viewId) { b.classList.add('bg-blue-600','text-white'); b.classList.remove('text-slate-400','hover:bg-slate-800'); document.getElementById('header-title').innerText = b.innerText.trim(); }
+                else { b.classList.remove('bg-blue-600','text-white'); b.classList.add('text-slate-400','hover:bg-slate-800'); }
+            });
+            document.getElementById('loading-state').classList.remove('hidden');
+            const container = document.getElementById('dynamic-view-container');
+            container.innerHTML = ''; 
 
-        async function loadDashboard(role) {
-            switchView('dashboard', 'Overview');
-            const view = views.dashboard;
-            view.innerHTML = ''; // Clear
+            // Render view logic
+            setTimeout(async () => {
+                try {
+                    if(viewId === 'dashboard') await renderDashboard(container);
+                    else if(viewId === 'records') await renderPatientRecords(container);
+                    else if(viewId === 'pharmacy') await renderPharmacy(container);
+                    else if(viewId === 'directory') await renderDirectory(container);
+                    else if(viewId === 'messages') await renderMessages(container);
+                    else if(viewId === 'appointments') await renderAppointments(container);
+                    else if(viewId === 'coverage') renderCoverage(container);
+                    else if(viewId === 'admin') renderAdmin(container);
+                } catch(e) { console.error(e); container.innerHTML = `<div class="p-6 bg-red-100 text-red-700 rounded">Error loading view</div>`; }
+                document.getElementById('loading-state').classList.add('hidden');
+            }, 100);
+        };
 
-            if (role === 'patient') {
-                view.innerHTML = `
-                    <div class="bg-blue-50 border border-blue-100 rounded-xl p-6 mb-6">
-                        <h3 class="text-xl font-bold text-blue-900 mb-2">Welcome to your Patient Portal</h3>
-                        <p class="text-blue-700">Access your medical records, review past visits, and stay connected with your care team.</p>
+        // --- NOTIFICATIONS & MESSAGING ---
+        function listenToNotifications() {
+            const q = query(collection(db, "messages"), where("receiverId", "==", currentUser.uid), where("read", "==", false));
+            unsubscribeMessages = onSnapshot(q, (snapshot) => {
+                const badge = document.getElementById('notification-badge');
+                if(snapshot.empty) badge.classList.add('hidden');
+                else { badge.classList.remove('hidden'); badge.innerText = snapshot.size; }
+            });
+        }
+
+        window.openMessageModal = (toUserId = '') => {
+            openModal('modal-message');
+            const select = document.getElementById('msg-to');
+            select.innerHTML = '<option value="">Select recipient...</option>';
+            
+            // Populate select based on role
+            const contacts = currentUserData.role === 'patient' 
+                ? allUsersCache.filter(u => u.role !== 'patient') // Patients can message staff
+                : allUsersCache.filter(u => u.id !== currentUser.uid); // Staff can message anyone
+                
+            contacts.forEach(c => {
+                select.innerHTML += `<option value="${c.id}" ${c.id === toUserId ? 'selected':''}>${c.name} (${c.role})</option>`;
+            });
+        };
+
+        window.sendMessage = async () => {
+            const to = document.getElementById('msg-to').value;
+            const sub = document.getElementById('msg-subject').value;
+            const body = document.getElementById('msg-body').value;
+            if(!to || !body) return showToast("Recipient and message required", "error");
+            
+            await addDoc(collection(db, "messages"), {
+                senderId: currentUser.uid, senderName: currentUserData.name,
+                receiverId: to, subject: sub || 'No Subject', body: body,
+                timestamp: serverTimestamp(), read: false
+            });
+            closeModal('modal-message'); showToast("Message sent", "success");
+            if(document.getElementById('header-title').innerText === 'Secure Inbox') switchView('messages');
+        };
+
+        async function renderMessages(container) {
+            const q = query(collection(db, "messages"));
+            const snap = await getDocs(q);
+            const msgs = snap.docs.map(d=>({id:d.id, ...d.data()})).filter(m => m.receiverId === currentUser.uid || m.senderId === currentUser.uid).sort((a,b)=>(b.timestamp?.toMillis()||0)-(a.timestamp?.toMillis()||0));
+
+            let html = `
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-bold text-slate-800">Secure Messages</h3>
+                    <button onclick="openMessageModal()" class="bg-blue-600 text-white px-4 py-2 rounded-lg"><i class="fas fa-pen mr-2"></i>Compose</button>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 divide-y divide-slate-100">
+            `;
+            if(msgs.length === 0) html += `<div class="p-8 text-center text-slate-500">No messages found.</div>`;
+            msgs.forEach(m => {
+                const isUnread = m.receiverId === currentUser.uid && !m.read;
+                const date = m.timestamp ? new Date(m.timestamp.toDate()).toLocaleDateString() : '';
+                html += `
+                    <div class="p-4 hover:bg-slate-50 cursor-pointer flex items-start gap-4 ${isUnread ? 'bg-blue-50/50':''}" onclick="markRead('${m.id}')">
+                        <div class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center shrink-0"><i class="fas fa-user text-slate-500"></i></div>
+                        <div class="flex-1">
+                            <div class="flex justify-between"><h4 class="font-bold ${isUnread?'text-blue-900':'text-slate-800'}">${m.subject}</h4><span class="text-xs text-slate-400">${date}</span></div>
+                            <p class="text-sm font-medium text-slate-600 mb-1">${m.senderId === currentUser.uid ? 'To: ' : 'From: '} ${m.senderId === currentUser.uid ? allUsersCache.find(u=>u.id===m.receiverId)?.name : m.senderName}</p>
+                            <p class="text-sm text-slate-500 truncate">${m.body}</p>
+                        </div>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                `;
+            });
+            container.innerHTML = html + `</div>`;
+        }
+        window.markRead = async (id) => { await updateDoc(doc(db,"messages",id),{read:true}); switchView('messages'); };
+
+        // --- DASHBOARD ---
+        async function renderDashboard(container) {
+            if(currentUserData.role === 'patient') {
+                container.innerHTML = `
+                    <div class="bg-gradient-to-r from-blue-600 to-blue-800 rounded-2xl p-8 text-white shadow-lg mb-8">
+                        <h2 class="text-3xl font-bold mb-2">Hello, ${currentUserData.name}</h2>
+                        <p class="text-blue-100">Welcome to Peak Health. Your Care Team is here for you.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Preventive Care Mock -->
                         <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-                            <div class="flex items-center gap-3 mb-4">
-                                <div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center"><i class="fas fa-calendar-check"></i></div>
-                                <h4 class="font-bold text-slate-800">Recent Visits</h4>
+                            <div class="flex items-center gap-3 mb-4"><div class="w-10 h-10 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center"><i class="fas fa-shield-virus"></i></div><h4 class="font-bold text-slate-800">Preventive Care</h4></div>
+                            <ul class="space-y-3 text-sm">
+                                <li class="flex justify-between items-center"><span class="text-slate-600">Annual Flu Vaccine</span><span class="text-red-500 font-medium">Due</span></li>
+                                <li class="flex justify-between items-center"><span class="text-slate-600">Lipid Panel</span><span class="text-emerald-500 font-medium">Up to date</span></li>
+                            </ul>
+                            <button onclick="switchView('appointments')" class="mt-4 w-full py-2 text-blue-600 border border-blue-200 rounded-lg hover:bg-blue-50 text-sm font-medium">Schedule Now</button>
+                        </div>
+                        <!-- Favorite Facilities Mock -->
+                        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                            <div class="flex items-center gap-3 mb-4"><div class="w-10 h-10 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center"><i class="fas fa-hospital"></i></div><h4 class="font-bold text-slate-800">Favorite Facilities</h4></div>
+                            <div class="space-y-3">
+                                <div class="border-l-4 border-blue-500 pl-3">
+                                    <p class="font-bold text-sm text-slate-800">Peak Health Main Campus</p>
+                                    <p class="text-xs text-slate-500">123 Wellness Way, City</p>
+                                </div>
+                                <div class="border-l-4 border-slate-300 pl-3">
+                                    <p class="font-bold text-sm text-slate-800">Peak Health Urgent Care</p>
+                                    <p class="text-xs text-slate-500">456 Rapid Dr, City</p>
+                                </div>
                             </div>
-                            <p class="text-slate-500 text-sm">Navigate to "My Records" to view your clinical summaries.</p>
+                        </div>
+                        <!-- Care Team Mock -->
+                        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                            <div class="flex items-center gap-3 mb-4"><div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center"><i class="fas fa-user-md"></i></div><h4 class="font-bold text-slate-800">Care Team</h4></div>
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="w-10 h-10 rounded-full bg-slate-200"></div>
+                                <div><p class="font-bold text-sm text-slate-800">Dr. Sarah Jenkins</p><p class="text-xs text-slate-500">Primary Care</p></div>
+                            </div>
+                            <button onclick="openMessageModal()" class="w-full py-2 text-slate-600 border border-slate-200 rounded-lg hover:bg-slate-50 text-sm font-medium"><i class="fas fa-envelope mr-1"></i> Message</button>
                         </div>
                     </div>
                 `;
             } else {
-                // Physician/Admin Dashboard
-                view.innerHTML = `
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
-                            <div>
-                                <p class="text-sm text-slate-500 font-medium mb-1">Active Patients</p>
-                                <h3 class="text-3xl font-bold text-slate-800" id="stat-patients">--</h3>
-                            </div>
-                            <div class="w-12 h-12 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-xl"><i class="fas fa-users"></i></div>
+                // Provider/Admin Dashboard
+                const ptCount = allUsersCache.filter(u=>u.role==='patient').length;
+                container.innerHTML = `
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between border-l-4 border-l-blue-500">
+                            <div><p class="text-sm text-slate-500 font-medium mb-1">Total Patients</p><h3 class="text-3xl font-bold text-slate-800">${ptCount}</h3></div>
+                            <i class="fas fa-users text-3xl text-slate-200"></i>
                         </div>
-                        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
-                            <div>
-                                <p class="text-sm text-slate-500 font-medium mb-1">Recent Encounters</p>
-                                <h3 class="text-3xl font-bold text-slate-800" id="stat-encounters">--</h3>
-                            </div>
-                            <div class="w-12 h-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl"><i class="fas fa-notes-medical"></i></div>
+                        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between border-l-4 border-l-emerald-500">
+                            <div><p class="text-sm text-slate-500 font-medium mb-1">Unread Messages</p><h3 class="text-3xl font-bold text-slate-800" id="dash-unread">0</h3></div>
+                            <i class="fas fa-envelope text-3xl text-slate-200"></i>
                         </div>
                     </div>
-                    
-                    <div class="flex gap-4">
-                        <button onclick="openNewEncounterModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium shadow-sm transition-colors flex items-center gap-2">
-                            <i class="fas fa-plus"></i> New Encounter Note
-                        </button>
-                    </div>
-                `;
-                
-                // Fetch stats (non-blocking)
-                try {
-                    const qPatients = query(collection(db, "users"), where("role", "==", "patient"));
-                    const snapPatients = await getDocs(qPatients);
-                    document.getElementById('stat-patients').innerText = snapPatients.size;
-                    
-                    const qEncounters = query(collection(db, "encounters")); // Requires index if using orderBy
-                    const snapEncounters = await getDocs(qEncounters);
-                    document.getElementById('stat-encounters').innerText = snapEncounters.size;
-                } catch(e) { console.warn("Stats error, might need DB rules configuration", e); }
-            }
-
-            if(role === 'admin') {
-                document.getElementById('view-admin').innerHTML = `
-                    <div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
-                        <div class="bg-slate-50 px-6 py-4 border-b border-slate-200 flex justify-between items-center">
-                            <h3 class="font-bold text-slate-800"><i class="fas fa-shield-halved text-purple-600 mr-2"></i> Administrative Controls</h3>
-                        </div>
-                        <div class="p-6">
-                            <p class="text-slate-600 mb-4">You have Hospital Administrator access. Firebase SAML SSO and Security Rules configuration dictates data access.</p>
-                            <div class="bg-amber-50 border-l-4 border-amber-500 p-4 text-amber-800 text-sm">
-                                <strong>System Note:</strong> Ensure your Firestore security rules strictly validate the <code>isAdmin()</code> function as implemented in the system blueprint.
-                            </div>
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                        <h3 class="font-bold text-lg mb-4">Quick Actions</h3>
+                        <div class="flex flex-wrap gap-4">
+                            <button onclick="switchView('directory')" class="px-5 py-3 bg-blue-50 text-blue-700 rounded-lg font-medium hover:bg-blue-100"><i class="fas fa-search mr-2"></i>Find Patient</button>
+                            <button onclick="openModal('modal-add-patient')" class="px-5 py-3 bg-emerald-50 text-emerald-700 rounded-lg font-medium hover:bg-emerald-100"><i class="fas fa-user-plus mr-2"></i>Register Patient</button>
                         </div>
                     </div>
                 `;
             }
         }
 
-        // --- PATIENTS DIRECTORY ---
-        window.loadPatientsList = async function() {
-            const view = views.patients;
-            view.innerHTML = `<div class="text-center py-10 text-slate-400"><i class="fas fa-spinner fa-spin text-3xl mb-3 text-blue-500"></i><p>Loading patient directory...</p></div>`;
-            
-            try {
-                const q = query(collection(db, "users"), where("role", "==", "patient"));
-                const querySnapshot = await getDocs(q);
-                
-                let html = `
-                    <div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
-                        <table class="w-full text-left border-collapse">
-                            <thead>
-                                <tr class="bg-slate-50 border-b border-slate-200 text-slate-500 text-sm uppercase tracking-wider">
-                                    <th class="px-6 py-4 font-medium">Patient Name</th>
-                                    <th class="px-6 py-4 font-medium">Email / Contact</th>
-                                    <th class="px-6 py-4 font-medium">System ID</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-slate-100">
-                `;
-                
-                if (querySnapshot.empty) {
-                    html += `<tr><td colspan="3" class="px-6 py-8 text-center text-slate-500">No patients registered in the system.</td></tr>`;
-                } else {
-                    querySnapshot.forEach((doc) => {
-                        const data = doc.data();
-                        html += `
-                            <tr class="hover:bg-slate-50 transition-colors">
-                                <td class="px-6 py-4 font-medium text-slate-900">${data.name || 'Unknown'}</td>
-                                <td class="px-6 py-4 text-slate-600">${data.email}</td>
-                                <td class="px-6 py-4 text-slate-400 text-xs font-mono">${doc.id.substring(0,8)}...</td>
-                            </tr>
-                        `;
-                    });
-                }
-                
-                html += `</tbody></table></div>`;
-                view.innerHTML = html;
-            } catch (error) {
-                console.error(error);
-                view.innerHTML = `<div class="p-6 bg-red-50 text-red-600 rounded-xl border border-red-100">Error loading patients. Check Firestore permissions.</div>`;
-            }
-        }
+        // --- PATIENT: MY RECORDS & TABS ---
+        window.activeRecordTab = 'visits';
+        window.setRecordTab = (tab) => { window.activeRecordTab = tab; switchView('records'); };
+        
+        async function renderPatientRecords(container) {
+            // Fetch encounters
+            const q = query(collection(db, "encounters"), where("patientId", "==", currentUser.uid));
+            const snap = await getDocs(q);
+            const visits = snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(b.timestamp?.toMillis()||0)-(a.timestamp?.toMillis()||0));
 
-        // --- ENCOUNTERS / RECORDS ---
-        window.loadRecordsList = async function() {
-            const view = views.records;
-            view.innerHTML = `<div class="text-center py-10 text-slate-400"><i class="fas fa-spinner fa-spin text-3xl mb-3 text-blue-500"></i><p>Loading clinical records...</p></div>`;
-            
-            try {
-                let q;
-                if (currentUserData.role === 'patient') {
-                    // Patients see their own
-                    q = query(collection(db, "encounters"), where("patientId", "==", currentUser.uid));
-                } else {
-                    // Staff see all (or you could add filters)
-                    q = query(collection(db, "encounters"));
-                }
-                
-                const querySnapshot = await getDocs(q);
-                
-                let html = `
-                    <div class="space-y-4">
-                `;
-                
-                if (querySnapshot.empty) {
+            const tabs = [
+                {id: 'visits', label: 'Past Visits', icon: 'fa-stethoscope'},
+                {id: 'test_results', label: 'Test Results', icon: 'fa-vial'},
+                {id: 'allergies', label: 'Allergies', icon: 'fa-exclamation-triangle'},
+                {id: 'immunizations', label: 'Immunizations', icon: 'fa-syringe'},
+                {id: 'conditions', label: 'Conditions', icon: 'fa-heartbeat'},
+                {id: 'letters', label: 'Letters', icon: 'fa-file-alt'}
+            ];
+
+            let html = `
+                <h3 class="text-2xl font-bold text-slate-800 mb-6">My Medical Records</h3>
+                <div class="flex overflow-x-auto border-b border-slate-200 mb-6 space-x-6 hide-scrollbar">
+                    ${tabs.map(t => `<button onclick="setRecordTab('${t.id}')" class="pb-3 whitespace-nowrap ${activeRecordTab===t.id?'tab-active':'tab-inactive'}"><i class="fas ${t.icon} mr-2"></i>${t.label}</button>`).join('')}
+                </div>
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 min-h-[400px]">
+            `;
+
+            if(activeRecordTab === 'visits') {
+                if(visits.length === 0) html += `<p class="text-slate-500 text-center py-10">No past visits recorded.</p>`;
+                visits.forEach(v => {
+                    const d = v.timestamp ? new Date(v.timestamp.toDate()).toLocaleDateString() : '';
                     html += `
-                        <div class="bg-white border border-slate-200 rounded-xl p-10 text-center flex flex-col items-center justify-center">
-                            <div class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center text-slate-400 mb-4 text-2xl"><i class="fas fa-folder-open"></i></div>
-                            <h3 class="text-lg font-medium text-slate-800 mb-1">No Records Found</h3>
-                            <p class="text-slate-500">There are no clinical encounters documented yet.</p>
+                        <div class="border-b border-slate-100 py-4 last:border-0">
+                            <div class="flex justify-between items-start mb-2">
+                                <div><h4 class="font-bold text-lg text-slate-800">${v.complaint}</h4><p class="text-sm text-slate-500">Provider: ${allUsersCache.find(u=>u.id===v.providerId)?.name||'Unknown'}</p></div>
+                                <span class="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-xs font-bold">${d}</span>
+                            </div>
+                            <div class="bg-slate-50 p-4 rounded text-sm text-slate-700 font-mono mt-3">${v.notes}</div>
                         </div>
                     `;
-                } else {
-                    const encounters = [];
-                    querySnapshot.forEach(doc => encounters.push({id: doc.id, ...doc.data()}));
-                    
-                    // Sort locally since we didn't specify an index in rules yet
-                    encounters.sort((a,b) => {
-                        const tA = a.timestamp ? a.timestamp.toMillis() : 0;
-                        const tB = b.timestamp ? b.timestamp.toMillis() : 0;
-                        return tB - tA; // Descending
-                    });
-
-                    encounters.forEach(data => {
-                        const dateStr = data.timestamp ? new Date(data.timestamp.toDate()).toLocaleString() : 'Pending Date';
-                        html += `
-                            <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
-                                <div class="flex justify-between items-start mb-4">
-                                    <div>
-                                        <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded tracking-wide uppercase mb-2 inline-block">Clinical Note</span>
-                                        <h3 class="text-lg font-bold text-slate-900">${data.complaint || 'General Visit'}</h3>
-                                    </div>
-                                    <div class="text-right">
-                                        <p class="text-sm font-medium text-slate-800">${dateStr}</p>
-                                        <p class="text-xs text-slate-500 mt-1">Provider ID: ${data.providerId.substring(0,6)}...</p>
-                                    </div>
-                                </div>
-                                <div class="bg-slate-50 p-4 rounded-lg border border-slate-100 text-slate-700 text-sm whitespace-pre-wrap font-mono leading-relaxed">${data.notes}</div>
-                                ${currentUserData.role !== 'patient' ? `<div class="mt-4 text-xs text-slate-400">Patient ID: ${data.patientId}</div>` : ''}
-                            </div>
-                        `;
-                    });
-                }
-                
-                html += `</div>`;
-                view.innerHTML = html;
-            } catch (error) {
-                console.error(error);
-                view.innerHTML = `<div class="p-6 bg-red-50 text-red-600 rounded-xl border border-red-100">Error loading records. Check Firestore permissions.</div>`;
-            }
-        }
-
-        // --- NEW ENCOUNTER LOGIC ---
-        window.openNewEncounterModal = async function() {
-            if(currentUserData.role === 'patient') return;
-            
-            openModal('modal-encounter');
-            const select = document.getElementById('encounter-patient-select');
-            
-            // Populate select
-            if(select.options.length <= 1) {
-                try {
-                    const q = query(collection(db, "users"), where("role", "==", "patient"));
-                    const snap = await getDocs(q);
-                    snap.forEach(doc => {
-                        const opt = document.createElement('option');
-                        opt.value = doc.id;
-                        opt.text = `${doc.data().name || doc.data().email}`;
-                        select.appendChild(opt);
-                    });
-                } catch(e) {
-                    console.error("Error loading patient dropdown", e);
-                }
-            }
-        }
-
-        document.getElementById('btn-save-encounter').addEventListener('click', async () => {
-            const patientId = document.getElementById('encounter-patient-select').value;
-            const complaint = document.getElementById('encounter-complaint').value;
-            const notes = document.getElementById('encounter-notes').value;
-
-            if(!patientId || !complaint || !notes) {
-                showToast("Please fill all fields.", "error");
-                return;
-            }
-
-            const btn = document.getElementById('btn-save-encounter');
-            const originalText = btn.innerText;
-            btn.innerText = "Saving...";
-            btn.disabled = true;
-
-            try {
-                await addDoc(collection(db, "encounters"), {
-                    patientId: patientId,
-                    providerId: currentUser.uid,
-                    complaint: complaint,
-                    notes: notes,
-                    timestamp: serverTimestamp()
                 });
-                
-                showToast("Encounter note signed & saved.", "success");
-                closeModal('modal-encounter');
-                
-                // Clear form
-                document.getElementById('encounter-complaint').value = '';
-                document.getElementById('encounter-notes').value = '';
-                document.getElementById('encounter-patient-select').value = '';
-                
-                // Refresh records if currently viewing them
-                if(!views.records.classList.contains('hidden')) {
-                    loadRecordsList();
-                }
-            } catch(e) {
-                console.error(e);
-                showToast("Failed to save encounter. Check permissions.", "error");
-            } finally {
-                btn.innerText = originalText;
-                btn.disabled = false;
+            } else {
+                // Mock data for other tabs
+                html += `<div class="text-center py-12"><div class="text-4xl text-slate-200 mb-4"><i class="fas ${tabs.find(t=>t.id===activeRecordTab).icon}"></i></div><h4 class="text-lg font-bold text-slate-700 mb-2">No ${tabs.find(t=>t.id===activeRecordTab).label} on file</h4><p class="text-slate-500 text-sm">Your care team has not added any entries here yet.</p></div>`;
             }
-        });
+            container.innerHTML = html + `</div>`;
+        }
+
+        // --- PATIENT: PHARMACY ---
+        async function renderPharmacy(container) {
+            const q = query(collection(db, "medications"), where("patientId", "==", currentUser.uid));
+            const snap = await getDocs(q);
+            const meds = snap.docs.map(d=>({id:d.id,...d.data()}));
+            
+            // Add a mock medication if empty just to show UI capability
+            if(meds.length === 0) {
+                meds.push({id:'mock', name: 'Lisinopril 10mg', status: 'active', refills: 2});
+            }
+
+            let html = `
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl font-bold text-slate-800">Pharmacy & Prescriptions</h3>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            `;
+            meds.forEach(m => {
+                html += `
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center"><i class="fas fa-pills"></i></div>
+                                <div><h4 class="font-bold text-slate-800 text-lg">${m.name}</h4><span class="text-xs bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded font-bold uppercase">${m.status}</span></div>
+                            </div>
+                        </div>
+                        <div class="mt-auto pt-4 border-t border-slate-100 flex justify-between items-center">
+                            <span class="text-sm text-slate-500">${m.refills} refills remaining</span>
+                            <button onclick="requestRefill('${m.id}')" class="text-sm font-medium text-blue-600 hover:text-blue-800">Order Refill</button>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html + `</div>`;
+        }
+        window.requestRefill = (id) => showToast("Refill requested successfully. Pharmacy will process it shortly.", "success");
+
+        // --- PATIENT: COVERAGE & BILLING ---
+        function renderCoverage(container) {
+            container.innerHTML = `
+                <h3 class="text-2xl font-bold text-slate-800 mb-6">Benefits & Billing</h3>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-8 text-white shadow-lg relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-6 opacity-20"><i class="fas fa-shield-alt text-6xl"></i></div>
+                        <h4 class="text-slate-300 text-sm tracking-wider uppercase mb-1">Health Insurance</h4>
+                        <h2 class="text-2xl font-bold mb-6">Peak Health Premium Plan</h2>
+                        <div class="space-y-4">
+                            <div class="flex justify-between border-b border-slate-700 pb-2"><span class="text-slate-400">Member ID</span><span class="font-mono">${currentUser.uid.substring(0,10).toUpperCase()}</span></div>
+                            <div class="flex justify-between border-b border-slate-700 pb-2"><span class="text-slate-400">Group</span><span class="font-mono">PH-2026</span></div>
+                            <div class="flex justify-between"><span class="text-slate-400">Primary Care Copay</span><span class="font-bold">$20.00</span></div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                        <h4 class="font-bold text-slate-800 mb-4"><i class="fas fa-file-invoice-dollar text-slate-400 mr-2"></i>Recent Claims & Balances</h4>
+                        <div class="flex items-center justify-between p-4 bg-emerald-50 rounded-lg border border-emerald-100 mb-4">
+                            <div class="flex items-center gap-3"><i class="fas fa-check-circle text-emerald-500 text-xl"></i><div><p class="font-bold text-emerald-900">No Amount Due</p><p class="text-xs text-emerald-700">Your accounts are up to date.</p></div></div>
+                            <span class="text-xl font-bold text-emerald-700">$0.00</span>
+                        </div>
+                        <p class="text-sm text-slate-500 text-center mt-8">Recent claims will appear here once processed by Peak Health.</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        // --- APPOINTMENTS ---
+        async function renderAppointments(container) {
+            const q = query(collection(db, "appointments"), where(currentUserData.role==='patient'?"patientId":"providerId", "==", currentUser.uid));
+            const snap = await getDocs(q);
+            const appts = snap.docs.map(d=>({id:d.id,...d.data()}));
+
+            let html = `
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl font-bold text-slate-800">Appointments</h3>
+                    ${currentUserData.role === 'patient' ? `<button onclick="showToast('Scheduling system requires clinic confirmation. Please message your provider.', 'info')" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium">Schedule New</button>` : ''}
+                </div>
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 divide-y divide-slate-100">
+            `;
+            if(appts.length === 0) html += `<div class="p-8 text-center text-slate-500"><i class="fas fa-calendar-times text-4xl mb-3 text-slate-300"></i><p>No upcoming appointments.</p></div>`;
+            appts.forEach(a => {
+                html += `
+                    <div class="p-6 flex justify-between items-center">
+                        <div class="flex items-start gap-4">
+                            <div class="bg-blue-50 text-blue-700 w-16 h-16 rounded-lg flex flex-col items-center justify-center border border-blue-100"><span class="text-xs font-bold uppercase">${new Date(a.date).toLocaleString('default',{month:'short'})}</span><span class="text-xl font-bold">${new Date(a.date).getDate()}</span></div>
+                            <div><h4 class="font-bold text-lg text-slate-800">${a.type}</h4><p class="text-sm text-slate-500">${currentUserData.role==='patient'?'Provider':'Patient'}: ${a.withName}</p><p class="text-xs text-slate-400 mt-1"><i class="fas fa-clock mr-1"></i>${new Date(a.date).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</p></div>
+                        </div>
+                        <span class="px-3 py-1 bg-amber-100 text-amber-800 text-xs font-bold rounded-full uppercase">Scheduled</span>
+                    </div>
+                `;
+            });
+            container.innerHTML = html + `</div>`;
+        }
+
+        // --- PROVIDER: DIRECTORY & PATIENT CHART ---
+        async function renderDirectory(container) {
+            const pts = allUsersCache.filter(u=>u.role==='patient');
+            let html = `
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl font-bold text-slate-800">Patient Directory</h3>
+                    <button onclick="openModal('modal-add-patient')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium shadow-sm transition-colors"><i class="fas fa-plus mr-2"></i>Register Patient</button>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <table class="w-full text-left">
+                        <thead class="bg-slate-50 border-b border-slate-200 text-xs uppercase text-slate-500 font-bold tracking-wider"><tr><th class="px-6 py-4">Patient</th><th class="px-6 py-4">Contact</th><th class="px-6 py-4">Action</th></tr></thead>
+                        <tbody class="divide-y divide-slate-100">
+            `;
+            pts.forEach(p => {
+                html += `<tr class="hover:bg-slate-50">
+                    <td class="px-6 py-4"><div class="font-bold text-slate-900">${p.name}</div><div class="text-xs text-slate-400 font-mono">ID: ${p.id.substring(0,8)}</div></td>
+                    <td class="px-6 py-4 text-sm text-slate-600">${p.email}</td>
+                    <td class="px-6 py-4"><button onclick="loadPatientChart('${p.id}')" class="text-blue-600 hover:text-blue-800 text-sm font-medium bg-blue-50 px-3 py-1 rounded">Open Chart</button></td>
+                </tr>`;
+            });
+            container.innerHTML = html + `</tbody></table></div>`;
+        }
+
+        window.registerPatient = async () => {
+            const name = document.getElementById('new-pat-name').value;
+            const email = document.getElementById('new-pat-email').value;
+            const dob = document.getElementById('new-pat-dob').value;
+            if(!name || !email) return showToast("Name and email required", "error");
+            
+            try {
+                // Add to Firestore. They can 'claim' it via signup later.
+                await addDoc(collection(db, "users"), { name, email, dob, role: 'patient', stub: true, createdAt: serverTimestamp() });
+                showToast("Patient registered successfully", "success");
+                closeModal('modal-add-patient');
+                // refresh cache
+                const allUsersSnap = await getDocs(collection(db, "users"));
+                allUsersCache = allUsersSnap.docs.map(d => ({id: d.id, ...d.data()}));
+                if(document.getElementById('header-title').innerText === 'Patient Directory') switchView('directory');
+            } catch(e) { showToast("Error registering patient", "error"); }
+        };
+
+        window.chartTab = 'overview';
+        window.currentPatientId = null;
+        window.loadPatientChart = async (ptId) => {
+            window.currentPatientId = ptId;
+            const pt = allUsersCache.find(u=>u.id===ptId);
+            document.getElementById('header-title').innerHTML = `<button onclick="switchView('directory')" class="text-slate-400 hover:text-slate-600 mr-2"><i class="fas fa-arrow-left"></i></button> Chart: ${pt.name}`;
+            
+            const container = document.getElementById('dynamic-view-container');
+            
+            const tabs = [
+                {id: 'overview', label: 'Overview'},
+                {id: 'encounters', label: 'Encounters'},
+                {id: 'vitals', label: 'Flowsheets / Vitals'},
+                {id: 'orders', label: 'Orders / Rx'}
+            ];
+
+            let html = `
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm mb-6 flex items-center justify-between border-t-4 border-t-blue-600">
+                    <div class="flex items-center gap-4">
+                        <div class="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center text-2xl text-slate-400"><i class="fas fa-user"></i></div>
+                        <div><h2 class="text-2xl font-bold text-slate-900">${pt.name}</h2><p class="text-sm text-slate-500">${pt.dob ? `DOB: ${pt.dob}` : 'DOB: Unknown'} | ${pt.email}</p></div>
+                    </div>
+                    <div><button onclick="addEncounterMock()" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium shadow-sm"><i class="fas fa-plus mr-2"></i>New Note</button></div>
+                </div>
+                <div class="flex border-b border-slate-200 mb-6 space-x-6">
+                    ${tabs.map(t => `<button onclick="switchChartTab('${t.id}')" class="pb-3 ${chartTab===t.id?'tab-active':'tab-inactive'}">${t.label}</button>`).join('')}
+                </div>
+                <div id="chart-content" class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm min-h-[400px]"></div>
+            `;
+            container.innerHTML = html;
+            renderChartContent();
+        };
+
+        window.switchChartTab = (tab) => { window.chartTab = tab; loadPatientChart(window.currentPatientId); };
+
+        async function renderChartContent() {
+            const cc = document.getElementById('chart-content');
+            if(chartTab === 'overview') {
+                cc.innerHTML = `<div class="grid grid-cols-2 gap-6">
+                    <div><h4 class="font-bold text-slate-700 mb-3 border-b pb-2">Active Problems</h4><ul class="list-disc pl-5 text-sm text-slate-600 space-y-1"><li>Essential Hypertension</li><li>Type 2 Diabetes Mellitus</li></ul></div>
+                    <div><h4 class="font-bold text-slate-700 mb-3 border-b pb-2">Allergies</h4><div class="bg-red-50 text-red-700 p-3 rounded text-sm font-medium"><i class="fas fa-exclamation-triangle mr-2"></i>Penicillin (Hives)</div></div>
+                </div>`;
+            } else if (chartTab === 'encounters') {
+                const q = query(collection(db, "encounters"), where("patientId", "==", window.currentPatientId));
+                const snap = await getDocs(q);
+                let eh = `<div class="space-y-4">`;
+                snap.forEach(d => {
+                    const v = d.data();
+                    eh += `<div class="border border-slate-200 rounded p-4"><div class="flex justify-between mb-2"><b>${v.complaint}</b><span class="text-xs text-slate-500">${v.timestamp?new Date(v.timestamp.toDate()).toLocaleDateString():''}</span></div><pre class="text-sm font-mono text-slate-700 whitespace-pre-wrap">${v.notes}</pre></div>`;
+                });
+                cc.innerHTML = eh + (snap.empty ? 'No encounters found.' : '') + `</div>`;
+            } else if (chartTab === 'vitals') {
+                cc.innerHTML = `<table class="w-full text-left text-sm"><thead class="bg-slate-50"><tr><th class="p-2">Date</th><th class="p-2">BP</th><th class="p-2">HR</th><th class="p-2">Temp</th><th class="p-2">Weight</th></tr></thead><tbody><tr><td class="p-2 border-t">Today</td><td class="p-2 border-t text-red-600 font-bold">142/90</td><td class="p-2 border-t">88</td><td class="p-2 border-t">98.6</td><td class="p-2 border-t">195 lbs</td></tr></tbody></table>`;
+            } else {
+                cc.innerHTML = `<p class="text-slate-500">No active orders.</p>`;
+            }
+        }
+
+        window.addEncounterMock = async () => {
+            const complaint = prompt("Enter Chief Complaint:");
+            if(!complaint) return;
+            const notes = prompt("Enter Clinical Note (SOAP):");
+            if(!notes) return;
+            await addDoc(collection(db, "encounters"), { patientId: window.currentPatientId, providerId: currentUser.uid, complaint, notes, timestamp: serverTimestamp() });
+            showToast("Encounter Saved", "success");
+            if(chartTab==='encounters') renderChartContent();
+        }
+
+        // --- ADMIN CONTROLS ---
+        function renderAdmin(container) {
+            container.innerHTML = `
+                <div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+                    <div class="bg-slate-50 px-6 py-4 border-b border-slate-200 flex justify-between items-center"><h3 class="font-bold text-slate-800"><i class="fas fa-shield-halved text-purple-600 mr-2"></i> System Administration</h3></div>
+                    <div class="p-6">
+                        <div class="bg-amber-50 border-l-4 border-amber-500 p-4 text-amber-800 text-sm mb-6">
+                            <strong>Admin Access Confirmed:</strong> You have full system rights via SAML mapping to the <code>admin</code> role.
+                        </div>
+                        <h4 class="font-bold mb-3 border-b pb-2">All System Users</h4>
+                        <table class="w-full text-left text-sm">
+                            <thead><tr class="text-slate-500"><th class="pb-2">Name</th><th class="pb-2">Email</th><th class="pb-2">Role</th><th class="pb-2">UID</th></tr></thead>
+                            <tbody class="divide-y divide-slate-100">
+                                ${allUsersCache.map(u => `<tr><td class="py-2">${u.name}</td><td class="py-2">${u.email}</td><td class="py-2 font-mono ${u.role==='admin'?'text-purple-600':u.role==='physician'?'text-emerald-600':'text-blue-600'}">${u.role}</td><td class="py-2 text-xs text-slate-400">${u.id}</td></tr>`).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
 
     </script>
 </body>
